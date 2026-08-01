@@ -1,0 +1,10 @@
+{
+  "description": "Provides a simple and intuitive platform for users to send and receive greetings, enhancing personal and professional communication.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
