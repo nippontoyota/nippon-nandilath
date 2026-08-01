@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Star, Medal } from "lucide-react";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
-export const revalidate = 300; // Cache this page for 5 minutes (ISR)
+export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function WinnersPage() {
   const winners = await prisma.winner.findMany({
