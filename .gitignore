@@ -45,6 +45,7 @@ design_inspiration/
 .env.local
 .env.production
 .env.*.local
+.env.vercel*
 
 # SQLite Database
 dev.db
@@ -58,3 +59,6 @@ dev.db-journal
 next-env.d.ts
 
 /src/generated/prisma
+
+.vercel
+.env*
