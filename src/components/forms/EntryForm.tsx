@@ -136,6 +136,7 @@ export function EntryForm() {
       name: "",
       phone: "",
       address: "",
+      terms: false,
       honeypot: "",
     },
   });
@@ -267,6 +268,23 @@ export function EntryForm() {
             >
               {form.formState.errors.root.message}
             </motion.p>
+          )}
+
+          <div className="mt-4 flex items-start gap-3 px-1">
+            <input 
+              type="checkbox" 
+              id="terms"
+              {...form.register("terms")}
+              className="mt-1 w-5 h-5 rounded border-gray-300 text-[#C8102E] focus:ring-[#C8102E]"
+            />
+            <label htmlFor="terms" className="text-[13px] text-gray-500 font-medium leading-tight cursor-pointer">
+              I have read and agree to the <span className="text-[#C8102E] font-bold">Terms and Conditions</span> of this lucky draw.
+            </label>
+          </div>
+          {form.formState.errors.terms && (
+            <p className="text-[12px] text-[#DC2626] font-medium mt-1 ml-9">
+              {form.formState.errors.terms.message}
+            </p>
           )}
 
           <div className="mt-6">
