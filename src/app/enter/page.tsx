@@ -10,7 +10,6 @@ export default async function EnterPage() {
     select: {
       id: true,
       name: true,
-      colours: { select: { id: true, name: true } },
     },
     orderBy: { name: "asc" },
   });
@@ -18,7 +17,6 @@ export default async function EnterPage() {
   const models = modelsData.map((m) => ({
     id: m.id,
     name: m.name,
-    colours: m.colours,
   }));
 
   return (

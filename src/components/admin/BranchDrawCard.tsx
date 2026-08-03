@@ -13,9 +13,8 @@ type WinnerWithDetails = {
   entry: {
     name: string;
     phone: string;
-    vin: string;
-    model: { name: string };
-    colour: { name: string };
+    customerLocation: string;
+    model: { name: string } | null;
   };
 };
 
@@ -121,7 +120,7 @@ export function BranchDrawCard({ branch, winners }: BranchDrawCardProps) {
                     <th className="px-3 sm:px-4 py-2.5 font-medium">Name</th>
                     <th className="px-3 sm:px-4 py-2.5 font-medium">Phone</th>
                     <th className="px-3 sm:px-4 py-2.5 font-medium">Vehicle</th>
-                    <th className="px-3 sm:px-4 py-2.5 font-medium">VIN</th>
+                    <th className="px-3 sm:px-4 py-2.5 font-medium">Location</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -140,12 +139,11 @@ export function BranchDrawCard({ branch, winners }: BranchDrawCardProps) {
                         {winner.entry.name}
                       </td>
                       <td className="px-3 sm:px-4 py-3 text-gray-700 whitespace-nowrap">{winner.entry.phone}</td>
-                      <td className="px-3 sm:px-4 py-3 text-gray-600 max-w-[180px] truncate" title={`${winner.entry.model.name} (${winner.entry.colour.name})`}>
-                        {winner.entry.model.name}{" "}
-                        <span className="text-gray-400">({winner.entry.colour.name})</span>
+                      <td className="px-3 sm:px-4 py-3 text-gray-600 max-w-[180px] truncate" title={`${winner.entry.model?.name || 'None'}`}>
+                        {winner.entry.model?.name || 'None'}
                       </td>
-                      <td className="px-3 sm:px-4 py-3 text-xs font-mono text-gray-600 max-w-[120px] truncate" title={winner.entry.vin}>
-                        {winner.entry.vin}
+                      <td className="px-3 sm:px-4 py-3 text-xs font-mono text-gray-600 max-w-[120px] truncate" title={winner.entry.customerLocation}>
+                        {winner.entry.customerLocation}
                       </td>
                     </tr>
                   ))}
@@ -248,16 +246,12 @@ export function BranchDrawCard({ branch, winners }: BranchDrawCardProps) {
                   <dd className="font-medium text-gray-900 break-all">{selectedWinner.entry.phone}</dd>
                 </div>
                 <div className="grid grid-cols-[5rem_1fr] gap-2">
+                  <dt className="text-gray-500">Location</dt>
+                  <dd className="font-medium text-gray-900 break-words">{selectedWinner.entry.customerLocation}</dd>
+                </div>
+                <div className="grid grid-cols-[5rem_1fr] gap-2">
                   <dt className="text-gray-500">Vehicle</dt>
-                  <dd className="font-medium text-gray-900 break-words">{selectedWinner.entry.model.name}</dd>
-                </div>
-                <div className="grid grid-cols-[5rem_1fr] gap-2">
-                  <dt className="text-gray-500">Colour</dt>
-                  <dd className="font-medium text-gray-900 break-words">{selectedWinner.entry.colour.name}</dd>
-                </div>
-                <div className="grid grid-cols-[5rem_1fr] gap-2">
-                  <dt className="text-gray-500">VIN</dt>
-                  <dd className="font-mono font-medium text-gray-900 break-all">{selectedWinner.entry.vin}</dd>
+                  <dd className="font-medium text-gray-900 break-words">{selectedWinner.entry.model?.name || "None"}</dd>
                 </div>
               </dl>
             </div>

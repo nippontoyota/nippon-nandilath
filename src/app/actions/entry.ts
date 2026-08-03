@@ -19,7 +19,7 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, modelId, colourId, vin, honeypot } = validated.data;
+  const { name, phone, customerLocation, interestedInPurchase, modelId, honeypot } = validated.data;
   const branchId = validated.data.branchId ?? DEFAULT_ENTRY_BRANCH_ID;
   const normalizedPhone = `+91${phone}`;
 
@@ -31,29 +31,24 @@ export async function submitEntry(data: EntryInput) {
 
   try {
     // One DB round-trip: uniqueness + branch/model/colour names + fraud
-    const [branch, existingEntry, model, colour, dbFlags] = await Promise.all([
+    const [branch, existingEntry, model, dbFlags] = await Promise.all([
       prisma.branch.findUnique({
         where: { id: branchId },
         select: { id: true, name: true },
       }),
       prisma.entry.findFirst({
-        where: { OR: [{ phone: normalizedPhone }, { vin }] },
-        select: { phone: true, vin: true },
+        where: { OR: [{ phone: normalizedPhone }] },
+        select: { phone: true },
       }),
-      prisma.model.findUnique({ where: { id: modelId }, select: { name: true } }),
-      prisma.colour.findUnique({ where: { id: colourId }, select: { name: true } }),
+      modelId ? prisma.model.findUnique({ where: { id: modelId }, select: { name: true } }) : Promise.resolve(null),
       assessEntryDb(normalizedPhone, ip, branchId),
     ]);
 
     if (!branch) return { error: "Invalid branch selected." };
-    if (!model || !colour) return { error: "Invalid vehicle selection." };
 
     if (existingEntry) {
       if (existingEntry.phone === normalizedPhone) {
         return { error: "This mobile number has already been registered." };
-      }
-      if (existingEntry.vin === vin) {
-        return { error: "This VIN has already been registered." };
       }
     }
 
@@ -65,14 +60,15 @@ export async function submitEntry(data: EntryInput) {
         name,
         phone: normalizedPhone,
         phoneRaw: phone,
-        modelId,
-        colourId,
-        vin,
+        customerLocation,
+        interestedInPurchase,
+        modelId: modelId || null,
         branchId: branch.id,
         ip,
         userAgent,
         flag: fraudFlags.length > 0 ? JSON.stringify(fraudFlags) : null,
       },
+
       select: { id: true },
     });
 
@@ -86,8 +82,8 @@ export async function submitEntry(data: EntryInput) {
         await sendWhatsAppMessage(normalizedPhone, DOUBLETICK_CONFIRM_TEMPLATE, {
           name,
           branchName: branch.name,
-          vehicle: `${model.name} (${colour.name})`,
-          vin,
+          vehicle: `${model?.name || "No Model"}`,
+          vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
         });
         await prisma.whatsAppLog.update({

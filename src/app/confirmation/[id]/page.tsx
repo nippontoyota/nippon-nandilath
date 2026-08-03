@@ -13,10 +13,10 @@ export default async function ConfirmationPage(
     select: {
       id: true,
       name: true,
-      vin: true,
+      customerLocation: true,
+      interestedInPurchase: true,
       branch: { select: { name: true } },
       model: { select: { name: true } },
-      colour: { select: { name: true } },
     },
   });
 
@@ -30,9 +30,9 @@ export default async function ConfirmationPage(
         entryId={entry.id}
         name={entry.name}
         branchName={entry.branch.name}
-        modelName={entry.model.name}
-        colourName={entry.colour.name}
-        vin={entry.vin}
+        modelName={entry.model?.name || "None"}
+        customerLocation={entry.customerLocation}
+        interestedInPurchase={entry.interestedInPurchase}
       />
     </main>
   );

@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     const entryIds = messagesToProcess.map((m) => m.entryId);
     const entries = await prisma.entry.findMany({
       where: { id: { in: entryIds } },
-      include: { branch: true, model: true, colour: true },
+      include: { branch: true, model: true },
     });
     const entryMap = new Map(entries.map((e) => [e.id, e]));
 
@@ -46,11 +46,11 @@ export async function GET(request: Request) {
         const variables = {
           name: entry.name,
           branchName: entry.branch.name,
-          vehicle: `${entry.model.name} (${entry.colour.name})`,
-            vin: entry.vin,
-            confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
-          };
-          await sendWhatsAppMessage(entry.phone, DOUBLETICK_CONFIRM_TEMPLATE, variables);
+          vehicle: entry.model?.name || "None",
+          vin: "N/A",
+          confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
+        };
+        await sendWhatsAppMessage(entry.phone, DOUBLETICK_CONFIRM_TEMPLATE, variables);
 
         await prisma.whatsAppLog.update({
           where: { id: log.id },

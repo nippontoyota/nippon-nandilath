@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   if (type === "winners") {
     const winners = await prisma.winner.findMany({
       include: {
-        entry: { include: { model: true, colour: true } },
+        entry: { include: { model: true } },
         branch: true,
       },
       orderBy: [{ branch: { name: "asc" } }, { place: "asc" }],
@@ -40,9 +40,9 @@ export async function GET(req: NextRequest) {
       Place: w.place,
       Name: w.entry.name,
       Phone: w.entry.phone,
-      Model: w.entry.model.name,
-      Colour: w.entry.colour.name,
-      VIN: w.entry.vin,
+      Vehicle: w.entry.model?.name || "None",
+      Location: w.entry.customerLocation,
+      "Purchase Interest": w.entry.interestedInPurchase,
       "Draw Date": w.createdAt.toISOString(),
     }));
 
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
 
   const entries = await prisma.entry.findMany({
     where,
-    include: { branch: true, model: true, colour: true },
+    include: { branch: true, model: true },
     orderBy: [{ branch: { name: "asc" } }, { createdAt: "asc" }],
   });
 
@@ -76,9 +76,9 @@ export async function GET(req: NextRequest) {
       "Ticket ID": e.id.slice(0, 8).toUpperCase(),
       Name: e.name,
       Phone: e.phone,
-      Model: e.model.name,
-      Colour: e.colour.name,
-      VIN: e.vin,
+      Vehicle: e.model?.name || "None",
+      Location: e.customerLocation,
+      "Purchase Interest": e.interestedInPurchase,
       Branch: e.branch.name,
       Flagged: flags.join(", ") || "No",
       Excluded: e.excluded ? "Yes" : "No",

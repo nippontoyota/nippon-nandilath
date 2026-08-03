@@ -17,9 +17,7 @@ export function assessEntrySync(data: EntryInput): FraudFlag[] {
   if (TEST_NAMES.some((t) => lowerName.includes(t)) || lowerName.length < 3) {
     flags.push(FraudFlag.SUSPICIOUS_NAME);
   }
-  if (/(.)\1{4,}/.test(data.vin.toUpperCase())) {
-    flags.push(FraudFlag.SUSPICIOUS_VIN);
-  }
+  // VIN check removed
   return flags;
 }
 
