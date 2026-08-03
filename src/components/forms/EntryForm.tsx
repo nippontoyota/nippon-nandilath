@@ -166,22 +166,8 @@ export function EntryForm() {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[100] h-[100dvh] w-screen flex flex-col items-center justify-center p-6 text-white overflow-hidden"
-            style={{ background: '#0E3A36' }}
+            className="fixed inset-0 z-[100] h-[100dvh] w-screen flex flex-col items-center justify-center p-6 bg-white/95 backdrop-blur-md overflow-hidden"
           >
-            <PetalRain />
-            {[
-              { top: '10%', left: '10%', size: 10, color: '#FFD700', delay: '0s' },
-              { top: '20%', left: '80%', size: 8, color: '#FFA000', delay: '0.6s' },
-              { top: '70%', left: '15%', size: 7, color: '#FFD700', delay: '1.1s' },
-              { top: '80%', left: '85%', size: 9, color: '#FF8F00', delay: '0.3s' },
-              { top: '40%', left: '75%', size: 6, color: '#FFD700', delay: '1.8s' },
-            ].map((s, i) => (
-              <div key={i} className="absolute twinkle" style={{ top: s.top, left: s.left, animationDuration: `${1.6 + i * 0.4}s`, animationDelay: s.delay }}>
-                <Sparkle size={s.size} color={s.color} />
-              </div>
-            ))}
-
             <div className="flex flex-col items-center justify-center relative z-10 text-center">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
@@ -193,8 +179,8 @@ export function EntryForm() {
                   <Image src="/images/logo_for_customer_facing.webp" alt="Toyota Emblem" fill sizes="56px" className="object-contain object-center" priority />
                 </div>
                 <div className="flex flex-col items-center mt-3">
-                  <p className="text-white text-[20px] font-black tracking-[0.15em] leading-tight uppercase">NIPPON</p>
-                  <p className="text-white text-[20px] font-black tracking-[0.15em] leading-none uppercase">TOYOTA</p>
+                  <p className="text-gray-900 text-[20px] font-black tracking-[0.15em] leading-tight uppercase">NIPPON</p>
+                  <p className="text-[#C8102E] text-[20px] font-black tracking-[0.15em] leading-none uppercase">TOYOTA</p>
                 </div>
               </motion.div>
               
@@ -204,20 +190,14 @@ export function EntryForm() {
                 transition={{ delay: 0.2, duration: 0.6, type: "spring" }} 
                 className="mb-14 relative"
               >
-                <div className="pookalam-spin shadow-2xl" style={{ width: 160, height: 160, borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,215,0,0.3)', position: 'relative' }}>
-                  <Image src="/images/pookalam-generated.webp" alt="Loading" fill sizes="160px" className="object-cover" priority />
-                </div>
+                <div className="w-16 h-16 border-4 border-gray-100 border-t-[#C8102E] rounded-full animate-spin"></div>
               </motion.div>
               
               <motion.h2 
                 initial={{ opacity: 0, y: 15 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }} 
-                className={`w-full py-4 rounded-2xl text-[15px] font-black uppercase tracking-widest transition-all ${
-              form.formState.isSubmitting
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-[#C8102E] text-white hover:bg-[#F47C00] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-            }`}
+                className="text-gray-900 text-[18px] font-black uppercase tracking-widest mb-2"
               >
                 Processing | പ്രോസസ്സ് ചെയ്യുന്നു
               </motion.h2>
@@ -225,7 +205,7 @@ export function EntryForm() {
                 initial={{ opacity: 0, y: 10 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }} 
-                className="text-white/80 text-[13px] font-medium shimmer-gold"
+                className="text-gray-500 text-[13px] font-medium"
               >
                 Please wait while we secure your entry... | ദയവായി കാത്തിരിക്കുക...
               </motion.p>
