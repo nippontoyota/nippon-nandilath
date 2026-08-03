@@ -270,22 +270,31 @@ export function EntryForm() {
             </motion.p>
           )}
 
-          <div className="mt-4 flex items-start gap-3 px-1">
-            <input 
-              type="checkbox" 
-              id="terms"
-              {...form.register("terms")}
-              className="mt-1 w-5 h-5 rounded border-gray-300 text-[#C8102E] focus:ring-[#C8102E]"
-            />
-            <label htmlFor="terms" className="text-[13px] text-gray-500 font-medium leading-tight cursor-pointer">
-              I have read and agree to the <span className="text-[#C8102E] font-bold">Terms and Conditions</span> of this lucky draw.
+          <div className="mt-4 px-1">
+            <label className="flex items-start gap-3.5 cursor-pointer group">
+              <div className="relative flex items-center justify-center shrink-0 mt-0.5">
+                <input 
+                  type="checkbox" 
+                  id="terms"
+                  {...form.register("terms")}
+                  className="peer sr-only"
+                />
+                <div className="w-7 h-7 rounded-md bg-white border-2 border-gray-300 peer-checked:bg-[#C8102E] peer-checked:border-[#C8102E] transition-all flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-all scale-50 peer-checked:scale-100 duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              <div className="text-[13px] text-gray-500 font-medium leading-snug pt-1">
+                I have read and agree to the <span className="text-[#C8102E] font-bold">Terms and Conditions</span> of this lucky draw.
+              </div>
             </label>
+            {form.formState.errors.terms && (
+              <p className="text-[12px] text-[#DC2626] font-medium mt-2 ml-[42px]">
+                {form.formState.errors.terms.message}
+              </p>
+            )}
           </div>
-          {form.formState.errors.terms && (
-            <p className="text-[12px] text-[#DC2626] font-medium mt-1 ml-9">
-              {form.formState.errors.terms.message}
-            </p>
-          )}
 
           <div className="mt-6">
             <motion.button
