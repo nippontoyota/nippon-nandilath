@@ -10,6 +10,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
+  PetalRain,
   Sparkle,
 } from "./FestiveElements";
 import { CAMPAIGN_NAME } from "@/lib/brand";

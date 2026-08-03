@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
-import { useDebounce } from "use-debounce";
 import { Search, X } from "lucide-react";
 
 export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
@@ -11,7 +10,12 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
   const [isPending, startTransition] = useTransition();
 
   const [value, setValue] = useState(initialSearch);
-  const [debouncedValue] = useDebounce(value, 300);
+  const [debouncedValue, setDebouncedValue] = useState(initialSearch);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), 300);
+    return () => clearTimeout(timer);
+  }, [value]);
 
   useEffect(() => {
     const currentQuery = searchParams.toString();
@@ -39,24 +43,21 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search name, phone, or ticket"
-        aria-label="Search entries"
-        className="flex h-9 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-9 py-1 text-sm shadow-sm transition-colors placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/10 focus-visible:border-gray-400"
+        placeholder="Search by name or phone..."
+        className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-400 bg-white"
       />
-      {isPending && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-          <div className="h-4 w-4 rounded-full border-2 border-gray-200 border-t-gray-700 animate-spin" />
-        </div>
-      )}
-      {value && !isPending && (
+      {value && (
         <button
           type="button"
           onClick={() => setValue("")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 rounded-md transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
           aria-label="Clear search"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="w-4 h-4" />
         </button>
+      )}
+      {isPending && (
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin" />
       )}
     </div>
   );

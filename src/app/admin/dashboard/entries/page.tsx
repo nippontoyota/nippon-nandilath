@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { format } from "date-fns";
 import { DeleteEntryButton } from "@/components/admin/DeleteEntryButton";
 import { ExcludeEntryButton } from "@/components/admin/ExcludeEntryButton";
 import { EntriesSearch } from "@/components/admin/EntriesSearch";
@@ -8,6 +7,14 @@ import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 50;
+
+const dateFormatter = new Intl.DateTimeFormat("en-IN", {
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+});
 
 function parseFlags(flag: string | null): string[] {
   if (!flag) return [];
@@ -184,7 +191,7 @@ export default async function EntriesPage(props: {
                               {entry.id.slice(0, 8).toUpperCase()}
                             </div>
                             <div className="text-xs text-gray-500 mt-0.5">
-                              {format(entry.createdAt, "MMM d, h:mm a")}
+                              {dateFormatter.format(entry.createdAt)}
                             </div>
                           </td>
                           <td className="px-4 py-3 min-w-0 max-w-[200px]">
