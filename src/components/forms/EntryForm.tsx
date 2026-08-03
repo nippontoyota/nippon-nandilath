@@ -15,6 +15,71 @@ import {
 } from "./FestiveElements";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
+const TermsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            className="relative bg-white w-full max-w-lg max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-5 border-b border-gray-100">
+              <h2 className="text-xl font-black text-gray-900 tracking-wide uppercase">Terms & Conditions</h2>
+              <button 
+                type="button"
+                onClick={onClose}
+                className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto text-[14px] text-gray-600 leading-relaxed space-y-4">
+              <p><strong>1. Program Details & Concept</strong></p>
+              <p>This "Onam Lucky Draw Scheme" is organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Toyota Pvt. Ltd.</strong> Eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
+              
+              <p><strong>2. Program Period</strong></p>
+              <p>The Program will run from <strong>1st August 2026 to 30th September 2026</strong>. Entries close strictly at 11:59:59 PM on September 30, 2026.</p>
+
+              <p><strong>3. Eligibility</strong></p>
+              <p>Any customer who makes a qualifying purchase at any Nandilath G-Mart outlet during the Program Period and successfully registers their entry via this official form is eligible.</p>
+
+              <p><strong>4. Prize Structure</strong></p>
+              <p>The grand prize is a <strong>Toyota Glanza</strong>. Prizes are non-transferable and cannot be exchanged for cash.</p>
+
+              <p><strong>5. Winner Selection</strong></p>
+              <p>The lucky draw will be conducted via a randomized computerized system and live-streamed on Instagram. Each participant is eligible to win only one prize. Duplicate entries will be disqualified.</p>
+
+              <p><strong>6. Prize Claim & Taxes</strong></p>
+              <p>The grand prize is an ex-showroom vehicle. <strong>The winner shall be solely responsible for all additional costs</strong>, including RTO Registration charges, Road Tax, Vehicle Insurance, and Tax Deducted at Source (TDS) liable at 30% of the prize value.</p>
+            </div>
+            <div className="p-5 border-t border-gray-100 bg-gray-50">
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-3.5 rounded-xl text-white font-extrabold uppercase tracking-widest text-[14px] transition-transform hover:scale-[1.01] active:scale-95"
+                style={{ background: '#C8102E' }}
+              >
+                I Understand
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
 
 
 const inputBase = (hasError: boolean) =>
@@ -128,6 +193,7 @@ function SearchableSelect({
 export function EntryForm() {
   const campaignSubtitle = CAMPAIGN_NAME;
   const [loading, setLoading] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const router = useRouter();
 
   const form = useForm<EntryInput>({
@@ -159,6 +225,7 @@ export function EntryForm() {
 
   return (
     <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto overflow-hidden bg-white">
+      <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
 
       {/* Loading Overlay */}
       <AnimatePresence>
@@ -286,7 +353,7 @@ export function EntryForm() {
                 </div>
               </div>
               <div className="text-[13px] text-gray-500 font-medium leading-snug pt-1">
-                I have read and agree to the <span className="text-[#C8102E] font-bold">Terms and Conditions</span> of this lucky draw.
+                I have read and agree to the <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowTerms(true); }} className="text-[#C8102E] font-bold underline outline-none">Terms and Conditions</button> of this lucky draw.
               </div>
             </label>
             {form.formState.errors.terms && (
