@@ -353,7 +353,7 @@ export function EntryForm() {
                 </div>
               </div>
               <div className="text-[13px] text-gray-500 font-medium leading-snug pt-1">
-                I have read and agree to the <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowTerms(true); }} className="text-[#C8102E] font-bold underline outline-none">Terms and Conditions</button> of this lucky draw.
+                I have read and agree to the <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowTerms(true); }} className="text-[#C8102E] font-bold underline outline-none">Terms and Conditions</button> of this lucky draw, and I consent to receiving communications regarding my entry.
               </div>
             </label>
             {form.formState.errors.terms && (
