@@ -14,6 +14,7 @@ export default async function ConfirmationPage(
       id: true,
       name: true,
       customerLocation: true,
+      createdAt: true,
     },
   });
 
@@ -26,9 +27,8 @@ export default async function ConfirmationPage(
       <ConfirmationScreen
         entryId={entry.id}
         name={entry.name}
-
         customerLocation={entry.customerLocation}
-
+        createdAt={entry.createdAt}
       />
     </main>
   );
