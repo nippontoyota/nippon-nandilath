@@ -26,7 +26,6 @@ const validEntry = {
   customerLocation: "Kochi",
   interestedInPurchase: "Yes",
   modelId: "model1",
-  branchId: "branch1",
   confirm: true,
   honeypot: "",
 };
@@ -62,8 +61,7 @@ async function testFraudDetection() {
       confirm: true,
       honeypot: "",
     },
-    "1.2.3.4",
-    "branch-a"
+    "1.2.3.4"
   );
   assert(suspiciousName.includes(FraudFlag.SUSPICIOUS_NAME), "flags suspicious name");
 
@@ -76,8 +74,7 @@ async function testFraudDetection() {
       confirm: true,
       honeypot: "",
     },
-    "9.9.9.9",
-    "branch-a"
+    "9.9.9.9"
   );
   assert(clean.length === 0, "clean entry has no flags");
 }
@@ -85,15 +82,14 @@ async function testFraudDetection() {
 async function testDatabaseConnectivity() {
   console.log("\n[Database]");
 
-  const [branchCount, entryCount, modelCount] = await Promise.all([
-    prisma.branch.count(),
+  const [entryCount, modelCount, winnerCount] = await Promise.all([
     prisma.entry.count(),
     prisma.model.count(),
+    prisma.winner.count(),
   ]);
 
-  assert(branchCount > 0, `branches exist (${branchCount})`);
   assert(modelCount > 0, `models exist (${modelCount})`);
-  console.log(`  ℹ ${entryCount} entries in database`);
+  console.log(`  ℹ ${entryCount} entries, ${winnerCount} winners in database`);
 }
 
 async function testImageAssets() {
@@ -108,49 +104,13 @@ async function testImageAssets() {
   }
 }
 
-async function testPhoneNormalization() {
-  console.log("\n[Phone normalization in fraud]");
-
-  const branch = await prisma.branch.findFirst();
-  if (!branch) {
-    console.log("  ⚠ skipped (no branch)");
-    return;
-  }
-
-  const testPhone = "8888800001";
-  const normalizedPhone = `+91${testPhone}`;
-  const existing = await prisma.entry.findFirst({ where: { phone: normalizedPhone } });
-
-  if (existing) {
-    const flags = await assessEntry(
-      {
-        name: "Existing User",
-        phone: testPhone,
-        customerLocation: "Kochi",
-        interestedInPurchase: "No",
-        confirm: true,
-        honeypot: "",
-      },
-      existing.ip || "127.0.0.1",
-      branch.id
-    );
-    assert(
-      flags.includes(FraudFlag.MULTI_BRANCH_PHONE) || existing.branchId === branch.id,
-      "phone lookup uses +91 prefix (multi-branch check works)"
-    );
-  } else {
-    console.log("  ℹ skipped multi-branch test (no existing entry with test phone)");
-  }
-}
-
 async function main() {
-  console.log("=== Nandilath Nippon Lucky Draw — Pre-Production Smoke Tests ===");
+  console.log("=== Nippon Toyota Lucky Draw — Pre-Production Smoke Tests ===");
 
   await testSchemaValidation();
   await testFraudDetection();
   await testDatabaseConnectivity();
   await testImageAssets();
-  await testPhoneNormalization();
 
   console.log(`\n=== Results: ${passed} passed, ${failed} failed ===`);
   if (failed > 0) process.exit(1);
