@@ -10,8 +10,6 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
-  PetalRain,
-  Sparkle,
 } from "./FestiveElements";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
@@ -47,7 +45,7 @@ const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: (
             </div>
             <div className="p-6 overflow-y-auto text-[14px] text-gray-600 leading-relaxed space-y-4">
               <p><strong>1. Program Details & Concept</strong></p>
-              <p>1.1 These Terms and Conditions govern the "Onam Lucky Draw Scheme" organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Motor Corporation Private Limited</strong>, wherein eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
+              <p>1.1 These Terms and Conditions govern the &quot;Onam Lucky Draw Scheme&quot; organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Motor Corporation Private Limited</strong>, wherein eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
               <p>1.2 The Program is subject to all applicable central and state laws and regulations of India.</p>
               <p>1.3 Winners will be selected through a randomized computerized system. The Organizers shall not be liable to explain the method by which any winner is chosen. The joint decision of Nandilath G-Mart and Nippon Motor Corporation Private Limited shall be final and binding in all matters related to this Program.</p>
               <p>1.4 Lucky draws are directed towards encouraging customer transactions and do not fall within the ambit of lotteries and are consequently not prohibited.</p>
@@ -130,10 +128,6 @@ const inputBase = (hasError: boolean) =>
   (hasError
     ? 'border-red-400'
     : 'border-gray-200 focus:border-gray-900 focus:shadow-[0_0_0_3px_rgba(0,0,0,0.1)]')
-
-const selectBase = (hasError: boolean) =>
-  inputBase(hasError) + ' appearance-none cursor-pointer ' +
-  (hasError ? 'text-red-700' : 'text-[#0E3A36]')
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
@@ -234,7 +228,6 @@ function SearchableSelect({
 }
 
 export function EntryForm() {
-  const campaignSubtitle = CAMPAIGN_NAME;
   const [loading, setLoading] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const router = useRouter();

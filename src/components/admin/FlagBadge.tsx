@@ -20,6 +20,7 @@ export function FlagBadge() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCount();
     const interval = setInterval(fetchCount, POLL_INTERVAL);
     return () => clearInterval(interval);
