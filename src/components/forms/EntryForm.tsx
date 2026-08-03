@@ -372,7 +372,6 @@ export function EntryForm() {
             <input
               {...form.register("email")}
               type="email"
-              placeholder="Enter your email"
               disabled={loading}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E]/20 focus:border-[#C8102E] transition-all disabled:opacity-50"
             />
