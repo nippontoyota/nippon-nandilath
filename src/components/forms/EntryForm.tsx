@@ -274,10 +274,10 @@ export function EntryForm() {
           </Field>
 
           <Field label="Address" error={form.formState.errors.address?.message}>
-            <input
-              type="text"
+            <textarea
+              rows={4}
               {...form.register("address")}
-              className={inputBase(!!form.formState.errors.address)}
+              className={inputBase(!!form.formState.errors.address) + " resize-none"}
             />
           </Field>
 
