@@ -19,7 +19,7 @@ const TermsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-y-0 w-full max-w-[420px] left-1/2 -translate-x-1/2 z-[100] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
