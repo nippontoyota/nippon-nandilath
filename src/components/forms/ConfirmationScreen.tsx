@@ -66,7 +66,7 @@ export function ConfirmationScreen({
             {CAMPAIGN_NAME}
           </p>
           <h2 className="text-gray-900 text-[28px] font-black leading-tight">
-            You&apos;re In! 🎉
+            You&apos;re In!
           </h2>
           <p className="text-[14px] font-medium mt-2 leading-relaxed text-gray-600">
             Thank you, <span className="font-extrabold text-gray-900">{name.split(' ')[0]}</span>!<br />
@@ -137,7 +137,7 @@ export function ConfirmationScreen({
           className="w-full py-4 rounded-2xl text-[14px] font-extrabold text-white transition-transform"
           style={{ background: '#C8102E' }}
         >
-          Share with Friends 🎊
+          Share with Friends
         </motion.button>
       </motion.div>
 
