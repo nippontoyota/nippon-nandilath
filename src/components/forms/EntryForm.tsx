@@ -136,8 +136,6 @@ export function EntryForm() {
       name: "",
       phone: "",
       address: "",
-      city: "",
-      pincode: "",
       honeypot: "",
     },
   });
@@ -275,39 +273,13 @@ export function EntryForm() {
             />
           </Field>
 
-          <div className="pt-4 pb-2">
-            <h3 className="text-[13px] font-black uppercase tracking-widest text-gray-800">Address</h3>
-            <div className="h-px w-full bg-gray-200 mt-2"></div>
-          </div>
-
-          <Field label="Address (House & Street)" error={form.formState.errors.address?.message}>
+          <Field label="Address" error={form.formState.errors.address?.message}>
             <input
               type="text"
               {...form.register("address")}
               className={inputBase(!!form.formState.errors.address)}
             />
           </Field>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="City / Town" error={form.formState.errors.city?.message}>
-              <input
-                type="text"
-                {...form.register("city")}
-                className={inputBase(!!form.formState.errors.city)}
-              />
-            </Field>
-
-            <Field label="Pincode" error={form.formState.errors.pincode?.message}>
-              <input
-                type="text"
-                maxLength={6}
-                {...form.register("pincode", {
-                  onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
-                })}
-                className={inputBase(!!form.formState.errors.pincode)}
-              />
-            </Field>
-          </div>
 
 
 
