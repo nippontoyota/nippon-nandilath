@@ -199,7 +199,7 @@ export function EntryForm() {
                 transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }} 
                 className="text-gray-900 text-[18px] font-black uppercase tracking-widest mb-2"
               >
-                Processing | പ്രോസസ്സ് ചെയ്യുന്നു
+                Processing
               </motion.h2>
               <motion.p 
                 initial={{ opacity: 0, y: 10 }} 
@@ -207,7 +207,7 @@ export function EntryForm() {
                 transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }} 
                 className="text-gray-500 text-[13px] font-medium"
               >
-                Please wait while we secure your entry... | ദയവായി കാത്തിരിക്കുക...
+                Please wait while we secure your entry...
               </motion.p>
             </div>
           </motion.div>
