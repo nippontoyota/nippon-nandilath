@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 /**
  * Pre-production smoke tests. Run: npx tsx scripts/smoke-test.ts
