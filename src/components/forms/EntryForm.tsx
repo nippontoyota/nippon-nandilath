@@ -236,7 +236,7 @@ export function EntryForm() {
         )}
       </AnimatePresence>
 
-      <div className="w-full bg-[#C8102E] overflow-hidden">
+      <div className="w-full bg-white overflow-hidden">
         <Image 
           src="/images/nandilath-nippon-v2.png" 
           alt="Nandilath Nippon Banner" 
@@ -247,15 +247,11 @@ export function EntryForm() {
         />
       </div>
 
-      {/* Form card */}
-      <div className="relative z-10 mx-4 mt-6 mb-8 rounded-3xl overflow-visible">
+      {/* Form container */}
+      <div className="relative z-10 px-4 mt-6 mb-8 max-w-xl mx-auto">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="rounded-3xl p-5 shadow-xl bg-white"
-          style={{
-            border: '1.5px solid #E5E7EB',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
-          }}
+          className="flex flex-col w-full"
         >
           <input type="text" {...form.register("honeypot")} className="absolute -left-[9999px] opacity-0 pointer-events-none" tabIndex={-1} aria-hidden="true" />
           
