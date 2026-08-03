@@ -13,6 +13,7 @@ model Entry {
   name                 String
   phone                String   @unique
   phoneRaw             String
+  email                String?
   customerLocation     String   @default("Unknown")
   ip                   String?
   userAgent            String?

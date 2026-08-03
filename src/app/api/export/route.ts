@@ -66,10 +66,10 @@ export async function GET(req: NextRequest) {
     return {
       "Ticket ID": e.id.slice(0, 8).toUpperCase(),
       Name: e.name,
-      Phone: e.phone,
-
+      "Phone Number": e.phone,
+      "Email": e.email || "",
       Address: e.customerLocation,
-      Flagged: flags.join(", ") || "No",
+      "Flagged?": flags.length > 0 ? "Yes" : "No",
       Excluded: e.excluded ? "Yes" : "No",
       "Created At": e.createdAt.toISOString(),
     };

@@ -244,6 +244,7 @@ export function EntryForm() {
     defaultValues: {
       name: "",
       phone: "",
+      email: "",
       address: "",
       terms: false,
       honeypot: "",
@@ -367,7 +368,17 @@ export function EntryForm() {
             />
           </Field>
 
-          <Field label="Address" error={form.formState.errors.address?.message}>
+          <Field label="Email Address (Optional)" error={form.formState.errors.email?.message}>
+            <input
+              {...form.register("email")}
+              type="email"
+              placeholder="Enter your email"
+              disabled={loading}
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E]/20 focus:border-[#C8102E] transition-all disabled:opacity-50"
+            />
+          </Field>
+
+          <Field label="Location" error={form.formState.errors.address?.message}>
             <textarea
               rows={3}
               {...form.register("address")}
