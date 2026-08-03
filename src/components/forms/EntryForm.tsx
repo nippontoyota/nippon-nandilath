@@ -143,14 +143,13 @@ export function EntryForm({ models }: EntryFormProps) {
       name: "",
       phone: "",
       customerLocation: "",
-      interestedInPurchase: undefined as any,
       modelId: "",
       confirm: false,
       honeypot: "",
     },
   });
 
-  const interestedInPurchase = form.watch("interestedInPurchase");
+
 
   const onSubmit = async (data: EntryInput) => {
     setLoading(true);
@@ -302,35 +301,7 @@ export function EntryForm({ models }: EntryFormProps) {
             />
           </Field>
 
-          <Field label="Interested in purchase?" error={form.formState.errors.interestedInPurchase?.message}>
-            <div className="grid grid-cols-3 gap-3 mt-1">
-              {["Yes", "Maybe", "No"].map((option) => (
-                <label key={option} className={`relative flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                  interestedInPurchase === option 
-                    ? 'border-[#C8102E] bg-[#C8102E] text-white shadow-lg scale-105' 
-                    : 'border-[#C8102E]/30 bg-white text-[#C8102E] hover:border-[#C8102E]/50 hover:bg-[#FFF4E1]'
-                }`}>
-                  <input
-                    type="radio"
-                    value={option}
-                    {...form.register("interestedInPurchase")}
-                    className="sr-only"
-                  />
-                  <span className="text-[14px] font-bold">{option}</span>
-                </label>
-              ))}
-            </div>
-          </Field>
-
-          <AnimatePresence>
-            {interestedInPurchase === "Yes" && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
-                animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
-                exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="pt-2">
+          <div className="pt-2">
                   <Field label="Vehicle Model" error={form.formState.errors.modelId?.message}>
                     <SearchableSelect
                       options={models}
@@ -343,9 +314,6 @@ export function EntryForm({ models }: EntryFormProps) {
                     />
                   </Field>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           <div className="mt-8 mb-6 bg-[#FFF4E1]/50 p-4 rounded-xl border border-[#C8102E]/30">
             <label className="flex items-start gap-3 cursor-pointer group">

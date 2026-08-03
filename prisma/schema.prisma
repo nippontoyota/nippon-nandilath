@@ -24,7 +24,6 @@ model Entry {
   phone                String   @unique
   phoneRaw             String
   customerLocation     String   @default("Unknown")
-  interestedInPurchase String   @default("No")
   modelId              String?
   model                Model?   @relation(fields: [modelId], references: [id])
   ip                   String?

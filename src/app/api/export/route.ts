@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
       Phone: w.entry.phone,
       Vehicle: w.entry.model?.name || "None",
       Location: w.entry.customerLocation,
-      "Purchase Interest": w.entry.interestedInPurchase,
+
       "Draw Date": w.createdAt.toISOString(),
     }));
 
@@ -69,7 +69,6 @@ export async function GET(req: NextRequest) {
       Phone: e.phone,
       Vehicle: e.model?.name || "None",
       Location: e.customerLocation,
-      "Purchase Interest": e.interestedInPurchase,
       Flagged: flags.join(", ") || "No",
       Excluded: e.excluded ? "Yes" : "No",
       "Created At": e.createdAt.toISOString(),
