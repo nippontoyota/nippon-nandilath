@@ -275,7 +275,7 @@ export function EntryForm() {
 
           <Field label="Address" error={form.formState.errors.address?.message}>
             <textarea
-              rows={4}
+              rows={6}
               {...form.register("address")}
               className={inputBase(!!form.formState.errors.address) + " resize-none"}
             />
