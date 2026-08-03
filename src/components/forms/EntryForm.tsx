@@ -246,7 +246,7 @@ export function EntryForm() {
       </div>
 
       {/* Form container */}
-      <div className="relative z-10 px-4 mt-6 mb-8 max-w-xl mx-auto">
+      <div className="relative z-10 w-full mt-6 mb-8">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col w-full"
