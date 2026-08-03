@@ -246,10 +246,10 @@ export function EntryForm() {
       </div>
 
       {/* Form container */}
-      <div className="relative z-10 w-full mt-6 mb-8">
+      <div className="relative z-10 w-full mt-6 mb-8 flex-1 flex flex-col">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col w-full"
+          className="flex flex-col flex-1 w-full"
         >
           <input type="text" {...form.register("honeypot")} className="absolute -left-[9999px] opacity-0 pointer-events-none" tabIndex={-1} aria-hidden="true" />
           
@@ -293,16 +293,18 @@ export function EntryForm() {
             </motion.p>
           )}
 
-          <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.97 }}
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 mt-2 rounded-2xl text-white text-[15px] font-extrabold tracking-widest uppercase transition-transform"
-            style={{ background: '#C8102E', opacity: loading ? 0.8 : 1 }}
-          >
-            {form.formState.isSubmitting ? "PROCESSING..." : "SUBMIT ENTRY"}
-          </motion.button>
+          <div className="mt-auto pt-6">
+            <motion.button
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 rounded-2xl text-white text-[15px] font-extrabold tracking-widest uppercase transition-transform"
+              style={{ background: '#C8102E', opacity: loading ? 0.8 : 1 }}
+            >
+              {form.formState.isSubmitting ? "PROCESSING..." : "SUBMIT ENTRY"}
+            </motion.button>
+          </div>
         </form>
       </div>
     </div>
