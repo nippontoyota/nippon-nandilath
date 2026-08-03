@@ -15,7 +15,7 @@ import {
 } from "./FestiveElements";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
-const TermsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: () => void; onAccept: () => void }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -110,7 +110,7 @@ const TermsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             <div className="p-5 border-t border-gray-100 bg-gray-50">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={onAccept}
                 className="w-full py-3.5 rounded-xl text-white font-extrabold uppercase tracking-widest text-[14px] transition-transform hover:scale-[1.01] active:scale-95"
                 style={{ background: '#C8102E' }}
               >
@@ -268,7 +268,14 @@ export function EntryForm() {
 
   return (
     <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto overflow-hidden bg-white">
-      <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
+      <TermsModal 
+        isOpen={showTerms} 
+        onClose={() => setShowTerms(false)} 
+        onAccept={() => {
+          form.setValue("terms", true, { shouldValidate: true });
+          setShowTerms(false);
+        }}
+      />
 
       {/* Loading Overlay */}
       <AnimatePresence>
