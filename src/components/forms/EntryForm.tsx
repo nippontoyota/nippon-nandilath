@@ -18,10 +18,10 @@ import { CAMPAIGN_NAME } from "@/lib/brand";
 
 
 const inputBase = (hasError: boolean) =>
-  `w-full px-4 py-3.5 rounded-2xl text-[14px] font-medium border-2 transition-all bg-white outline-none text-[#C8102E] placeholder:text-gray-400 ` +
+  `w-full px-4 py-3.5 rounded-2xl text-[14px] font-medium border-2 transition-all bg-white outline-none text-gray-900 placeholder:text-gray-400 ` +
   (hasError
     ? 'border-red-400'
-    : 'border-[#C8102E]/30 focus:border-[#C8102E] focus:shadow-[0_0_0_3px_rgba(200,16,46,0.15)]')
+    : 'border-gray-200 focus:border-gray-900 focus:shadow-[0_0_0_3px_rgba(0,0,0,0.1)]')
 
 const selectBase = (hasError: boolean) =>
   inputBase(hasError) + ' appearance-none cursor-pointer ' +
@@ -30,7 +30,7 @@ const selectBase = (hasError: boolean) =>
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="mb-4">
-      <label className="block text-[11px] font-bold mb-1.5 tracking-[0.12em] uppercase" style={{ color: '#C8102E' }}>
+      <label className="block text-[11px] font-bold mb-1.5 tracking-[0.12em] uppercase text-gray-700">
         {label}
       </label>
       {children}
@@ -251,7 +251,7 @@ export function EntryForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="rounded-3xl p-5 shadow-xl bg-white"
           style={{
-            border: '1.5px solid #C8102E',
+            border: '1.5px solid #E5E7EB',
             boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
           }}
         >
@@ -268,7 +268,7 @@ export function EntryForm() {
           <Field label="Mobile Number" error={form.formState.errors.phone?.message}>
             <div className="flex gap-2">
               <div
-                className="flex items-center justify-center gap-1.5 px-3.5 rounded-2xl border-2 border-[#C8102E]/30 bg-white text-[13px] font-bold text-[#C8102E] whitespace-nowrap shrink-0"
+                className="flex items-center justify-center gap-1.5 px-3.5 rounded-2xl border-2 border-gray-200 bg-white text-[13px] font-bold text-gray-900 whitespace-nowrap shrink-0"
                 style={{ paddingTop: '0.875rem', paddingBottom: '0.875rem' }}
               >
                 +91
