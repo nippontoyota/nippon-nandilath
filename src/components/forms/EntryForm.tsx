@@ -246,10 +246,10 @@ export function EntryForm() {
       </div>
 
       {/* Form container */}
-      <div className="relative z-10 w-full mt-6 mb-8 flex-1 flex flex-col">
+      <div className="relative z-10 w-full mt-6 mb-8 px-4">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col flex-1 w-full"
+          className="flex flex-col w-full"
         >
           <input type="text" {...form.register("honeypot")} className="absolute -left-[9999px] opacity-0 pointer-events-none" tabIndex={-1} aria-hidden="true" />
           
@@ -275,7 +275,7 @@ export function EntryForm() {
 
           <Field label="Address" error={form.formState.errors.address?.message}>
             <textarea
-              rows={6}
+              rows={3}
               {...form.register("address")}
               className={inputBase(!!form.formState.errors.address) + " resize-none"}
             />
@@ -293,7 +293,7 @@ export function EntryForm() {
             </motion.p>
           )}
 
-          <div className="mt-auto pt-6">
+          <div className="mt-6">
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.97 }}
