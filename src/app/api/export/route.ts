@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
   if (type === "winners") {
     const winners = await prisma.winner.findMany({
       include: {
-        entry: { include: { model: true } },
+        entry: true,
       },
       orderBy: { place: "asc" },
     });
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
       Place: w.place,
       Name: w.entry.name,
       Phone: w.entry.phone,
-      Vehicle: w.entry.model?.name || "None",
+
       Location: w.entry.customerLocation,
 
       "Draw Date": w.createdAt.toISOString(),
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
   }
 
   const entries = await prisma.entry.findMany({
-    include: { model: true },
+
     orderBy: { createdAt: "asc" },
   });
 
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
       "Ticket ID": e.id.slice(0, 8).toUpperCase(),
       Name: e.name,
       Phone: e.phone,
-      Vehicle: e.model?.name || "None",
+
       Location: e.customerLocation,
       Flagged: flags.join(", ") || "No",
       Excluded: e.excluded ? "Yes" : "No",

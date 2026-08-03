@@ -56,7 +56,7 @@ export default async function EntriesPage(props: {
         flag: true,
         excluded: true,
         createdAt: true,
-        model: { select: { name: true } },
+
       },
       orderBy: { createdAt: "desc" },
       take: PAGE_SIZE,
@@ -168,12 +168,7 @@ export default async function EntriesPage(props: {
                         >
                           {entry.customerLocation}
                         </div>
-                        <div
-                          className="text-xs text-gray-500 mt-0.5 truncate"
-                          title={entry.model?.name || "No model selected"}
-                        >
-                          {entry.model?.name || "No model selected"}
-                        </div>
+
                       </td>
                       <td className="px-4 py-3">
                         {flags.length > 0 ? (

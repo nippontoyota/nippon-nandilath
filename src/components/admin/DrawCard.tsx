@@ -13,7 +13,7 @@ type WinnerWithDetails = {
     name: string;
     phone: string;
     customerLocation: string;
-    model: { name: string } | null;
+
   };
 };
 
@@ -109,7 +109,6 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
                 <p className="text-sm text-gray-500 truncate">{winner.entry.phone}</p>
                 <p className="text-xs text-gray-500 mt-0.5 truncate">
                   {winner.entry.customerLocation}
-                  {winner.entry.model?.name ? ` · ${winner.entry.model.name}` : ""}
                 </p>
               </div>
             </div>
@@ -170,10 +169,6 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
                 <div className="grid grid-cols-[5rem_1fr] gap-2">
                   <dt className="text-gray-500">Location</dt>
                   <dd className="font-medium text-gray-900 break-words">{winner.entry.customerLocation}</dd>
-                </div>
-                <div className="grid grid-cols-[5rem_1fr] gap-2">
-                  <dt className="text-gray-500">Vehicle</dt>
-                  <dd className="font-medium text-gray-900 break-words">{winner.entry.model?.name || "None"}</dd>
                 </div>
               </dl>
             </div>
