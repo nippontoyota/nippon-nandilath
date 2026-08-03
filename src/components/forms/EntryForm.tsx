@@ -370,7 +370,7 @@ export function EntryForm() {
             />
           </Field>
 
-          <Field label="Location" error={form.formState.errors.address?.message}>
+          <Field label="Address" error={form.formState.errors.address?.message}>
             <textarea
               rows={3}
               {...form.register("address")}
