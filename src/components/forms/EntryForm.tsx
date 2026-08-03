@@ -256,7 +256,7 @@ export function EntryForm() {
         >
           <input type="text" {...form.register("honeypot")} className="absolute -left-[9999px] opacity-0 pointer-events-none" tabIndex={-1} aria-hidden="true" />
           
-          <Field label="Full Name" error={form.formState.errors.name?.message}>
+          <Field label="Full Name *" error={form.formState.errors.name?.message}>
             <input
               type="text"
               {...form.register("name")}
@@ -264,7 +264,7 @@ export function EntryForm() {
             />
           </Field>
 
-          <Field label="Mobile Number" error={form.formState.errors.phone?.message}>
+          <Field label="Mobile Number *" error={form.formState.errors.phone?.message}>
             <input
               type="tel"
               maxLength={10}
