@@ -248,7 +248,7 @@ export function EntryForm({ branchId, branchName, models }: EntryFormProps) {
 
       <div className="w-full bg-[#C8102E] overflow-hidden">
         <Image 
-          src="/images/nandilath-nippon.png" 
+          src="/images/nandilath-nippon-v2.png" 
           alt="Nandilath Nippon Banner" 
           width={1200}
           height={600}
