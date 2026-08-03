@@ -22,7 +22,7 @@ export default async function ConfirmationPage(
   }
 
   return (
-    <main className="min-h-screen bg-[#fbf9f8]">
+    <main className="min-h-screen bg-white">
       <ConfirmationScreen
         entryId={entry.id}
         name={entry.name}
