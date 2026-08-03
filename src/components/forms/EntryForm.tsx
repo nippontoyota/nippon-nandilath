@@ -178,10 +178,6 @@ export function EntryForm() {
                 <div className="relative h-14 w-14">
                   <Image src="/images/logo_for_customer_facing.webp" alt="Toyota Emblem" fill sizes="56px" className="object-contain object-center" priority />
                 </div>
-                <div className="flex flex-col items-center mt-3">
-                  <p className="text-gray-900 text-[20px] font-black tracking-[0.15em] leading-tight uppercase">NIPPON</p>
-                  <p className="text-[#C8102E] text-[20px] font-black tracking-[0.15em] leading-none uppercase">TOYOTA</p>
-                </div>
               </motion.div>
               
               <motion.div 
