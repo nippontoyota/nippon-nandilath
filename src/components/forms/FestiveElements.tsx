@@ -54,29 +54,35 @@ export function Sparkle({ size = 14, color = '#FFD700' }: { size?: number; color
   )
 }
 
-const PETAL_CONFIGS = [
-  { color: '#FF6D00', size: 7,  left: 5,  delay: 0,    dur: 6.2 },
-  { color: '#FFD600', size: 9,  left: 15, delay: 1.1,  dur: 7.5 },
-  { color: '#F44336', size: 6,  left: 28, delay: 2.3,  dur: 5.8 },
-  { color: '#FF8F00', size: 8,  left: 42, delay: 0.7,  dur: 6.9 },
-  { color: '#FFF176', size: 7,  left: 55, delay: 3.2,  dur: 7.1 },
-  { color: '#FF3D00', size: 6,  left: 68, delay: 1.8,  dur: 5.5 },
-  { color: '#FFD600', size: 9,  left: 80, delay: 0.3,  dur: 8.0 },
-  { color: '#FF6D00', size: 7,  left: 92, delay: 2.9,  dur: 6.4 },
-  { color: '#F44336', size: 8,  left: 35, delay: 4.0,  dur: 7.2 },
-  { color: '#FF8F00', size: 6,  left: 72, delay: 3.6,  dur: 5.9 },
+const FLOWER_CONFIGS = [
+  { flower: '🌼', size: 36, left: 8,  delay: 0.1, dur: 4.2 },
+  { flower: '🌸', size: 30, left: 18, delay: 0.5, dur: 3.8 },
+  { flower: '🌸', size: 42, left: 28, delay: 0.2, dur: 4.5 },
+  { flower: '🌼', size: 34, left: 38, delay: 0.8, dur: 3.9 },
+  { flower: '🌼', size: 40, left: 48, delay: 0.3, dur: 4.6 },
+  { flower: '🌸', size: 28, left: 58, delay: 0.9, dur: 3.7 },
+  { flower: '🌼', size: 45, left: 68, delay: 0.1, dur: 4.8 },
+  { flower: '🌼', size: 35, left: 78, delay: 0.6, dur: 4.1 },
+  { flower: '🌸', size: 32, left: 88, delay: 0.3, dur: 4.3 },
+  { flower: '🌸', size: 40, left: 95, delay: 0.7, dur: 3.9 },
 ]
 
 export function PetalRain() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {PETAL_CONFIGS.map((p, i) => (
+      {FLOWER_CONFIGS.map((f, i) => (
         <div
           key={i}
-          className="petal"
-          style={{ left: `${p.left}%`, top: '-16px', animationDelay: `${p.delay}s`, animationDuration: `${p.dur}s` }}
+          className="petal drop-shadow-md"
+          style={{ 
+            left: `${f.left}%`, 
+            top: '-32px', 
+            animationDelay: `${f.delay}s`, 
+            animationDuration: `${f.dur}s`,
+            fontSize: `${f.size}px`
+          }}
         >
-          <Petal color={p.color} size={p.size} />
+          {f.flower}
         </div>
       ))}
     </div>

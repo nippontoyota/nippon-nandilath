@@ -32,7 +32,7 @@ export default async function EntriesPage(props: {
           { id: { startsWith: search, mode: "insensitive" as const } },
           { name: { contains: search, mode: "insensitive" as const } },
           { phone: { contains: search } },
-          { vin: { contains: search, mode: "insensitive" as const } },
+          { customerLocation: { contains: search, mode: "insensitive" as const } },
         ],
       }
     : {};
@@ -48,13 +48,13 @@ export default async function EntriesPage(props: {
         id: true,
         name: true,
         phone: true,
-        vin: true,
+        customerLocation: true,
+        interestedInPurchase: true,
         flag: true,
         excluded: true,
         createdAt: true,
         branchId: true,
         model: { select: { name: true } },
-        colour: { select: { name: true } },
       },
       orderBy: { createdAt: "desc" },
       take: PAGE_SIZE,
@@ -133,7 +133,7 @@ export default async function EntriesPage(props: {
                 <tr>
                   <th className="px-4 py-3 font-medium">Participant</th>
                   <th className="px-4 py-3 font-medium">Ticket</th>
-                  <th className="px-4 py-3 font-medium">Vehicle</th>
+                  <th className="px-4 py-3 font-medium">Location / Vehicle</th>
                   <th className="px-4 py-3 font-medium">Flags</th>
                   <th className="px-4 py-3 font-medium">Draw status</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
@@ -190,14 +190,14 @@ export default async function EntriesPage(props: {
                           <td className="px-4 py-3 min-w-0 max-w-[200px]">
                             <div
                               className="text-gray-900 truncate"
-                              title={`${entry.model.name} · ${entry.colour.name}`}
+                              title={`${entry.customerLocation} · Interested: ${entry.interestedInPurchase}`}
                             >
-                              {entry.model.name}
+                              {entry.customerLocation}
                               <span className="text-gray-400 mx-1">·</span>
-                              {entry.colour.name}
+                              <span className={entry.interestedInPurchase === 'Yes' ? 'text-emerald-600 font-medium' : ''}>Int: {entry.interestedInPurchase}</span>
                             </div>
-                            <div className="font-mono text-xs text-gray-500 mt-0.5 truncate" title={entry.vin}>
-                              {entry.vin}
+                            <div className="text-xs text-gray-500 mt-0.5 truncate" title={entry.model?.name || "No model selected"}>
+                              {entry.model?.name || "No model selected"}
                             </div>
                           </td>
                           <td className="px-4 py-3">

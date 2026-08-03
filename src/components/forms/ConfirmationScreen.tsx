@@ -14,15 +14,16 @@ interface ConfirmationScreenProps {
   name: string;
   branchName: string;
   modelName: string;
-  colourName: string;
-  vin: string;
+  customerLocation: string;
+  interestedInPurchase: string;
 }
 
 export function ConfirmationScreen({
   entryId,
   name,
   modelName,
-  colourName,
+  customerLocation,
+  interestedInPurchase,
 }: ConfirmationScreenProps) {
   const [confetti] = useState(() =>
     Array.from({ length: 30 }, (_, i) => ({
@@ -184,9 +185,9 @@ export function ConfirmationScreen({
           <div className="space-y-3">
             {[
               { label: 'Name', value: name },
-              { label: 'Vehicle', value: modelName },
-              { label: 'Colour', value: colourName },
-              { label: 'Status', value: null },
+              { label: 'Vehicle', value: modelName || "None" },
+              { label: 'Location', value: customerLocation },
+              { label: 'Interested', value: interestedInPurchase },
             ].map(row => (
               <div key={row.label} className="flex items-center justify-between gap-3">
                 <span className="text-[10px] font-semibold uppercase tracking-wider flex-shrink-0" style={{ color: '#9CA3AF' }}>{row.label}</span>

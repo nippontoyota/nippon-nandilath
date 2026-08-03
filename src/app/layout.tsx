@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Serif_Display } from "next/font/google";
+import { Outfit, Eczar } from "next/font/google";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 import "./globals.css";
 
-const poppins = Poppins({
+const outfit = Outfit({
   weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-poppins",
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
 
-const dmSerif = DM_Serif_Display({
-  weight: ["400"],
-  variable: "--font-dm-serif",
+const eczar = Eczar({
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-eczar",
   subsets: ["latin"],
   display: "swap",
 });
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${dmSerif.variable} h-full antialiased`}
+      className={`${outfit.variable} ${eczar.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

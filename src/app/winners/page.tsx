@@ -10,7 +10,7 @@ export default async function WinnersPage() {
   const winners = await prisma.winner.findMany({
     include: {
       entry: {
-        include: { model: true, colour: true },
+        include: { model: true },
       },
       branch: true,
     },
@@ -79,7 +79,7 @@ export default async function WinnersPage() {
                           {winner.entry.phone.substring(winner.entry.phone.length - 4)}
                         </p>
                         <div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-700">
-                          {winner.entry.model.name} - {winner.entry.colour.name}
+                          {winner.entry.customerLocation} - {winner.entry.model?.name || "None"}
                         </div>
                       </CardContent>
                     </Card>

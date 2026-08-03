@@ -14,7 +14,8 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
   const [debouncedValue] = useDebounce(value, 300);
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const currentQuery = searchParams.toString();
+    const params = new URLSearchParams(currentQuery);
 
     if (debouncedValue) {
       params.set("search", debouncedValue);
@@ -23,9 +24,12 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
       params.delete("search");
     }
 
-    startTransition(() => {
-      router.replace(`?${params.toString()}`);
-    });
+    const newQuery = params.toString();
+    if (currentQuery !== newQuery) {
+      startTransition(() => {
+        router.replace(`?${newQuery}`);
+      });
+    }
   }, [debouncedValue, router, searchParams]);
 
   return (
@@ -35,7 +39,7 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search name, phone, ticket, or VIN"
+        placeholder="Search name, phone, or ticket"
         aria-label="Search entries"
         className="flex h-9 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-9 py-1 text-sm shadow-sm transition-colors placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/10 focus-visible:border-gray-400"
       />

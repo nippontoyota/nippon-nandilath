@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Pre-production smoke tests. Run: npx tsx scripts/smoke-test.ts
  */

@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -28,45 +28,31 @@ model Model {
   name      String   @unique
   createdAt DateTime @default(now())
 
-  colours Colour[]
   entries Entry[]
 
   @@map("models")
 }
 
-model Colour {
-  id      String  @id @default(cuid())
-  name    String
-  modelId String
-  model   Model   @relation(fields: [modelId], references: [id])
-  entries Entry[]
-
-  @@unique([modelId, name])
-  @@map("colours")
-}
-
 model Entry {
-  id         String   @id @default(cuid())
-  name       String
-  phone      String   @unique
-  phoneRaw   String
-  modelId    String
-  model      Model    @relation(fields: [modelId], references: [id])
-  colourId   String
-  colour     Colour   @relation(fields: [colourId], references: [id])
-  vin        String   @unique
-  branchId   String
-  branch     Branch   @relation(fields: [branchId], references: [id])
-  ip         String?
-  userAgent  String?
-  flag       String?
-  flagReason String?
-  excluded   Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  winner     Winner?
+  id                   String   @id @default(cuid())
+  name                 String
+  phone                String   @unique
+  phoneRaw             String
+  customerLocation     String   @default("Unknown")
+  interestedInPurchase String   @default("No")
+  modelId              String?
+  model                Model?   @relation(fields: [modelId], references: [id])
+  branchId             String
+  branch               Branch   @relation(fields: [branchId], references: [id])
+  ip                   String?
+  userAgent            String?
+  flag                 String?
+  flagReason           String?
+  excluded             Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  winner               Winner?
 
   @@index([phone])
-  @@index([vin])
   @@index([branchId])
   @@index([branchId, flag])
   @@index([branchId, excluded])
