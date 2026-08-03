@@ -18,22 +18,7 @@ export function ConfirmationScreen({
   return (
     <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto bg-white overflow-hidden">
       
-      {/* Header */}
-      <motion.div 
-        initial={{ y: -50, opacity: 0 }} 
-        animate={{ y: 0, opacity: 1 }} 
-        transition={{ duration: 0.6, type: "spring", bounce: 0.2 }}
-        className="relative overflow-hidden bg-white border-b border-gray-100" 
-      >
-        <div className="h-9" />
-        <div className="relative flex items-center justify-center px-5 pb-4">
-          <div className="flex items-center">
-            <div className="relative h-12 w-36">
-              <Image src="/images/gopu-nandilath.png" alt="Gopu Nandilath" fill sizes="144px" className="object-contain object-left" priority />
-            </div>
-          </div>
-        </div>
-      </motion.div>
+
 
       {/* Success hero */}
       <div className="flex flex-col items-center pt-8 pb-4 relative z-10">
