@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     const entryIds = messagesToProcess.map((m) => m.entryId);
     const entries = await prisma.entry.findMany({
       where: { id: { in: entryIds } },
-      include: { branch: true, model: true },
+      include: { model: true },
     });
     const entryMap = new Map(entries.map((e) => [e.id, e]));
 
@@ -41,11 +41,10 @@ export async function GET(request: Request) {
         const entry = entryMap.get(log.entryId);
         if (!entry) throw new Error("Associated entry not found");
 
-        // Entry registration confirmation
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         const variables = {
           name: entry.name,
-          branchName: entry.branch.name,
+          branchName: "Nippon Toyota",
           vehicle: entry.model?.name || "None",
           vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
@@ -58,7 +57,6 @@ export async function GET(request: Request) {
         });
         successCount++;
 
-        // Rate limit: 200ms between messages
         await new Promise((r) => setTimeout(r, 200));
       } catch (error: unknown) {
         await prisma.whatsAppLog.update({
