@@ -276,23 +276,21 @@ export function EntryForm() {
             />
           </Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="House Name / No." error={form.formState.errors.house?.message}>
-              <input
-                type="text"
-                {...form.register("house")}
-                className={inputBase(!!form.formState.errors.house)}
-              />
-            </Field>
+          <Field label="House Name / No." error={form.formState.errors.house?.message}>
+            <input
+              type="text"
+              {...form.register("house")}
+              className={inputBase(!!form.formState.errors.house)}
+            />
+          </Field>
 
-            <Field label="Street / Area" error={form.formState.errors.street?.message}>
-              <input
-                type="text"
-                {...form.register("street")}
-                className={inputBase(!!form.formState.errors.street)}
-              />
-            </Field>
-          </div>
+          <Field label="Street / Area" error={form.formState.errors.street?.message}>
+            <input
+              type="text"
+              {...form.register("street")}
+              className={inputBase(!!form.formState.errors.street)}
+            />
+          </Field>
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="City / Town" error={form.formState.errors.city?.message}>
