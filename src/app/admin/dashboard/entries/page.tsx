@@ -52,7 +52,7 @@ export default async function EntriesPage(props: {
         name: true,
         phone: true,
         customerLocation: true,
-        interestedInPurchase: true,
+
         flag: true,
         excluded: true,
         createdAt: true,
@@ -164,13 +164,9 @@ export default async function EntriesPage(props: {
                       <td className="px-4 py-3 min-w-0 max-w-[200px]">
                         <div
                           className="text-gray-900 truncate"
-                          title={`${entry.customerLocation} · Interested: ${entry.interestedInPurchase}`}
+                          title={entry.customerLocation}
                         >
                           {entry.customerLocation}
-                          <span className="text-gray-400 mx-1">·</span>
-                          <span className={entry.interestedInPurchase === "Yes" ? "text-emerald-600 font-medium" : ""}>
-                            Int: {entry.interestedInPurchase}
-                          </span>
                         </div>
                         <div
                           className="text-xs text-gray-500 mt-0.5 truncate"

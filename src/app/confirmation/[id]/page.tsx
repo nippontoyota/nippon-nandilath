@@ -14,7 +14,7 @@ export default async function ConfirmationPage(
       id: true,
       name: true,
       customerLocation: true,
-      interestedInPurchase: true,
+
       model: { select: { name: true } },
     },
   });
@@ -30,7 +30,7 @@ export default async function ConfirmationPage(
         name={entry.name}
         modelName={entry.model?.name || "None"}
         customerLocation={entry.customerLocation}
-        interestedInPurchase={entry.interestedInPurchase}
+
       />
     </main>
   );

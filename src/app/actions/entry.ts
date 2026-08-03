@@ -18,7 +18,7 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, customerLocation, interestedInPurchase, modelId, honeypot } = validated.data;
+  const { name, phone, customerLocation, modelId, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
 
   if (honeypot) {
@@ -51,7 +51,7 @@ export async function submitEntry(data: EntryInput) {
         phone: normalizedPhone,
         phoneRaw: phone,
         customerLocation,
-        interestedInPurchase,
+
         modelId: modelId || null,
         ip,
         userAgent,
