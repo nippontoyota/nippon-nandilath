@@ -159,7 +159,7 @@ export function EntryForm() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto shadow-2xl overflow-hidden" style={{ background: '#FFF4E1' }}>
+    <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto overflow-hidden bg-white">
 
       {/* Loading Overlay */}
       <AnimatePresence>
