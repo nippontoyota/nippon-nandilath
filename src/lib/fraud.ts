@@ -5,7 +5,6 @@ export enum FraudFlag {
   MULTI_BRANCH_PHONE = "MULTI_BRANCH_PHONE",
   SUSPICIOUS_NAME = "SUSPICIOUS_NAME",
   MULTI_PHONE_DEVICE = "MULTI_PHONE_DEVICE",
-  SUSPICIOUS_VIN = "SUSPICIOUS_VIN",
 }
 
 const TEST_NAMES = ["test", "asdf", "demo", "dummy", "fake", "unknown"];

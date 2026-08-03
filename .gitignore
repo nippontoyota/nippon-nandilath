@@ -60,5 +60,9 @@ next-env.d.ts
 
 /src/generated/prisma
 
-.vercel
 .env*
+!.env.example
+
+# Supabase local link artifacts
+supabase/.temp/
+prisma/full-schema.sql

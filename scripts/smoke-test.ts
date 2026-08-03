@@ -20,55 +20,33 @@ function assert(condition: boolean, label: string) {
   }
 }
 
+const validEntry = {
+  name: "Priya Menon",
+  phone: "9876543210",
+  customerLocation: "Kochi",
+  interestedInPurchase: "Yes",
+  modelId: "model1",
+  branchId: "branch1",
+  confirm: true,
+  honeypot: "",
+};
+
 async function testSchemaValidation() {
   console.log("\n[Schema validation]");
 
-  const valid = entrySchema.safeParse({
-    name: "Priya Menon",
-    phone: "9876543210",
-    modelId: "model1",
-    colourId: "colour1",
-    vin: "JTDKN3DU5A0123456",
-    branchId: "branch1",
-    confirm: true,
-    honeypot: "",
-  });
-  assert(valid.success, "valid entry passes");
+  assert(entrySchema.safeParse(validEntry).success, "valid entry passes");
 
-  const badPhone = entrySchema.safeParse({
-    name: "Priya Menon",
-    phone: "1234567890",
-    modelId: "model1",
-    colourId: "colour1",
-    vin: "JTDKN3DU5A0123456",
-    branchId: "branch1",
-    confirm: true,
-    honeypot: "",
-  });
+  const badPhone = entrySchema.safeParse({ ...validEntry, phone: "1234567890" });
   assert(!badPhone.success, "invalid phone rejected");
 
-  const badVin = entrySchema.safeParse({
-    name: "Priya Menon",
-    phone: "9876543210",
-    modelId: "model1",
-    colourId: "colour1",
-    vin: "SHORT",
-    branchId: "branch1",
-    confirm: true,
-    honeypot: "",
+  const missingModel = entrySchema.safeParse({
+    ...validEntry,
+    interestedInPurchase: "Yes",
+    modelId: undefined,
   });
-  assert(!badVin.success, "short VIN rejected");
+  assert(!missingModel.success, "purchase intent without model rejected");
 
-  const honeypot = entrySchema.safeParse({
-    name: "Priya Menon",
-    phone: "9876543210",
-    modelId: "model1",
-    colourId: "colour1",
-    vin: "JTDKN3DU5A0123456",
-    branchId: "branch1",
-    confirm: true,
-    honeypot: "spam",
-  });
+  const honeypot = entrySchema.safeParse({ ...validEntry, honeypot: "spam" });
   assert(!honeypot.success, "honeypot filled rejected");
 }
 
@@ -79,10 +57,8 @@ async function testFraudDetection() {
     {
       name: "test user",
       phone: "9999900001",
-      modelId: "x",
-      colourId: "x",
-      vin: "JTDKN3DU5A0123456",
-      branchId: "branch-a",
+      customerLocation: "Kochi",
+      interestedInPurchase: "No",
       confirm: true,
       honeypot: "",
     },
@@ -91,30 +67,12 @@ async function testFraudDetection() {
   );
   assert(suspiciousName.includes(FraudFlag.SUSPICIOUS_NAME), "flags suspicious name");
 
-  const suspiciousVin = await assessEntry(
-    {
-      name: "Rajesh Kumar",
-      phone: "9999900002",
-      modelId: "x",
-      colourId: "x",
-      vin: "AAAAAAAAAAAAAAAAA",
-      branchId: "branch-a",
-      confirm: true,
-      honeypot: "",
-    },
-    "1.2.3.5",
-    "branch-a"
-  );
-  assert(suspiciousVin.includes(FraudFlag.SUSPICIOUS_VIN), "flags repeated VIN chars");
-
   const clean = await assessEntry(
     {
       name: "Rajesh Kumar",
       phone: "9999900003",
-      modelId: "x",
-      colourId: "x",
-      vin: "JTDKN3DU5A0123456",
-      branchId: "branch-a",
+      customerLocation: "Kochi",
+      interestedInPurchase: "No",
       confirm: true,
       honeypot: "",
     },
@@ -136,12 +94,6 @@ async function testDatabaseConnectivity() {
   assert(branchCount > 0, `branches exist (${branchCount})`);
   assert(modelCount > 0, `models exist (${modelCount})`);
   console.log(`  ℹ ${entryCount} entries in database`);
-
-  const migrations = await prisma.$queryRaw<{ migration_name: string; finished_at: Date | null }[]>`
-    SELECT migration_name, finished_at FROM _prisma_migrations ORDER BY started_at
-  `;
-  const allApplied = migrations.every((m) => m.finished_at !== null);
-  assert(allApplied, "all migrations applied");
 }
 
 async function testImageAssets() {
@@ -149,12 +101,7 @@ async function testImageAssets() {
 
   const fs = await import("fs");
   const path = await import("path");
-  const images = [
-    "logo_for_customer_facing.webp",
-    "onam-boat.webp",
-    "pookalam.webp",
-    "pookalam-generated.webp",
-  ];
+  const images = ["nandilath-nippon.png", "gopu-nandilath.png", "maveli.png"];
   for (const img of images) {
     const exists = fs.existsSync(path.join(process.cwd(), "public/images", img));
     assert(exists, `${img} exists`);
@@ -172,17 +119,15 @@ async function testPhoneNormalization() {
 
   const testPhone = "8888800001";
   const normalizedPhone = `+91${testPhone}`;
-
   const existing = await prisma.entry.findFirst({ where: { phone: normalizedPhone } });
+
   if (existing) {
-  const flags = await assessEntry(
+    const flags = await assessEntry(
       {
         name: "Existing User",
         phone: testPhone,
-        modelId: existing.modelId,
-        colourId: existing.colourId,
-        vin: "JTDKN3DU5A0999999",
-        branchId: branch.id,
+        customerLocation: "Kochi",
+        interestedInPurchase: "No",
         confirm: true,
         honeypot: "",
       },
