@@ -47,22 +47,65 @@ const TermsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             </div>
             <div className="p-6 overflow-y-auto text-[14px] text-gray-600 leading-relaxed space-y-4">
               <p><strong>1. Program Details & Concept</strong></p>
-              <p>This "Onam Lucky Draw Scheme" is organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Toyota Pvt. Ltd.</strong> Eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
+              <p>1.1 These Terms and Conditions govern the "Onam Lucky Draw Scheme" organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Motor Corporation Private Limited</strong>, wherein eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
+              <p>1.2 The Program is subject to all applicable central and state laws and regulations of India.</p>
+              <p>1.3 Winners will be selected through a randomized computerized system. The Organizers shall not be liable to explain the method by which any winner is chosen. The joint decision of Nandilath G-Mart and Nippon Motor Corporation Private Limited shall be final and binding in all matters related to this Program.</p>
+              <p>1.4 Lucky draws are directed towards encouraging customer transactions and do not fall within the ambit of lotteries and are consequently not prohibited.</p>
               
               <p><strong>2. Program Period</strong></p>
-              <p>The Program will run from <strong>1st August 2026 to 30th September 2026</strong>. Entries close strictly at 11:59:59 PM on September 30, 2026.</p>
+              <p>2.1 The Program will run from <strong>1st August 2026 to 30th September 2026</strong> (both dates inclusive). Entries will strictly close at 11:59:59 PM on 30th September 2026.</p>
+              <p>2.2 Only qualifying purchases that occur within the Program Period at authorized Nandilath G-Mart outlets will be considered eligible for entry.</p>
 
               <p><strong>3. Eligibility</strong></p>
-              <p>Any customer who makes a qualifying purchase at any Nandilath G-Mart outlet during the Program Period and successfully registers their entry via this official form is eligible.</p>
+              <p>3.1 The following categories of customers are eligible for the Program:</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Any customer who makes a qualifying purchase at any Nandilath G-Mart outlet between 1st August 2026 and 30th September 2026.</li>
+                <li>Customers who successfully register their entry via the official digital entry form before the deadline.</li>
+              </ul>
+              <p>3.2 A valid government-issued photo ID proof (Aadhaar Card, Voter ID, Passport, or Driving License) and the original purchase invoice from Nandilath G-Mart are required to claim the prize.</p>
+              <p>3.3 This scheme is <strong>not applicable</strong> to bulk purchases, institutional orders, or corporate fleet purchases.</p>
 
               <p><strong>4. Prize Structure</strong></p>
-              <p>The grand prize is a <strong>Toyota Glanza</strong>. Prizes are non-transferable and cannot be exchanged for cash.</p>
+              <p>4.1 The grand prize for this campaign is a <strong>Toyota Glanza</strong>.</p>
+              <p>4.2 Prizes are <strong>non-transferable</strong> and cannot be exchanged, redeemed for cash, or converted to any other form of consideration.</p>
+              <p>4.3 <strong>This scheme cannot be converted into cash and no refund or claim of any kind shall be made against this offer.</strong></p>
+              <p>4.4 Prize images shown in any promotional material are for illustrative purposes only. The actual vehicle variant, color, and specifications may slightly vary depending on availability.</p>
 
-              <p><strong>5. Winner Selection</strong></p>
-              <p>The lucky draw will be conducted via a randomized computerized system and live-streamed on Instagram. Each participant is eligible to win only one prize. Duplicate entries will be disqualified.</p>
+              <p><strong>5. Winner Selection & Draw</strong></p>
+              <p>5.1 The lucky draw will be conducted via a <strong>randomized computerized system</strong> from all eligible entries received during the Program Period.</p>
+              <p>5.2 The draw will be conducted and live-streamed on <strong>Instagram Live</strong>. The draw date will be communicated to all participants via WhatsApp and official social media channels.</p>
+              <p>5.3 Each participant is eligible to win <strong>only one prize</strong> during the Program Period. Duplicate entries using the same mobile number will be automatically disqualified.</p>
+              <p>5.4 If a selected winner fails to claim their prize within the stipulated time and manner, the prize shall stand <strong>forfeited</strong> and no alternative compensation will be provided.</p>
 
               <p><strong>6. Prize Claim & Taxes</strong></p>
-              <p>The grand prize is an ex-showroom vehicle. <strong>The winner shall be solely responsible for all additional costs</strong>, including RTO Registration charges, Road Tax, Vehicle Insurance, and Tax Deducted at Source (TDS) liable at 30% of the prize value.</p>
+              <p>6.1 The winner must claim their prize from the designated Nippon Motor Corporation Private Limited outlet.</p>
+              <p>6.2 The following documents are required at the time of prize collection:</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Original Nandilath G-Mart purchase invoice / receipt.</li>
+                <li>Self-attested copy of a valid government-issued photo ID.</li>
+                <li>PAN Card.</li>
+              </ul>
+              <p>6.3 <strong>Taxes and Additional Costs:</strong> The grand prize is an ex-showroom vehicle. <strong>The winner shall be solely responsible for bearing all additional costs</strong>, including but not limited to:</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>RTO Registration charges.</li>
+                <li>Road Tax.</li>
+                <li>Vehicle Insurance.</li>
+                <li>Tax Deducted at Source (TDS) under Section 194B of the Income Tax Act, 1961 (liable at <strong>30% of the prize value</strong>, or prevailing rate). A TDS certificate will be issued accordingly.</li>
+              </ul>
+
+              <p><strong>7. Publicity & Consent</strong></p>
+              <p>7.1 By participating in this Program, participants grant Nandilath G-Mart and Nippon Motor Corporation Private Limited the right to use their name, photograph, video, and/or sound recording in any media for promotional purposes without any additional compensation.</p>
+              <p>7.2 By accepting the prize, the winner unconditionally consents to the Organizers featuring their win in any marketing communication.</p>
+              <p>7.3 Participants registered under NDNC / DND hereby give express consent to be contacted by Nandilath G-Mart, Nippon Motor Corporation Private Limited, or their partner agencies for purposes related to this Program.</p>
+
+              <p><strong>8. General Conditions</strong></p>
+              <p>8.1 The Organizers reserve the right to modify, suspend, extend, or cancel this Program at any time without prior notice. Any such decision shall be final and binding.</p>
+              <p>8.2 Nandilath G-Mart, Nippon Motor Corporation Private Limited, their directors, officers, employees, and affiliates shall not be held liable for any loss, damage, injury, or claims arising from participation in this Program or acceptance of the prize.</p>
+              <p>8.3 All disputes shall be subject to the exclusive jurisdiction of courts in <strong>Kochi, Kerala</strong>. The decision of the Organizers in all matters related to this Program shall be final and no further correspondence will be entertained.</p>
+              <p>8.4 Mere participation does not guarantee a prize. Any fraudulent activity or misrepresentation shall result in immediate disqualification.</p>
+              <p>8.5 This Program shall not be clubbed with any other ongoing offer or discount scheme unless explicitly stated.</p>
+              <p>8.6 The Organizers shall not be held responsible for any technical failures, network issues, or delays in QR code scanning, WhatsApp delivery, or form submission.</p>
+              <p>8.7 <strong>Force Majeure:</strong> The Organizers shall not be liable for failure to fulfill obligations due to circumstances beyond their reasonable control, including but not limited to floods, natural disasters, strikes, government orders, or cyber incidents.</p>
             </div>
             <div className="p-5 border-t border-gray-100 bg-gray-50">
               <button
