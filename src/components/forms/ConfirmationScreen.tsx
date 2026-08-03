@@ -8,13 +8,24 @@ interface ConfirmationScreenProps {
   entryId: string;
   name: string;
   customerLocation: string;
+  createdAt: Date;
 }
 
 export function ConfirmationScreen({
   entryId,
   name,
   customerLocation,
+  createdAt,
 }: ConfirmationScreenProps) {
+  const dateFormatter = new Intl.DateTimeFormat("en-IN", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  });
+
   return (
     <div className="flex flex-col min-h-screen relative font-sans w-full max-w-[420px] mx-auto bg-white overflow-hidden">
       
@@ -72,9 +83,12 @@ export function ConfirmationScreen({
           <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-2">Your Lucky Ticket</p>
           <div className="inline-block px-6 py-2 rounded-xl bg-white border-2 border-gray-100">
             <span className="text-[22px] font-black tracking-[0.05em] uppercase text-[#C8102E]">
-              {entryId.slice(0, 8)}
+              {entryId.slice(0, 8).toUpperCase()}
             </span>
           </div>
+          <p className="text-[11px] font-bold text-gray-400 mt-2 uppercase tracking-wide">
+             {dateFormatter.format(createdAt)}
+          </p>
         </div>
 
         <div className="px-5 pb-5 pt-4 bg-white">
