@@ -8,21 +8,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Branch {
-  id        String   @id @default(cuid())
-  name      String
-  location  String?
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  entries    Entry[]
-  winners    Winner[]
-  drawStatus String   @default("PENDING")
-
-  @@map("branches")
-}
-
 model Model {
   id        String   @id @default(cuid())
   name      String   @unique
@@ -42,8 +27,6 @@ model Entry {
   interestedInPurchase String   @default("No")
   modelId              String?
   model                Model?   @relation(fields: [modelId], references: [id])
-  branchId             String
-  branch               Branch   @relation(fields: [branchId], references: [id])
   ip                   String?
   userAgent            String?
   flag                 String?
@@ -53,13 +36,11 @@ model Entry {
   winner               Winner?
 
   @@index([phone])
-  @@index([branchId])
-  @@index([branchId, flag])
-  @@index([branchId, excluded])
   @@index([ip])
   @@index([createdAt])
   @@index([phone, createdAt])
   @@index([ip, createdAt])
+  @@index([excluded])
   @@map("entries")
 }
 
@@ -67,13 +48,9 @@ model Winner {
   id        String   @id @default(cuid())
   entryId   String   @unique
   entry     Entry    @relation(fields: [entryId], references: [id])
-  branchId  String
-  branch    Branch   @relation(fields: [branchId], references: [id])
-  place     Int
+  place     Int      @unique
   createdAt DateTime @default(now())
 
-  @@unique([branchId, place])
-  @@index([branchId])
   @@map("winners")
 }
 

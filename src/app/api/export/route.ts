@@ -24,19 +24,16 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = req.nextUrl;
   const type = searchParams.get("type") ?? "entries"; // entries | winners
-  const branchSlug = searchParams.get("branch") ?? undefined;
 
   if (type === "winners") {
     const winners = await prisma.winner.findMany({
       include: {
         entry: { include: { model: true } },
-        branch: true,
       },
-      orderBy: [{ branch: { name: "asc" } }, { place: "asc" }],
+      orderBy: { place: "asc" },
     });
 
     const rows = winners.map((w) => ({
-      Branch: w.branch.name,
       Place: w.place,
       Name: w.entry.name,
       Phone: w.entry.phone,
@@ -58,15 +55,9 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  // Default: entries export
-  const where = branchSlug
-    ? { branch: { slug: branchSlug } }
-    : {};
-
   const entries = await prisma.entry.findMany({
-    where,
-    include: { branch: true, model: true },
-    orderBy: [{ branch: { name: "asc" } }, { createdAt: "asc" }],
+    include: { model: true },
+    orderBy: { createdAt: "asc" },
   });
 
   const rows = entries.map((e) => {
@@ -79,7 +70,6 @@ export async function GET(req: NextRequest) {
       Vehicle: e.model?.name || "None",
       Location: e.customerLocation,
       "Purchase Interest": e.interestedInPurchase,
-      Branch: e.branch.name,
       Flagged: flags.join(", ") || "No",
       Excluded: e.excluded ? "Yes" : "No",
       "Created At": e.createdAt.toISOString(),

@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import type { EntryInput } from "@/schemas/entry";
 
 export enum FraudFlag {
-  MULTI_BRANCH_PHONE = "MULTI_BRANCH_PHONE",
   SUSPICIOUS_NAME = "SUSPICIOUS_NAME",
   MULTI_PHONE_DEVICE = "MULTI_PHONE_DEVICE",
 }
@@ -16,37 +15,19 @@ export function assessEntrySync(data: EntryInput): FraudFlag[] {
   if (TEST_NAMES.some((t) => lowerName.includes(t)) || lowerName.length < 3) {
     flags.push(FraudFlag.SUSPICIOUS_NAME);
   }
-  // VIN check removed
   return flags;
 }
 
 /** DB fraud checks only — run in parallel with other lookups. */
-export async function assessEntryDb(
-  phone: string,
-  ip: string,
-  branchId: string
-): Promise<FraudFlag[]> {
-  const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
+export async function assessEntryDb(phone: string, ip: string): Promise<FraudFlag[]> {
   const twoMinsAgo = new Date(Date.now() - 2 * 60 * 1000);
 
-  const [otherBranchHit, recentIpPhones] = await Promise.all([
-    prisma.entry.findFirst({
-      where: {
-        phone,
-        createdAt: { gte: fiveMinsAgo },
-        branchId: { not: branchId },
-      },
-      select: { id: true },
-    }),
-    prisma.entry.findMany({
-      where: { ip, createdAt: { gte: twoMinsAgo } },
-      select: { phone: true },
-    }),
-  ]);
+  const recentIpPhones = await prisma.entry.findMany({
+    where: { ip, createdAt: { gte: twoMinsAgo } },
+    select: { phone: true },
+  });
 
   const flags: FraudFlag[] = [];
-  if (otherBranchHit) flags.push(FraudFlag.MULTI_BRANCH_PHONE);
-
   const uniquePhones = new Set(recentIpPhones.map((e) => e.phone));
   if (uniquePhones.size >= 2 && !uniquePhones.has(phone)) {
     flags.push(FraudFlag.MULTI_PHONE_DEVICE);
@@ -54,8 +35,8 @@ export async function assessEntryDb(
   return flags;
 }
 
-export async function assessEntry(data: EntryInput, ip: string, branchId: string): Promise<FraudFlag[]> {
+export async function assessEntry(data: EntryInput, ip: string): Promise<FraudFlag[]> {
   const normalizedPhone = `+91${data.phone}`;
-  const dbFlags = await assessEntryDb(normalizedPhone, ip, branchId);
+  const dbFlags = await assessEntryDb(normalizedPhone, ip);
   return [...assessEntrySync(data), ...dbFlags];
 }

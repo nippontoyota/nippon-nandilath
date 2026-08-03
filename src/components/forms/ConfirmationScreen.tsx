@@ -12,7 +12,6 @@ import { CAMPAIGN_NAME } from "@/lib/brand";
 interface ConfirmationScreenProps {
   entryId: string;
   name: string;
-  branchName: string;
   modelName: string;
   customerLocation: string;
   interestedInPurchase: string;

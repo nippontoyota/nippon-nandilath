@@ -15,7 +15,6 @@ export default async function ConfirmationPage(
       name: true,
       customerLocation: true,
       interestedInPurchase: true,
-      branch: { select: { name: true } },
       model: { select: { name: true } },
     },
   });
@@ -29,7 +28,6 @@ export default async function ConfirmationPage(
       <ConfirmationScreen
         entryId={entry.id}
         name={entry.name}
-        branchName={entry.branch.name}
         modelName={entry.model?.name || "None"}
         customerLocation={entry.customerLocation}
         interestedInPurchase={entry.interestedInPurchase}
