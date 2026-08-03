@@ -135,7 +135,8 @@ export function EntryForm() {
     defaultValues: {
       name: "",
       phone: "",
-      address: "",
+      house: "",
+      street: "",
       city: "",
       pincode: "",
       honeypot: "",
@@ -275,14 +276,23 @@ export function EntryForm() {
             />
           </Field>
 
-          <Field label="Address (House & Street)" error={form.formState.errors.address?.message}>
-            <input
-              type="text"
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="House Name / No." error={form.formState.errors.house?.message}>
+              <input
+                type="text"
+                {...form.register("house")}
+                className={inputBase(!!form.formState.errors.house)}
+              />
+            </Field>
 
-              {...form.register("address")}
-              className={inputBase(!!form.formState.errors.address)}
-            />
-          </Field>
+            <Field label="Street / Area" error={form.formState.errors.street?.message}>
+              <input
+                type="text"
+                {...form.register("street")}
+                className={inputBase(!!form.formState.errors.street)}
+              />
+            </Field>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="City / Town" error={form.formState.errors.city?.message}>

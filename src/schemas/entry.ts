@@ -10,7 +10,8 @@ export const entrySchema = z.object({
     .string()
     .transform((val) => val.startsWith("+91") ? val.slice(3) : val)
     .pipe(z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number")),
-  address: z.string().min(3, "Address is required"),
+  house: z.string().min(2, "House details are required"),
+  street: z.string().min(2, "Street is required"),
   city: z.string().min(2, "City is required"),
   pincode: z.string().regex(/^\d{6}$/, "Enter a valid 6-digit pincode"),
   honeypot: z.string().max(0), // Hidden field, must be empty
