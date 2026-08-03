@@ -18,8 +18,9 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, address, honeypot } = validated.data;
+  const { name, phone, address, city, pincode, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
+  const combinedAddress = `${address}, ${city} - ${pincode}`;
 
   if (honeypot) {
     return { error: "Spam detected." };
@@ -49,7 +50,7 @@ export async function submitEntry(data: EntryInput) {
         name,
         phone: normalizedPhone,
         phoneRaw: phone,
-        customerLocation: address,
+        customerLocation: combinedAddress,
 
         ip,
         userAgent,
