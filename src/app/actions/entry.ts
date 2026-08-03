@@ -13,6 +13,11 @@ export async function submitEntry(data: EntryInput) {
   const ip = reqHeaders.get("x-forwarded-for") || reqHeaders.get("x-real-ip") || "unknown";
   const userAgent = reqHeaders.get("user-agent") || "unknown";
 
+  const deadline = new Date("2026-09-30T23:59:59+05:30");
+  if (new Date() > deadline) {
+    return { error: "The lucky draw entry period has officially closed." };
+  }
+
   const validated = entrySchema.safeParse(data);
   if (!validated.success) {
     return { error: "Invalid data provided." };
