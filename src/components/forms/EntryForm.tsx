@@ -239,7 +239,7 @@ export function EntryForm() {
 
       <div className="w-full bg-white overflow-hidden">
         <Image 
-          src="/images/nandilath-nippon-v2.png" 
+          src="/images/nandilath-nippon-v3.png" 
           alt="Nandilath Nippon Banner" 
           width={1200}
           height={600}
