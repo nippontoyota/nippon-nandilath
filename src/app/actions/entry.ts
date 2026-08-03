@@ -20,7 +20,15 @@ export async function submitEntry(data: EntryInput) {
 
   const { name, phone, house, street, city, pincode, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
-  const combinedAddress = `${house}, ${street}, ${city} - ${pincode}`;
+  
+  const addressParts = [house, street, city].filter(Boolean);
+  let combinedAddress = addressParts.join(", ");
+  if (pincode) {
+    combinedAddress += combinedAddress ? ` - ${pincode}` : pincode;
+  }
+  if (!combinedAddress) {
+    combinedAddress = "Not provided";
+  }
 
   if (honeypot) {
     return { error: "Spam detected." };
