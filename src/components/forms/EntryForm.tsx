@@ -279,8 +279,8 @@ export function EntryForm() {
                   {...form.register("terms")}
                   className="peer sr-only"
                 />
-                <div className="w-7 h-7 rounded-md bg-white border-2 border-gray-300 peer-checked:bg-[#C8102E] peer-checked:border-[#C8102E] transition-all flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-all scale-50 peer-checked:scale-100 duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                <div className="w-7 h-7 rounded-md bg-white border-2 border-gray-300 peer-checked:bg-[#C8102E] peer-checked:border-[#C8102E] transition-all flex items-center justify-center text-transparent peer-checked:text-white">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
