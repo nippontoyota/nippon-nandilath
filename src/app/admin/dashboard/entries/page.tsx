@@ -14,6 +14,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-IN", {
   hour: "numeric",
   minute: "2-digit",
   hour12: true,
+  timeZone: "Asia/Kolkata",
 });
 
 function parseFlags(flag: string | null): string[] {
