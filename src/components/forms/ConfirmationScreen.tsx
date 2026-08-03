@@ -27,13 +27,9 @@ export function ConfirmationScreen({
       >
         <div className="h-9" />
         <div className="relative flex items-center justify-center px-5 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="relative h-10 w-10">
-              <Image src="/images/logo_for_customer_facing.webp" alt="Toyota Emblem" fill sizes="40px" className="object-contain" priority />
-            </div>
-            <div className="flex flex-col justify-center">
-              <p className="text-gray-900 text-[18px] font-black tracking-[0.15em] leading-tight uppercase">NIPPON</p>
-              <p className="text-[#C8102E] text-[18px] font-black tracking-[0.15em] leading-none uppercase">TOYOTA</p>
+          <div className="flex items-center">
+            <div className="relative h-12 w-36">
+              <Image src="/images/gopu-nandilath.png" alt="Gopu Nandilath" fill sizes="144px" className="object-contain object-left" priority />
             </div>
           </div>
         </div>
