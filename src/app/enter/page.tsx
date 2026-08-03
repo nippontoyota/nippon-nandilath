@@ -5,7 +5,7 @@ export const revalidate = 300;
 
 export default async function EnterPage() {
   return (
-    <div className="bg-[#FFF4E1] min-h-screen">
+    <div className="bg-white min-h-screen">
       <EntryForm />
     </div>
   );
