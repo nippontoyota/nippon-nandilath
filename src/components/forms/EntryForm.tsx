@@ -135,10 +135,7 @@ export function EntryForm() {
     defaultValues: {
       name: "",
       phone: "",
-      house: "",
-      street: "",
-      city: "",
-      pincode: "",
+      address: "",
       honeypot: "",
     },
   });
@@ -281,44 +278,13 @@ export function EntryForm() {
             <div className="h-px w-full bg-gray-200 mt-2"></div>
           </div>
 
-          <Field label="House Name / No." error={form.formState.errors.house?.message}>
-            <input
-              type="text"
-              {...form.register("house")}
-              className={inputBase(!!form.formState.errors.house)}
+          <Field label="Address" error={form.formState.errors.address?.message}>
+            <textarea
+              rows={3}
+              {...form.register("address")}
+              className={inputBase(!!form.formState.errors.address)}
             />
           </Field>
-
-          <Field label="Street / Area" error={form.formState.errors.street?.message}>
-            <input
-              type="text"
-              {...form.register("street")}
-              className={inputBase(!!form.formState.errors.street)}
-            />
-          </Field>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="City / Town" error={form.formState.errors.city?.message}>
-              <input
-                type="text"
-
-                {...form.register("city")}
-                className={inputBase(!!form.formState.errors.city)}
-              />
-            </Field>
-
-            <Field label="Pincode" error={form.formState.errors.pincode?.message}>
-              <input
-                type="text"
-                maxLength={6}
-
-                {...form.register("pincode", {
-                  onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
-                })}
-                className={inputBase(!!form.formState.errors.pincode)}
-              />
-            </Field>
-          </div>
 
 
 
