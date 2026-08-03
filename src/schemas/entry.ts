@@ -13,7 +13,6 @@ export const entrySchema = z.object({
   customerLocation: z.string().min(2, "Location is required"),
   interestedInPurchase: z.enum(["Yes", "Maybe", "No"]),
   modelId: z.string().optional(),
-  branchId: z.string().optional(),
   confirm: z.boolean().refine((val) => val === true, {
     message: "You must confirm that the provided information is correct",
   }),

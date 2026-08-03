@@ -6,7 +6,6 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { assessEntrySync, assessEntryDb } from "@/lib/fraud";
-import { DEFAULT_ENTRY_BRANCH_ID } from "@/lib/entry-config";
 import { sendWhatsAppMessage, DOUBLETICK_CONFIRM_TEMPLATE } from "@/lib/doubletick";
 
 export async function submitEntry(data: EntryInput) {
@@ -20,7 +19,6 @@ export async function submitEntry(data: EntryInput) {
   }
 
   const { name, phone, customerLocation, interestedInPurchase, modelId, honeypot } = validated.data;
-  const branchId = validated.data.branchId ?? DEFAULT_ENTRY_BRANCH_ID;
   const normalizedPhone = `+91${phone}`;
 
   if (honeypot) {
@@ -30,21 +28,14 @@ export async function submitEntry(data: EntryInput) {
   const syncFlags = assessEntrySync(validated.data);
 
   try {
-    // One DB round-trip: uniqueness + branch/model/colour names + fraud
-    const [branch, existingEntry, model, dbFlags] = await Promise.all([
-      prisma.branch.findUnique({
-        where: { id: branchId },
-        select: { id: true, name: true },
-      }),
+    const [existingEntry, model, dbFlags] = await Promise.all([
       prisma.entry.findFirst({
         where: { OR: [{ phone: normalizedPhone }] },
         select: { phone: true },
       }),
       modelId ? prisma.model.findUnique({ where: { id: modelId }, select: { name: true } }) : Promise.resolve(null),
-      assessEntryDb(normalizedPhone, ip, branchId),
+      assessEntryDb(normalizedPhone, ip),
     ]);
-
-    if (!branch) return { error: "Invalid branch selected." };
 
     if (existingEntry) {
       if (existingEntry.phone === normalizedPhone) {
@@ -54,7 +45,6 @@ export async function submitEntry(data: EntryInput) {
 
     const fraudFlags = [...syncFlags, ...dbFlags];
 
-    // Single write on the critical path — WhatsApp log + send happen after response
     const entry = await prisma.entry.create({
       data: {
         name,
@@ -63,12 +53,10 @@ export async function submitEntry(data: EntryInput) {
         customerLocation,
         interestedInPurchase,
         modelId: modelId || null,
-        branchId: branch.id,
         ip,
         userAgent,
         flag: fraudFlags.length > 0 ? JSON.stringify(fraudFlags) : null,
       },
-
       select: { id: true },
     });
 
@@ -81,7 +69,7 @@ export async function submitEntry(data: EntryInput) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         await sendWhatsAppMessage(normalizedPhone, DOUBLETICK_CONFIRM_TEMPLATE, {
           name,
-          branchName: branch.name,
+          branchName: "Nippon Toyota",
           vehicle: `${model?.name || "No Model"}`,
           vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,

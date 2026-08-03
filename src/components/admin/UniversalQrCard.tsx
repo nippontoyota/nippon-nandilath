@@ -37,7 +37,7 @@ export function UniversalQrCard({ entryUrl }: { entryUrl: string }) {
           Entry QR code
         </CardTitle>
         <CardDescription>
-          One universal QR for all showrooms. Scans open the single registration form.
+          One QR for Nippon Toyota. Scans open the registration form.
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-5 flex flex-col items-center">

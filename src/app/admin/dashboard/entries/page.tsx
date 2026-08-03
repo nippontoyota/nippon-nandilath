@@ -44,11 +44,7 @@ export default async function EntriesPage(props: {
       }
     : {};
 
-  const [branches, entries, totalEntries, flaggedCount] = await Promise.all([
-    prisma.branch.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
+  const [entries, totalEntries, flaggedCount] = await Promise.all([
     prisma.entry.findMany({
       where: whereClause,
       select: {
@@ -60,7 +56,6 @@ export default async function EntriesPage(props: {
         flag: true,
         excluded: true,
         createdAt: true,
-        branchId: true,
         model: { select: { name: true } },
       },
       orderBy: { createdAt: "desc" },
@@ -72,13 +67,6 @@ export default async function EntriesPage(props: {
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalEntries / PAGE_SIZE));
-
-  const groups = branches
-    .map((branch) => ({
-      branch,
-      entries: entries.filter((e) => e.branchId === branch.id),
-    }))
-    .filter((group) => group.entries.length > 0);
 
   const pageHref = (p: number) =>
     `?page=${p}${search ? `&search=${encodeURIComponent(search)}` : ""}`;
@@ -117,13 +105,13 @@ export default async function EntriesPage(props: {
         </p>
       </div>
 
-      {groups.length === 0 && search && (
+      {entries.length === 0 && search && (
         <div className="text-center py-14 text-sm text-gray-600 bg-white rounded-xl border border-dashed border-gray-300">
           No entries match &quot;{search}&quot;.
         </div>
       )}
 
-      {groups.length === 0 && !search && (
+      {entries.length === 0 && !search && (
         <div className="text-center py-14 bg-white rounded-xl border border-dashed border-gray-300">
           <p className="text-sm font-medium text-gray-900">No entries yet</p>
           <p className="text-sm text-gray-600 mt-1">
@@ -132,7 +120,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {groups.length > 0 && (
+      {entries.length > 0 && (
         <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm min-w-[720px]">
@@ -146,107 +134,89 @@ export default async function EntriesPage(props: {
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              {groups.map((group) => (
-                <tbody key={group.branch.id} className="group/branch divide-y divide-gray-100">
-                  <tr className="bg-gray-50">
-                    <td
-                      colSpan={6}
-                      className="px-4 py-2 text-xs font-semibold text-gray-900 border-t border-gray-200 group-first/branch:border-t-0"
+              <tbody className="divide-y divide-gray-100">
+                {entries.map((entry) => {
+                  const flags = parseFlags(entry.flag);
+                  return (
+                    <tr
+                      key={entry.id}
+                      className={`transition-colors hover:bg-gray-50/80 ${
+                        entry.excluded ? "bg-gray-50/60" : "bg-white"
+                      }`}
                     >
-                      <span className="truncate inline-block max-w-full align-bottom">
-                        {group.branch.name}
-                      </span>
-                      <span className="text-gray-500 font-normal ml-2">
-                        {group.entries.length} on this page
-                      </span>
-                    </td>
-                  </tr>
-                  {group.entries.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
-                        No entries for this branch yet.
+                      <td className="px-4 py-3 min-w-0 max-w-[180px]">
+                        <div
+                          className={`font-medium truncate ${entry.excluded ? "text-gray-500" : "text-gray-900"}`}
+                          title={entry.name}
+                        >
+                          {entry.name}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5 truncate">{entry.phone}</div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="font-mono text-xs text-gray-900">
+                          {entry.id.slice(0, 8).toUpperCase()}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5">
+                          {dateFormatter.format(entry.createdAt)}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 min-w-0 max-w-[200px]">
+                        <div
+                          className="text-gray-900 truncate"
+                          title={`${entry.customerLocation} · Interested: ${entry.interestedInPurchase}`}
+                        >
+                          {entry.customerLocation}
+                          <span className="text-gray-400 mx-1">·</span>
+                          <span className={entry.interestedInPurchase === "Yes" ? "text-emerald-600 font-medium" : ""}>
+                            Int: {entry.interestedInPurchase}
+                          </span>
+                        </div>
+                        <div
+                          className="text-xs text-gray-500 mt-0.5 truncate"
+                          title={entry.model?.name || "No model selected"}
+                        >
+                          {entry.model?.name || "No model selected"}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        {flags.length > 0 ? (
+                          <div className="flex flex-wrap gap-1 max-w-[160px]">
+                            {flags.map((f) => (
+                              <span
+                                key={f}
+                                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-50 text-red-700 border border-red-100 capitalize"
+                                title={f.replace(/_/g, " ")}
+                              >
+                                {f.replace(/_/g, " ")}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-gray-300">—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        {entry.excluded ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                            Excluded
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            In draw
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <ExcludeEntryButton id={entry.id} excluded={entry.excluded} />
+                          <DeleteEntryButton id={entry.id} name={entry.name} />
+                        </div>
                       </td>
                     </tr>
-                  ) : (
-                    group.entries.map((entry) => {
-                      const flags = parseFlags(entry.flag);
-                      return (
-                        <tr
-                          key={entry.id}
-                          className={`transition-colors hover:bg-gray-50/80 ${
-                            entry.excluded ? "bg-gray-50/60" : "bg-white"
-                          }`}
-                        >
-                          <td className="px-4 py-3 min-w-0 max-w-[180px]">
-                            <div
-                              className={`font-medium truncate ${entry.excluded ? "text-gray-500" : "text-gray-900"}`}
-                              title={entry.name}
-                            >
-                              {entry.name}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-0.5 truncate">{entry.phone}</div>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <div className="font-mono text-xs text-gray-900">
-                              {entry.id.slice(0, 8).toUpperCase()}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-0.5">
-                              {dateFormatter.format(entry.createdAt)}
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 min-w-0 max-w-[200px]">
-                            <div
-                              className="text-gray-900 truncate"
-                              title={`${entry.customerLocation} · Interested: ${entry.interestedInPurchase}`}
-                            >
-                              {entry.customerLocation}
-                              <span className="text-gray-400 mx-1">·</span>
-                              <span className={entry.interestedInPurchase === 'Yes' ? 'text-emerald-600 font-medium' : ''}>Int: {entry.interestedInPurchase}</span>
-                            </div>
-                            <div className="text-xs text-gray-500 mt-0.5 truncate" title={entry.model?.name || "No model selected"}>
-                              {entry.model?.name || "No model selected"}
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            {flags.length > 0 ? (
-                              <div className="flex flex-wrap gap-1 max-w-[160px]">
-                                {flags.map((f) => (
-                                  <span
-                                    key={f}
-                                    className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-50 text-red-700 border border-red-100 capitalize"
-                                    title={f.replace(/_/g, " ")}
-                                  >
-                                    {f.replace(/_/g, " ")}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-gray-300">—</span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3">
-                            {entry.excluded ? (
-                              <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                                Excluded
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                In draw
-                              </span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center justify-end gap-1.5">
-                              <ExcludeEntryButton id={entry.id} excluded={entry.excluded} />
-                              <DeleteEntryButton id={entry.id} name={entry.name} />
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              ))}
+                  );
+                })}
+              </tbody>
             </table>
           </div>
         </div>

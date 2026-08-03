@@ -18,7 +18,6 @@ export function SupabaseRealtime() {
 
     const scheduleRefresh = () => {
       if (timer.current) clearTimeout(timer.current);
-      // Burst of inserts → one refresh, not N
       timer.current = setTimeout(() => router.refresh(), 400);
     };
 
@@ -27,15 +26,15 @@ export function SupabaseRealtime() {
       .on("postgres_changes", { event: "*", schema: "public", table: "entries" }, scheduleRefresh)
       .subscribe();
 
-    const branchesSubscription = supabase
-      .channel("realtime-branches")
-      .on("postgres_changes", { event: "*", schema: "public", table: "branches" }, scheduleRefresh)
+    const winnersSubscription = supabase
+      .channel("realtime-winners")
+      .on("postgres_changes", { event: "*", schema: "public", table: "winners" }, scheduleRefresh)
       .subscribe();
 
     return () => {
       if (timer.current) clearTimeout(timer.current);
       supabase.removeChannel(entriesSubscription);
-      supabase.removeChannel(branchesSubscription);
+      supabase.removeChannel(winnersSubscription);
     };
   }, [router]);
 

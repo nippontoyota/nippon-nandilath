@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, FileText, Palette } from "lucide-react";
+import { LayoutDashboard, FileText, Palette } from "lucide-react";
 import { FlagBadge } from "./FlagBadge";
 
 export const adminNavItems = [
-  { href: "/admin/dashboard", label: "Draw", fullLabel: "Draw Winners", icon: LayoutDashboard, badge: null as "flags" | null },
-  { href: "/admin/dashboard/branches", label: "Branches", fullLabel: "Branches", icon: Store, badge: null },
+  { href: "/admin/dashboard", label: "Draw", fullLabel: "Draw Winner", icon: LayoutDashboard, badge: null as "flags" | null },
   { href: "/admin/dashboard/entries", label: "Entries", fullLabel: "Entries", icon: FileText, badge: "flags" as const },
   { href: "/admin/dashboard/models", label: "Models", fullLabel: "Models", icon: Palette, badge: null },
 ];
@@ -53,7 +52,7 @@ export function AdminMobileNav() {
       className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]"
       aria-label="Admin mobile"
     >
-      <div className="grid grid-cols-4 h-14">
+      <div className="grid grid-cols-3 h-14">
         {adminNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = isActivePath(pathname, item.href);

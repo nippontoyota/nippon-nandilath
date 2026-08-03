@@ -30,7 +30,7 @@ foreach ($entry in $envVars.GetEnumerator()) {
 Write-Host "Testing database connection..."
 $env:DATABASE_URL = $envVars.DATABASE_URL
 $env:DIRECT_URL = $envVars.DIRECT_URL
-node -e "const {PrismaClient}=require('@prisma/client'); const p=new PrismaClient(); p.branch.count().then(c=>{console.log('Connected. Branches:', c); return p.`$disconnect();}).catch(e=>{console.error(e.message); process.exit(1);})"
+node -e "const {PrismaClient}=require('@prisma/client'); const p=new PrismaClient(); p.model.count().then(c=>{console.log('Connected. Models:', c); return p.`$disconnect();}).catch(e=>{console.error(e.message); process.exit(1);})"
 
 Write-Host "Redeploying Vercel production..."
 npx vercel --prod --yes | Out-Null
