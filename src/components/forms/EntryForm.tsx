@@ -18,7 +18,7 @@ import { CAMPAIGN_NAME } from "@/lib/brand";
 
 
 const inputBase = (hasError: boolean) =>
-  `w-full px-4 py-3.5 rounded-2xl text-[14px] font-medium border-2 transition-all bg-white outline-none text-gray-900 placeholder:text-gray-400 ` +
+  `w-full px-4 py-3.5 rounded-2xl text-[16px] font-medium border-2 transition-all bg-white outline-none text-gray-900 placeholder:text-gray-400 ` +
   (hasError
     ? 'border-red-400'
     : 'border-gray-200 focus:border-gray-900 focus:shadow-[0_0_0_3px_rgba(0,0,0,0.1)]')
