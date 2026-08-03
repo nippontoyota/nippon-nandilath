@@ -18,10 +18,17 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, address, honeypot } = validated.data;
+  const { name, phone, address, city, pincode, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
   
-  const combinedAddress = address ? address.trim() : "Not provided";
+  const addressParts = [address, city].filter(Boolean);
+  let combinedAddress = addressParts.join(", ");
+  if (pincode) {
+    combinedAddress += combinedAddress ? ` - ${pincode}` : pincode;
+  }
+  if (!combinedAddress) {
+    combinedAddress = "Not provided";
+  }
 
   if (honeypot) {
     return { error: "Spam detected." };
