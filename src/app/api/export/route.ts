@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       Name: w.entry.name,
       Phone: w.entry.phone,
 
-      Location: w.entry.customerLocation,
+      Address: w.entry.customerLocation,
 
       "Draw Date": w.createdAt.toISOString(),
     }));
@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
       Name: e.name,
       Phone: e.phone,
 
-      Location: e.customerLocation,
+      Address: e.customerLocation,
       Flagged: flags.join(", ") || "No",
       Excluded: e.excluded ? "Yes" : "No",
       "Created At": e.createdAt.toISOString(),

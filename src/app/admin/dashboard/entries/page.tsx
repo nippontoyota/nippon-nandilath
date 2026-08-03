@@ -128,7 +128,7 @@ export default async function EntriesPage(props: {
                 <tr>
                   <th className="px-4 py-3 font-medium">Participant</th>
                   <th className="px-4 py-3 font-medium">Ticket</th>
-                  <th className="px-4 py-3 font-medium">Location / Vehicle</th>
+                  <th className="px-4 py-3 font-medium">Address</th>
                   <th className="px-4 py-3 font-medium">Flags</th>
                   <th className="px-4 py-3 font-medium">Draw status</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>

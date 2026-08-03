@@ -185,7 +185,7 @@ export function ConfirmationScreen({
             {[
               { label: 'Name', value: name },
 
-              { label: 'Location', value: customerLocation },
+              { label: 'Address', value: customerLocation },
 
             ].map(row => (
               <div key={row.label} className="flex items-center justify-between gap-3">

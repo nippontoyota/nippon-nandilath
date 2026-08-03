@@ -167,7 +167,7 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
                   <dd className="font-medium text-gray-900 break-all">{winner.entry.phone}</dd>
                 </div>
                 <div className="grid grid-cols-[5rem_1fr] gap-2">
-                  <dt className="text-gray-500">Location</dt>
+                  <dt className="text-gray-500">Address</dt>
                   <dd className="font-medium text-gray-900 break-words">{winner.entry.customerLocation}</dd>
                 </div>
               </dl>
