@@ -23,7 +23,7 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, address, honeypot } = validated.data;
+  const { name, phone, email, address, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
   
   const combinedAddress = address ? address.trim() : "Not provided";
@@ -56,6 +56,7 @@ export async function submitEntry(data: EntryInput) {
         name,
         phone: normalizedPhone,
         phoneRaw: phone,
+        email: email || null,
         customerLocation: combinedAddress,
 
         ip,

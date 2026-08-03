@@ -10,6 +10,7 @@ export const entrySchema = z.object({
     .string()
     .transform((val) => val.startsWith("+91") ? val.slice(3) : val)
     .pipe(z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number")),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
   address: z.string().optional().or(z.literal("")),
   terms: z.boolean().refine((val) => val === true, {
     message: "You must accept the terms and conditions",

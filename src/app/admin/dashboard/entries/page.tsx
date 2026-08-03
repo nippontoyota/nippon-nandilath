@@ -52,6 +52,7 @@ export default async function EntriesPage(props: {
         id: true,
         name: true,
         phone: true,
+        email: true,
         customerLocation: true,
 
         flag: true,
@@ -153,6 +154,9 @@ export default async function EntriesPage(props: {
                           {entry.name}
                         </div>
                         <div className="text-xs text-gray-500 mt-0.5 truncate">{entry.phone}</div>
+                        {entry.email && (
+                          <div className="text-xs text-gray-400 mt-0.5 truncate">{entry.email}</div>
+                        )}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="font-mono text-xs text-gray-900">
