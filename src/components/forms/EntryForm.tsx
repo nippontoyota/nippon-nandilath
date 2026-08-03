@@ -135,7 +135,7 @@ export function EntryForm() {
     defaultValues: {
       name: "",
       phone: "",
-      customerLocation: "",
+      address: "",
       honeypot: "",
     },
   });
@@ -266,29 +266,23 @@ export function EntryForm() {
           </Field>
 
           <Field label="Mobile Number" error={form.formState.errors.phone?.message}>
-            <div className="flex gap-2">
-              <div
-                className="flex items-center justify-center gap-1.5 px-3.5 rounded-2xl border-2 border-gray-200 bg-white text-[13px] font-bold text-gray-900 whitespace-nowrap shrink-0"
-                style={{ paddingTop: '0.875rem', paddingBottom: '0.875rem' }}
-              >
-                +91
-              </div>
-              <input
-                type="tel"
-                maxLength={10}
-                {...form.register("phone", {
-                  onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
-                })}
-                className={inputBase(!!form.formState.errors.phone) + ' !w-auto flex-1 min-w-0'}
-              />
-            </div>
+            <input
+              type="tel"
+              maxLength={10}
+              placeholder="e.g. 9876543210"
+              {...form.register("phone", {
+                onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
+              })}
+              className={inputBase(!!form.formState.errors.phone)}
+            />
           </Field>
 
-          <Field label="Customer Location" error={form.formState.errors.customerLocation?.message}>
-            <input
-              type="text"
-              {...form.register("customerLocation")}
-              className={inputBase(!!form.formState.errors.customerLocation)}
+          <Field label="Address" error={form.formState.errors.address?.message}>
+            <textarea
+              rows={3}
+              placeholder="House, Street, Pincode..."
+              {...form.register("address")}
+              className={inputBase(!!form.formState.errors.address)}
             />
           </Field>
 
