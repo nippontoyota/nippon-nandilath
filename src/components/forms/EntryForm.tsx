@@ -276,6 +276,11 @@ export function EntryForm() {
             />
           </Field>
 
+          <div className="pt-4 pb-2">
+            <h3 className="text-[13px] font-black uppercase tracking-widest text-gray-800">Address</h3>
+            <div className="h-px w-full bg-gray-200 mt-2"></div>
+          </div>
+
           <Field label="House Name / No." error={form.formState.errors.house?.message}>
             <input
               type="text"
