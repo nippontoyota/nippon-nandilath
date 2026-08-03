@@ -271,7 +271,7 @@ export function EntryForm() {
             <input
               type="tel"
               maxLength={10}
-              placeholder="e.g. 9876543210"
+
               {...form.register("phone", {
                 onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
               })}
@@ -282,7 +282,7 @@ export function EntryForm() {
           <Field label="Address (House & Street)" error={form.formState.errors.address?.message}>
             <input
               type="text"
-              placeholder="e.g. 123, Gandhi Road"
+
               {...form.register("address")}
               className={inputBase(!!form.formState.errors.address)}
             />
@@ -292,7 +292,7 @@ export function EntryForm() {
             <Field label="City / Town" error={form.formState.errors.city?.message}>
               <input
                 type="text"
-                placeholder="e.g. Kochi"
+
                 {...form.register("city")}
                 className={inputBase(!!form.formState.errors.city)}
               />
@@ -302,7 +302,7 @@ export function EntryForm() {
               <input
                 type="text"
                 maxLength={6}
-                placeholder="e.g. 682001"
+
                 {...form.register("pincode", {
                   onChange: (e) => e.target.value = e.target.value.replace(/\D/g, '')
                 })}
