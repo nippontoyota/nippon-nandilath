@@ -16,7 +16,6 @@ async function main() {
     "Legender",
     "Land Cruiser 300",
     "Vellfire",
-    "Land Cruiser Prado",
   ];
 
   for (const name of modelNames) {
