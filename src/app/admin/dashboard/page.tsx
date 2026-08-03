@@ -16,7 +16,7 @@ export default async function AdminDashboardPage() {
             name: true,
             phone: true,
             customerLocation: true,
-            model: { select: { name: true } },
+
           },
         },
       },

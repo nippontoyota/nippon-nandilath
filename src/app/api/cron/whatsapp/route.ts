@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     const entryIds = messagesToProcess.map((m) => m.entryId);
     const entries = await prisma.entry.findMany({
       where: { id: { in: entryIds } },
-      include: { model: true },
+
     });
     const entryMap = new Map(entries.map((e) => [e.id, e]));
 
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
         const variables = {
           name: entry.name,
           branchName: "Nippon Toyota",
-          vehicle: entry.model?.name || "None",
+          vehicle: "Glanza",
           vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
         };

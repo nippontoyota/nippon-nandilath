@@ -18,7 +18,7 @@ export async function submitEntry(data: EntryInput) {
     return { error: "Invalid data provided." };
   }
 
-  const { name, phone, customerLocation, modelId, honeypot } = validated.data;
+  const { name, phone, customerLocation, honeypot } = validated.data;
   const normalizedPhone = `+91${phone}`;
 
   if (honeypot) {
@@ -28,12 +28,11 @@ export async function submitEntry(data: EntryInput) {
   const syncFlags = assessEntrySync(validated.data);
 
   try {
-    const [existingEntry, model, dbFlags] = await Promise.all([
+    const [existingEntry, dbFlags] = await Promise.all([
       prisma.entry.findFirst({
         where: { OR: [{ phone: normalizedPhone }] },
         select: { phone: true },
       }),
-      modelId ? prisma.model.findUnique({ where: { id: modelId }, select: { name: true } }) : Promise.resolve(null),
       assessEntryDb(normalizedPhone, ip),
     ]);
 
@@ -52,7 +51,6 @@ export async function submitEntry(data: EntryInput) {
         phoneRaw: phone,
         customerLocation,
 
-        modelId: modelId || null,
         ip,
         userAgent,
         flag: fraudFlags.length > 0 ? JSON.stringify(fraudFlags) : null,
@@ -70,7 +68,7 @@ export async function submitEntry(data: EntryInput) {
         await sendWhatsAppMessage(normalizedPhone, DOUBLETICK_CONFIRM_TEMPLATE, {
           name,
           branchName: "Nippon Toyota",
-          vehicle: `${model?.name || "No Model"}`,
+          vehicle: "Glanza",
           vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
         });

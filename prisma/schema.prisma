@@ -8,24 +8,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Model {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-
-  entries Entry[]
-
-  @@map("models")
-}
-
 model Entry {
   id                   String   @id @default(cuid())
   name                 String
   phone                String   @unique
   phoneRaw             String
   customerLocation     String   @default("Unknown")
-  modelId              String?
-  model                Model?   @relation(fields: [modelId], references: [id])
   ip                   String?
   userAgent            String?
   flag                 String?

@@ -12,7 +12,7 @@ import { CAMPAIGN_NAME } from "@/lib/brand";
 interface ConfirmationScreenProps {
   entryId: string;
   name: string;
-  modelName: string;
+
   customerLocation: string;
 
 }
@@ -20,7 +20,7 @@ interface ConfirmationScreenProps {
 export function ConfirmationScreen({
   entryId,
   name,
-  modelName,
+
   customerLocation,
 
 }: ConfirmationScreenProps) {
@@ -184,7 +184,7 @@ export function ConfirmationScreen({
           <div className="space-y-3">
             {[
               { label: 'Name', value: name },
-              { label: 'Vehicle', value: modelName || "None" },
+
               { label: 'Location', value: customerLocation },
 
             ].map(row => (

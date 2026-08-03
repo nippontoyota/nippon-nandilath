@@ -15,14 +15,7 @@ import {
 } from "./FestiveElements";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
-interface ModelType {
-  id: string;
-  name: string;
-}
 
-interface EntryFormProps {
-  models: ModelType[];
-}
 
 const inputBase = (hasError: boolean) =>
   `w-full px-4 py-3.5 rounded-2xl text-[14px] font-medium border-2 transition-all bg-white outline-none text-[#C8102E] placeholder:text-gray-400 ` +
@@ -132,7 +125,7 @@ function SearchableSelect({
   );
 }
 
-export function EntryForm({ models }: EntryFormProps) {
+export function EntryForm() {
   const campaignSubtitle = CAMPAIGN_NAME;
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -143,8 +136,6 @@ export function EntryForm({ models }: EntryFormProps) {
       name: "",
       phone: "",
       customerLocation: "",
-      modelId: "",
-      confirm: false,
       honeypot: "",
     },
   });
@@ -301,50 +292,7 @@ export function EntryForm({ models }: EntryFormProps) {
             />
           </Field>
 
-          <div className="pt-2">
-                  <Field label="Vehicle Model" error={form.formState.errors.modelId?.message}>
-                    <SearchableSelect
-                      options={models}
-                      value={form.watch("modelId") || ""}
-                      onChange={(val) => {
-                        form.setValue("modelId", val, { shouldValidate: true });
-                      }}
-                      placeholder=""
-                      hasError={!!form.formState.errors.modelId}
-                    />
-                  </Field>
-                </div>
 
-          <div className="mt-8 mb-6 bg-[#FFF4E1]/50 p-4 rounded-xl border border-[#C8102E]/30">
-            <label className="flex items-start gap-3 cursor-pointer group">
-              <div className="relative flex items-center justify-center mt-0.5">
-                <input
-                  type="checkbox"
-                  {...form.register("confirm")}
-                  className="peer sr-only"
-                />
-                <div className="w-5 h-5 rounded border-2 border-[#C8102E]/40 bg-white peer-checked:bg-[#C8102E] peer-checked:border-[#C8102E] transition-all shadow-sm" />
-                <svg className="absolute w-3.5 h-3.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span className="text-[11px] leading-relaxed font-medium text-[#C8102E] select-none">
-                I confirm that the details provided are accurate and agree to the 
-                <a href="#" className="text-[#F062A7] font-bold mx-1 hover:underline">Terms &amp; Conditions</a> 
-                of the {CAMPAIGN_NAME}.
-              </span>
-            </label>
-            {form.formState.errors.confirm && (
-              <motion.p 
-                initial={{ opacity: 0, y: -5 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                className="text-[11px] font-medium mb-3 flex items-center gap-1" 
-                style={{ color: '#DC2626' }}
-              >
-                <span>⚠</span> {form.formState.errors.confirm.message}
-              </motion.p>
-            )}
-          </div>
 
           {form.formState.errors.root && (
             <motion.p 
