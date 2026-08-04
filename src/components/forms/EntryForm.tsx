@@ -361,7 +361,7 @@ export function EntryForm() {
             />
           </Field>
 
-          <Field label="Email Address (Optional)" error={form.formState.errors.email?.message}>
+          <Field label="Email Address" error={form.formState.errors.email?.message}>
             <input
               {...form.register("email")}
               type="email"
