@@ -1,31 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { DeleteEntryButton } from "@/components/admin/DeleteEntryButton";
-import { ExcludeEntryButton } from "@/components/admin/ExcludeEntryButton";
 import { EntriesSearch } from "@/components/admin/EntriesSearch";
+import { EntriesTable } from "@/components/admin/EntriesTable";
 import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 50;
-
-const dateFormatter = new Intl.DateTimeFormat("en-IN", {
-  month: "short",
-  day: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  hour12: true,
-  timeZone: "Asia/Kolkata",
-});
-
-function parseFlags(flag: string | null): string[] {
-  if (!flag) return [];
-  try {
-    const parsed = JSON.parse(flag);
-    return Array.isArray(parsed) ? parsed.map(String) : [String(parsed)];
-  } catch {
-    return [flag];
-  }
-}
 
 export default async function EntriesPage(props: {
   searchParams?: Promise<{ search?: string; page?: string }>;
@@ -54,11 +34,10 @@ export default async function EntriesPage(props: {
         phone: true,
         email: true,
         customerLocation: true,
-
         flag: true,
+        flagReason: true,
         excluded: true,
         createdAt: true,
-
       },
       orderBy: { createdAt: "desc" },
       take: PAGE_SIZE,
@@ -72,6 +51,11 @@ export default async function EntriesPage(props: {
 
   const pageHref = (p: number) =>
     `?page=${p}${search ? `&search=${encodeURIComponent(search)}` : ""}`;
+
+  const tableEntries = entries.map((entry) => ({
+    ...entry,
+    createdAt: entry.createdAt.toISOString(),
+  }));
 
   return (
     <div className="space-y-6">
@@ -122,100 +106,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && (
-        <div className="admin-product-card">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm min-w-[720px]">
-              <thead className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-xs">
-                <tr>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Participant</th>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Ticket</th>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Address</th>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Draw status</th>
-                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--gmart-border)]">
-                {entries.map((entry) => {
-                  const flags = parseFlags(entry.flag);
-                  return (
-                    <tr
-                      key={entry.id}
-                      className={`transition-colors hover:bg-[#fff5f6]/50 ${
-                        entry.excluded ? "bg-[#fafafa]" : "bg-white"
-                      }`}
-                    >
-                      <td className="px-4 py-3 min-w-0 max-w-[180px]">
-                        <div
-                          className={`font-medium truncate ${entry.excluded ? "text-[var(--gmart-muted)]" : "text-[var(--gmart-title)]"}`}
-                          title={entry.name}
-                        >
-                          {entry.name}
-                        </div>
-                        <div className="text-xs text-[var(--gmart-muted)] mt-0.5 truncate">{entry.phone}</div>
-                        {entry.email && (
-                          <div className="text-xs text-[var(--gmart-muted)]/80 mt-0.5 truncate">{entry.email}</div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="font-mono text-xs text-[var(--gmart-title)]">
-                          {entry.id.slice(0, 8).toUpperCase()}
-                        </div>
-                        <div className="text-xs text-[var(--gmart-muted)] mt-0.5">
-                          {dateFormatter.format(entry.createdAt)}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 min-w-0 max-w-[200px]">
-                        <div
-                          className="text-[var(--gmart-title)] truncate"
-                          title={entry.customerLocation}
-                        >
-                          {entry.customerLocation}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        {flags.length > 0 ? (
-                          <div className="flex flex-wrap gap-1 max-w-[160px]">
-                            {flags.map((f) => (
-                              <span
-                                key={f}
-                                className="admin-sale-badge capitalize"
-                                title={f.replace(/_/g, " ")}
-                              >
-                                {f.replace(/_/g, " ")}
-                              </span>
-                            ))}
-                          </div>
-                        ) : (
-                          <span className="text-[var(--gmart-border)]">—</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        {entry.excluded ? (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-[#f3f3f3] text-[var(--gmart-muted)] border border-[var(--gmart-border)]">
-                            Excluded
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-[#f0faf4] text-[var(--gmart-success)] border border-[#b7e4c7]">
-                            In draw
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <ExcludeEntryButton id={entry.id} excluded={entry.excluded} />
-                          <DeleteEntryButton id={entry.id} name={entry.name} />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      {entries.length > 0 && <EntriesTable entries={tableEntries} />}
 
       {totalPages > 1 && (
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
