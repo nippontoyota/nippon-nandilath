@@ -25,8 +25,8 @@ export function ExcludeEntryButton({ id, excluded }: { id: string; excluded: boo
       title={isExcluded ? "Put back in the draw" : "Remove from the draw"}
       className={`inline-flex items-center gap-1 px-2 py-1.5 rounded-md text-[11px] font-semibold transition-colors disabled:opacity-50 min-h-8 ${
         isExcluded
-          ? "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
-          : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900"
+          ? "bg-[#fff8e8] text-[#b45309] border border-[#f5d78e] hover:bg-[#fff1cf]"
+          : "admin-btn-secondary"
       }`}
     >
       {isExcluded ? (

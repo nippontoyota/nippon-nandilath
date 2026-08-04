@@ -15,7 +15,7 @@ export function UniversalQrCard({ entryUrl }: { entryUrl: string }) {
     QRCode.toDataURL(entryUrl, {
       width: 400,
       margin: 2,
-      color: { dark: "#000000", light: "#ffffff" },
+      color: { dark: "#0D0625", light: "#ffffff" },
     })
       .then((url) => {
         if (!cancelled) setDataUrl(url);
@@ -30,18 +30,23 @@ export function UniversalQrCard({ entryUrl }: { entryUrl: string }) {
   }, [entryUrl]);
 
   return (
-    <Card className="border border-gray-200 shadow-sm overflow-hidden">
-      <CardHeader className="pb-3 border-b border-gray-100 bg-gray-50/80">
-        <CardTitle className="text-base font-semibold flex items-center gap-2">
-          <QrCode className="w-4 h-4" />
+    <Card className="admin-product-card shadow-none ring-0 border-[var(--gmart-border)] py-0 gap-0 overflow-hidden rounded-xl">
+      <div className="bg-[var(--gmart-navy)] px-5 py-2.5">
+        <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-[var(--gmart-cream)]">
+          Entry access
+        </p>
+      </div>
+      <CardHeader className="pb-3 border-b border-[var(--gmart-border)] bg-[#fafafa] px-5 pt-4">
+        <CardTitle className="text-base font-bold text-[var(--gmart-title)] flex items-center gap-2">
+          <QrCode className="w-4 h-4 text-[var(--gmart-red)]" />
           Entry QR code
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-[var(--gmart-muted)]">
           One QR for Nippon Toyota. Scans open the registration form.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-5 flex flex-col items-center">
-        <div className="bg-white p-2 rounded-lg border border-gray-100 mb-4">
+      <CardContent className="pt-5 px-5 pb-5 flex flex-col items-center">
+        <div className="bg-white p-2 rounded-md border border-[var(--gmart-border)] mb-4">
           {dataUrl ? (
             <img
               src={dataUrl}
@@ -49,18 +54,18 @@ export function UniversalQrCard({ entryUrl }: { entryUrl: string }) {
               className="w-48 h-48 object-contain"
             />
           ) : (
-            <div className="w-48 h-48 flex items-center justify-center text-sm text-gray-400">
+            <div className="w-48 h-48 flex items-center justify-center text-sm text-[var(--gmart-muted)]">
               Generating…
             </div>
           )}
         </div>
-        <p className="w-full p-2.5 bg-gray-50 rounded-lg border border-gray-100 mb-4 text-xs text-center font-mono break-all text-gray-600">
+        <p className="w-full p-2.5 bg-[#fafafa] rounded-md border border-[var(--gmart-border)] mb-4 text-xs text-center font-mono break-all text-[var(--gmart-muted)]">
           {entryUrl}
         </p>
         {dataUrl && (
           <Button
             variant="outline"
-            className="w-full h-10 gap-2"
+            className="admin-btn-secondary w-full h-10 gap-2 rounded-md"
             onClick={() => {
               const link = document.createElement("a");
               link.href = dataUrl;
