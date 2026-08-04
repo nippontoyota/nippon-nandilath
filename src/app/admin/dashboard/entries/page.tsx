@@ -76,12 +76,12 @@ export default async function EntriesPage(props: {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Entries</h1>
-          <p className="text-sm text-gray-600 mt-1 max-w-xl">
+        <div className="admin-section-rail min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--gmart-title)]">Entries</h1>
+          <p className="text-sm text-[var(--gmart-muted)] mt-1 max-w-xl">
             Review submissions, exclude fraud suspects from the draw, or delete invalid entries.
             {flaggedCount > 0 && (
-              <span className="text-red-700 font-medium">
+              <span className="text-[var(--gmart-red)] font-semibold">
                 {" "}
                 {flaggedCount} flagged for review.
               </span>
@@ -90,7 +90,7 @@ export default async function EntriesPage(props: {
         </div>
         <a
           href="/api/export?type=entries"
-          className="inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-lg bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 text-sm font-medium transition-colors shrink-0 self-start"
+          className="admin-btn-secondary inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-md text-sm font-medium shrink-0 self-start"
         >
           <Download className="w-4 h-4" />
           Export CSV
@@ -101,79 +101,78 @@ export default async function EntriesPage(props: {
         <div className="flex-1 sm:max-w-md min-w-0">
           <EntriesSearch initialSearch={search} />
         </div>
-        <p className="text-sm text-gray-500 shrink-0">
+        <p className="text-sm text-[var(--gmart-muted)] shrink-0">
           {totalEntries} {totalEntries === 1 ? "entry" : "entries"}
           {search ? " matching" : ""}
         </p>
       </div>
 
       {entries.length === 0 && search && (
-        <div className="text-center py-14 text-sm text-gray-600 bg-white rounded-xl border border-dashed border-gray-300">
+        <div className="text-center py-14 text-sm text-[var(--gmart-muted)] admin-product-card border-dashed">
           No entries match &quot;{search}&quot;.
         </div>
       )}
 
       {entries.length === 0 && !search && (
-        <div className="text-center py-14 bg-white rounded-xl border border-dashed border-gray-300">
-          <p className="text-sm font-medium text-gray-900">No entries yet</p>
-          <p className="text-sm text-gray-600 mt-1">
+        <div className="text-center py-14 admin-product-card border-dashed">
+          <p className="text-sm font-medium text-[var(--gmart-title)]">No entries yet</p>
+          <p className="text-sm text-[var(--gmart-muted)] mt-1">
             Entries appear here when customers submit the lucky draw form.
           </p>
         </div>
       )}
 
       {entries.length > 0 && (
-        <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+        <div className="admin-product-card">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm min-w-[720px]">
-              <thead className="bg-gray-50 border-b border-gray-200 text-gray-500 text-xs">
+              <thead className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-xs">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Participant</th>
-                  <th className="px-4 py-3 font-medium">Ticket</th>
-                  <th className="px-4 py-3 font-medium">Address</th>
-                  <th className="px-4 py-3 font-medium">Flags</th>
-                  <th className="px-4 py-3 font-medium">Draw status</th>
-                  <th className="px-4 py-3 font-medium text-right">Actions</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Participant</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Ticket</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Address</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Draw status</th>
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-[var(--gmart-border)]">
                 {entries.map((entry) => {
                   const flags = parseFlags(entry.flag);
                   return (
                     <tr
                       key={entry.id}
-                      className={`transition-colors hover:bg-gray-50/80 ${
-                        entry.excluded ? "bg-gray-50/60" : "bg-white"
+                      className={`transition-colors hover:bg-[#fff5f6]/50 ${
+                        entry.excluded ? "bg-[#fafafa]" : "bg-white"
                       }`}
                     >
                       <td className="px-4 py-3 min-w-0 max-w-[180px]">
                         <div
-                          className={`font-medium truncate ${entry.excluded ? "text-gray-500" : "text-gray-900"}`}
+                          className={`font-medium truncate ${entry.excluded ? "text-[var(--gmart-muted)]" : "text-[var(--gmart-title)]"}`}
                           title={entry.name}
                         >
                           {entry.name}
                         </div>
-                        <div className="text-xs text-gray-500 mt-0.5 truncate">{entry.phone}</div>
+                        <div className="text-xs text-[var(--gmart-muted)] mt-0.5 truncate">{entry.phone}</div>
                         {entry.email && (
-                          <div className="text-xs text-gray-400 mt-0.5 truncate">{entry.email}</div>
+                          <div className="text-xs text-[var(--gmart-muted)]/80 mt-0.5 truncate">{entry.email}</div>
                         )}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="font-mono text-xs text-gray-900">
+                        <div className="font-mono text-xs text-[var(--gmart-title)]">
                           {entry.id.slice(0, 8).toUpperCase()}
                         </div>
-                        <div className="text-xs text-gray-500 mt-0.5">
+                        <div className="text-xs text-[var(--gmart-muted)] mt-0.5">
                           {dateFormatter.format(entry.createdAt)}
                         </div>
                       </td>
                       <td className="px-4 py-3 min-w-0 max-w-[200px]">
                         <div
-                          className="text-gray-900 truncate"
+                          className="text-[var(--gmart-title)] truncate"
                           title={entry.customerLocation}
                         >
                           {entry.customerLocation}
                         </div>
-
                       </td>
                       <td className="px-4 py-3">
                         {flags.length > 0 ? (
@@ -181,7 +180,7 @@ export default async function EntriesPage(props: {
                             {flags.map((f) => (
                               <span
                                 key={f}
-                                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-50 text-red-700 border border-red-100 capitalize"
+                                className="admin-sale-badge capitalize"
                                 title={f.replace(/_/g, " ")}
                               >
                                 {f.replace(/_/g, " ")}
@@ -189,16 +188,16 @@ export default async function EntriesPage(props: {
                             ))}
                           </div>
                         ) : (
-                          <span className="text-gray-300">—</span>
+                          <span className="text-[var(--gmart-border)]">—</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
                         {entry.excluded ? (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-[#f3f3f3] text-[var(--gmart-muted)] border border-[var(--gmart-border)]">
                             Excluded
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-[#f0faf4] text-[var(--gmart-success)] border border-[#b7e4c7]">
                             In draw
                           </span>
                         )}
@@ -223,30 +222,30 @@ export default async function EntriesPage(props: {
           {page > 1 ? (
             <a
               href={pageHref(page - 1)}
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="admin-btn-secondary inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md"
             >
               <ChevronLeft className="w-4 h-4" />
               Previous
             </a>
           ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-100 rounded-lg cursor-not-allowed">
+            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-[var(--gmart-border)] bg-white border border-[var(--gmart-border)] rounded-md cursor-not-allowed">
               <ChevronLeft className="w-4 h-4" />
               Previous
             </span>
           )}
-          <span className="text-sm text-gray-600 px-2">
+          <span className="text-sm text-[var(--gmart-muted)] px-2">
             Page {page} of {totalPages}
           </span>
           {page < totalPages ? (
             <a
               href={pageHref(page + 1)}
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="admin-btn-secondary inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md"
             >
               Next
               <ChevronRight className="w-4 h-4" />
             </a>
           ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-100 rounded-lg cursor-not-allowed">
+            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-[var(--gmart-border)] bg-white border border-[var(--gmart-border)] rounded-md cursor-not-allowed">
               Next
               <ChevronRight className="w-4 h-4" />
             </span>

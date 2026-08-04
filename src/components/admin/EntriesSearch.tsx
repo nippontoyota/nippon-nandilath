@@ -44,7 +44,7 @@ export function EntriesSearch({ initialSearch }: { initialSearch: string }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Search by name or phone..."
-        className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-400 bg-white"
+        className="w-full pl-10 pr-10 py-2.5 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] placeholder:text-[var(--gmart-muted)]"
       />
       {value && (
         <button

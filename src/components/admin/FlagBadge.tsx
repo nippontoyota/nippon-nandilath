@@ -30,7 +30,7 @@ export function FlagBadge() {
 
   return (
     <span
-      className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full text-[10px] font-bold bg-red-500 text-white leading-none"
+      className="admin-sale-badge min-w-5 justify-center"
       title={`${count} flagged entries`}
       aria-label={`${count} flagged entries`}
     >
