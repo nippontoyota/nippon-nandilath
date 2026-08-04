@@ -45,23 +45,22 @@ const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: (
             </div>
             <div className="p-6 overflow-y-auto text-[14px] text-gray-600 leading-relaxed space-y-4">
               <p><strong>1. Program Details & Concept</strong></p>
-              <p>1.1 These Terms and Conditions govern the &quot;Onam Lucky Draw Scheme&quot; organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Motor Corporation Private Limited</strong>, wherein eligible customers can participate by completing a qualifying purchase at any Nandilath G-Mart outlet during the Program Period.</p>
+              <p>1.1 These Terms and Conditions govern the &quot;Onam Lucky Draw Scheme&quot; organized jointly by <strong>Nandilath G-Mart</strong> and <strong>Nippon Motor Corporation Private Limited</strong>, wherein eligible customers can participate by completing any purchase at any Nandilath G-Mart outlet during the Program Period.</p>
               <p>1.2 The Program is subject to all applicable central and state laws and regulations of India.</p>
               <p>1.3 Winners will be selected through a randomized computerized system. The Organizers shall not be liable to explain the method by which any winner is chosen. The joint decision of Nandilath G-Mart and Nippon Motor Corporation Private Limited shall be final and binding in all matters related to this Program.</p>
               <p>1.4 Lucky draws are directed towards encouraging customer transactions and do not fall within the ambit of lotteries and are consequently not prohibited.</p>
               
               <p><strong>2. Program Period</strong></p>
               <p>2.1 The Program will run from <strong>1st August 2026 to 30th September 2026</strong> (both dates inclusive). Entries will strictly close at 11:59:59 PM on 30th September 2026.</p>
-              <p>2.2 Only qualifying purchases that occur within the Program Period at authorized Nandilath G-Mart outlets will be considered eligible for entry.</p>
+              <p>2.2 Any purchases that occur within the Program Period at authorized Nandilath G-Mart outlets will be considered eligible for entry.</p>
 
               <p><strong>3. Eligibility</strong></p>
               <p>3.1 The following categories of customers are eligible for the Program:</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Any customer who makes a qualifying purchase at any Nandilath G-Mart outlet between 1st August 2026 and 30th September 2026.</li>
+                <li>Any customer who makes any purchase at any Nandilath G-Mart outlet between 1st August 2026 and 30th September 2026.</li>
                 <li>Customers who successfully register their entry via the official digital entry form before the deadline.</li>
               </ul>
-              <p>3.2 A valid government-issued photo ID proof (Aadhaar Card, Voter ID, Passport, or Driving License) and the original purchase invoice from Nandilath G-Mart are required to claim the prize.</p>
-              <p>3.3 This scheme is <strong>not applicable</strong> to bulk purchases, institutional orders, or corporate fleet purchases.</p>
+              <p>3.2 This scheme is <strong>not applicable</strong> to bulk purchases, institutional orders, or corporate fleet purchases.</p>
 
               <p><strong>4. Prize Structure</strong></p>
               <p>4.1 The grand prize for this campaign is a <strong>Toyota Glanza</strong>.</p>
@@ -80,7 +79,6 @@ const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: (
               <p>6.2 The following documents are required at the time of prize collection:</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Original Nandilath G-Mart purchase invoice / receipt.</li>
-                <li>Self-attested copy of a valid government-issued photo ID.</li>
                 <li>PAN Card.</li>
               </ul>
               <p>6.3 <strong>Taxes and Additional Costs:</strong> The grand prize is an ex-showroom vehicle. <strong>The winner shall be solely responsible for bearing all additional costs</strong>, including but not limited to:</p>
