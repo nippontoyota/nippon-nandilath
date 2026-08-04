@@ -73,11 +73,9 @@ export async function submitEntry(data: EntryInput) {
       });
       try {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        // Template placeholders: {{1}} name, {{2}} confirmation URL
         await sendWhatsAppMessage(normalizedPhone, DOUBLETICK_CONFIRM_TEMPLATE, {
           name,
-          branchName: "Nippon Toyota",
-          vehicle: "Glanza",
-          vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
         });
         await prisma.whatsAppLog.update({

@@ -42,11 +42,9 @@ export async function GET(request: Request) {
         if (!entry) throw new Error("Associated entry not found");
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        // Template placeholders: {{1}} name, {{2}} confirmation URL
         const variables = {
           name: entry.name,
-          branchName: "Nippon Toyota",
-          vehicle: "Glanza",
-          vin: "N/A",
           confirmationUrl: `${appUrl}/confirmation/${entry.id}`,
         };
         await sendWhatsAppMessage(entry.phone, DOUBLETICK_CONFIRM_TEMPLATE, variables);

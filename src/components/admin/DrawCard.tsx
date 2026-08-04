@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { drawWinner } from "@/app/actions/draw";
+import { drawWinner, clearWinner, redrawWinner } from "@/app/actions/draw";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Trophy, RefreshCw, AlertTriangle, CheckCircle2, X } from "lucide-react";
+import { Trophy, RefreshCw, AlertTriangle, CheckCircle2, X, Trash2 } from "lucide-react";
 
 type WinnerWithDetails = {
   id: string;
@@ -13,7 +13,6 @@ type WinnerWithDetails = {
     name: string;
     phone: string;
     customerLocation: string;
-
   };
 };
 
@@ -22,28 +21,40 @@ interface DrawCardProps {
   eligibleCount: number;
 }
 
+type ConfirmAction = "clear" | "redraw" | null;
+
 export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
 
-  const handleDraw = () => {
+  const runAction = (
+    action: () => Promise<{ error?: string; success?: boolean }>,
+    successMessage: string
+  ) => {
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
+    setConfirmAction(null);
+    setShowDetails(false);
 
     startTransition(async () => {
-      const result = await drawWinner();
+      const result = await action();
 
       if (result.error) {
         setError(result.error);
         return;
       }
 
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      setSuccess(successMessage);
+      setTimeout(() => setSuccess(null), 3000);
     });
   };
+
+  const handleDraw = () => runAction(drawWinner, "Winner drawn.");
+  const handleClear = () => runAction(clearWinner, "Winner cleared.");
+  const handleRedraw = () => runAction(redrawWinner, "Winner redrawn.");
 
   return (
     <Card className="w-full min-w-0 overflow-hidden border-gray-200 shadow-sm">
@@ -57,7 +68,7 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
           </CardDescription>
         </div>
 
-        {!winner && (
+        {!winner ? (
           <Button
             onClick={handleDraw}
             disabled={isPending || eligibleCount < 1}
@@ -76,6 +87,35 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
               </>
             )}
           </Button>
+        ) : (
+          <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmAction("clear")}
+              disabled={isPending}
+              className="w-full sm:w-auto"
+            >
+              <Trash2 className="h-4 w-4" />
+              Clear winner
+            </Button>
+            <Button
+              onClick={() => setConfirmAction("redraw")}
+              disabled={isPending}
+              className="w-full sm:w-auto"
+            >
+              {isPending ? (
+                <>
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Redrawing…
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="h-4 w-4" />
+                  Redraw
+                </>
+              )}
+            </Button>
+          </div>
         )}
       </CardHeader>
 
@@ -90,7 +130,7 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
         {success && (
           <div className="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-2 text-sm text-emerald-800">
             <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-            Winner drawn.
+            {success}
           </div>
         )}
 
@@ -176,6 +216,81 @@ export function DrawCard({ winner, eligibleCount }: DrawCardProps) {
               <Button variant="outline" onClick={() => setShowDetails(false)}>
                 Close
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmAction && winner && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-winner-action-title"
+          onClick={() => !isPending && setConfirmAction(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-lg max-w-sm w-full p-5 space-y-4 border border-gray-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div
+                className={`h-11 w-11 rounded-full flex items-center justify-center ${
+                  confirmAction === "clear" ? "bg-red-100" : "bg-amber-100"
+                }`}
+              >
+                {confirmAction === "clear" ? (
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                ) : (
+                  <RefreshCw className="h-5 w-5 text-amber-700" />
+                )}
+              </div>
+              <h3 id="confirm-winner-action-title" className="text-base font-semibold text-gray-900">
+                {confirmAction === "clear" ? "Clear winner?" : "Redraw winner?"}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {confirmAction === "clear" ? (
+                  <>
+                    Remove{" "}
+                    <span className="font-semibold text-gray-900 break-words">{winner.entry.name}</span>{" "}
+                    as winner. They stay eligible for a future draw.
+                  </>
+                ) : (
+                  <>
+                    Replace the current winner with a new random pick. The previous winner stays
+                    eligible and may be selected again.
+                  </>
+                )}
+              </p>
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setConfirmAction(null)}
+                disabled={isPending}
+                className="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmAction === "clear" ? handleClear : handleRedraw}
+                disabled={isPending}
+                className={`flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-lg disabled:opacity-50 transition-colors ${
+                  confirmAction === "clear"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-gray-900 hover:bg-gray-800"
+                }`}
+              >
+                {isPending
+                  ? confirmAction === "clear"
+                    ? "Clearing…"
+                    : "Redrawing…"
+                  : confirmAction === "clear"
+                    ? "Clear"
+                    : "Redraw"}
+              </button>
             </div>
           </div>
         </div>
