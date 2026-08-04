@@ -59,7 +59,13 @@ async function callDoubleTick(
   }
 
   const data = await res.json();
-  return { success: true, messageId: data?.messages?.[0]?.id ?? data?.id };
+  const message = data?.messages?.[0];
+  if (message?.status === "FAILED" || message?.errorMessage) {
+    throw new Error(
+      `DoubleTick send failed: ${message.errorMessage ?? message.status ?? "unknown"}`
+    );
+  }
+  return { success: true, messageId: message?.messageId ?? message?.id ?? data?.id };
 }
 
 /**
