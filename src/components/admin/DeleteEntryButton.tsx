@@ -4,7 +4,15 @@ import { useTransition, useState } from "react";
 import { deleteEntry } from "@/app/actions/entry";
 import { Trash2, AlertTriangle } from "lucide-react";
 
-export function DeleteEntryButton({ id, name }: { id: string; name: string }) {
+export function DeleteEntryButton({
+  id,
+  name,
+  onDeleted,
+}: {
+  id: string;
+  name: string;
+  onDeleted?: () => void;
+}) {
   const [isPending, startTransition] = useTransition();
   const [showModal, setShowModal] = useState(false);
 
@@ -15,6 +23,7 @@ export function DeleteEntryButton({ id, name }: { id: string; name: string }) {
         alert(result.error);
       } else {
         setShowModal(false);
+        onDeleted?.();
       }
     });
   };
