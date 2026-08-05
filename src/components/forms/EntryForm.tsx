@@ -79,14 +79,14 @@ const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: (
               <p>6.2 The following documents are required at the time of prize collection:</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Original Nandilath G-Mart purchase invoice / receipt.</li>
-                <li>PAN Card.</li>
+                <li>PAN Card (Mandatory).</li>
               </ul>
               <p>6.3 <strong>Taxes and Additional Costs:</strong> The grand prize is an ex-showroom vehicle. <strong>The winner shall be solely responsible for bearing all additional costs</strong>, including but not limited to:</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>RTO Registration charges.</li>
                 <li>Road Tax.</li>
                 <li>Vehicle Insurance.</li>
-                <li>Tax Deducted at Source (TDS) under Section 194B of the Income Tax Act, 1961 (liable at <strong>30% of the prize value</strong>, or prevailing rate). A TDS certificate will be issued accordingly.</li>
+                <li><strong>Tax Deducted at Source (TDS):</strong> As per Section 194B of the Income Tax Act, 1961, if the prize value exceeds ₹10,000, the winner will be liable to pay TDS of the prize value at the prevailing rate at the time of claim directly to Nippon Toyota. A TDS certificate will be issued accordingly.</li>
               </ul>
 
               <p><strong>7. Publicity & Consent</strong></p>
