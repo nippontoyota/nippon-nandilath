@@ -60,7 +60,7 @@ const TermsModal = ({ isOpen, onClose, onAccept }: { isOpen: boolean; onClose: (
                 <li>Any customer who makes any purchase at any Nandilath G-Mart outlet between 1st August 2026 and 30th September 2026.</li>
                 <li>Customers who successfully register their entry via the official digital entry form before the deadline.</li>
               </ul>
-              <p>3.2 This scheme is <strong>not applicable</strong> to bulk purchases, institutional orders, or corporate fleet purchases.</p>
+
 
               <p><strong>4. Prize Structure</strong></p>
               <p>4.1 The grand prize for this campaign is a <strong>Toyota Glanza</strong>.</p>
