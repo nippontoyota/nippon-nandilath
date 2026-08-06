@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { assessEntrySync, assessEntryDb } from "@/lib/fraud";
+import { isAuthenticated } from "./auth";
 import { sendWhatsAppMessage, DOUBLETICK_CONFIRM_TEMPLATE } from "@/lib/doubletick";
 
 export async function submitEntry(data: EntryInput) {
@@ -105,6 +106,8 @@ export async function submitEntry(data: EntryInput) {
 }
 
 export async function deleteEntry(id: string) {
+  if (!(await isAuthenticated())) return { error: "Unauthorized" };
+
   try {
     await prisma.$transaction([
       prisma.winner.deleteMany({ where: { entryId: id } }),
@@ -121,6 +124,8 @@ export async function deleteEntry(id: string) {
 }
 
 export async function toggleExclude(entryId: string) {
+  if (!(await isAuthenticated())) return { error: "Unauthorized" };
+
   try {
     const entry = await prisma.entry.findUnique({
       where: { id: entryId },
@@ -142,6 +147,8 @@ export async function toggleExclude(entryId: string) {
 }
 
 export async function updateCallStatus(entryId: string, callStatus: string | null, callOutcome: string | null) {
+  if (!(await isAuthenticated())) return { error: "Unauthorized" };
+
   try {
     await prisma.entry.update({
       where: { id: entryId },
