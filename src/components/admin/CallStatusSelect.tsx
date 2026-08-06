@@ -96,20 +96,25 @@ export function CallStatusSelect({
   initialOutcome: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
+  const [currentStatus, setCurrentStatus] = useState(initialStatus);
+  const [currentOutcome, setCurrentOutcome] = useState(initialOutcome);
 
   const handleStatusChange = (newStatus: string) => {
+    setCurrentStatus(newStatus);
+    setCurrentOutcome(null);
     startTransition(async () => {
       await updateCallStatus(entryId, newStatus, null);
     });
   };
 
   const handleOutcomeChange = (newOutcome: string) => {
+    setCurrentOutcome(newOutcome);
     startTransition(async () => {
-      await updateCallStatus(entryId, initialStatus, newOutcome);
+      await updateCallStatus(entryId, currentStatus, newOutcome);
     });
   };
 
-  const availableOutcomes = initialStatus ? OUTCOMES[initialStatus as keyof typeof OUTCOMES] || [] : [];
+  const availableOutcomes = currentStatus ? OUTCOMES[currentStatus as keyof typeof OUTCOMES] || [] : [];
 
   return (
     <div 
@@ -118,7 +123,7 @@ export function CallStatusSelect({
       onKeyDown={(e) => e.stopPropagation()}
     >
       <CustomSelect
-        value={initialStatus}
+        value={currentStatus}
         options={["Connected", "Not Connected"]}
         placeholder="Select status..."
         onChange={handleStatusChange}
@@ -126,9 +131,9 @@ export function CallStatusSelect({
         colorMap={STATUS_COLORS}
       />
 
-      {initialStatus && (
+      {currentStatus && (
         <CustomSelect
-          value={initialOutcome}
+          value={currentOutcome}
           options={availableOutcomes}
           placeholder="Select outcome..."
           onChange={handleOutcomeChange}
