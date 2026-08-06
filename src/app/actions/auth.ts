@@ -14,9 +14,25 @@ export async function login(prevState: Record<string, unknown> | null, formData:
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@nippontoyota.com";
+  const CALL_CENTER_EMAIL = process.env.CALL_CENTER_EMAIL || "callcenter@nippontoyota.com";
+
+  let role: string | null = null;
+  let userIdentifier: string | null = null;
 
   if (email === ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-    const session = await encrypt({ user: "admin", timestamp: Date.now() });
+    role = "admin";
+    userIdentifier = "admin";
+  } else if (
+    process.env.CALL_CENTER_PASSWORD &&
+    email === CALL_CENTER_EMAIL &&
+    password === process.env.CALL_CENTER_PASSWORD
+  ) {
+    role = "call_center";
+    userIdentifier = "call_center";
+  }
+
+  if (role && userIdentifier) {
+    const session = await encrypt({ user: userIdentifier, role, timestamp: Date.now() });
     const cookieStore = await cookies();
     cookieStore.set("admin_session", session, {
       httpOnly: true,

@@ -140,3 +140,17 @@ export async function toggleExclude(entryId: string) {
     return { error: "Failed to update entry." };
   }
 }
+
+export async function updateCallStatus(entryId: string, callStatus: string | null, callOutcome: string | null) {
+  try {
+    await prisma.entry.update({
+      where: { id: entryId },
+      data: { callStatus, callOutcome },
+    });
+    revalidatePath("/admin/dashboard/entries");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update call status:", error);
+    return { error: "Failed to update entry." };
+  }
+}
