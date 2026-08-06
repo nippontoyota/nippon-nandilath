@@ -69,14 +69,14 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                   Address
                 </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
-                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
-                  Call Status
-                </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] whitespace-nowrap">
                   Draw status
                 </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] text-right whitespace-nowrap">
                   Actions
+                </th>
+                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
+                  Call Status
                 </th>
               </tr>
             </thead>
@@ -142,13 +142,7 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                         <span className="text-[var(--gmart-border)]">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 align-top">
-                      <CallStatusSelect
-                        entryId={entry.id}
-                        initialStatus={entry.callStatus}
-                        initialOutcome={entry.callOutcome}
-                      />
-                    </td>
+
                     <td className="px-4 py-3 align-top whitespace-nowrap">
                       {entry.excluded ? (
                         <span className="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-[#f3f3f3] text-[var(--gmart-muted)] border border-[var(--gmart-border)]">
@@ -169,6 +163,13 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                         <ExcludeEntryButton id={entry.id} excluded={entry.excluded} />
                         <DeleteEntryButton id={entry.id} name={entry.name} />
                       </div>
+                    </td>
+                    <td className="px-4 py-3 align-top">
+                      <CallStatusSelect
+                        entryId={entry.id}
+                        initialStatus={entry.callStatus}
+                        initialOutcome={entry.callOutcome}
+                      />
                     </td>
                   </tr>
                 );
