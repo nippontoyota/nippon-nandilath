@@ -154,7 +154,6 @@ export async function updateCallStatus(entryId: string, callStatus: string | nul
       where: { id: entryId },
       data: { callStatus, callOutcome },
     });
-    revalidatePath("/admin/dashboard/entries");
     return { success: true };
   } catch (error) {
     console.error("Failed to update call status:", error);
