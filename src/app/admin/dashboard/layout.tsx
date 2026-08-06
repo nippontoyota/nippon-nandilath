@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { isAuthenticated, logout } from "@/app/actions/auth";
-import { LogOut } from "lucide-react";
+import { getSession, logout } from "@/app/actions/auth";
+import { LogOut, Headset } from "lucide-react";
 
 import { AdminNav, AdminMobileNav } from "@/components/admin/AdminNav";
 import { SupabaseRealtime } from "@/components/admin/SupabaseRealtime";
@@ -11,10 +11,12 @@ export default async function AdminDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const isAuth = await isAuthenticated();
-  if (!isAuth) {
+  const session = await getSession();
+  if (!session) {
     redirect("/admin/login");
   }
+  
+  const isCallCenter = session.role === "call_center";
 
   return (
     <div className="admin-shell h-dvh overflow-hidden flex">
@@ -77,11 +79,17 @@ export default async function AdminDashboardLayout({
               <span className="text-sm text-[var(--gmart-muted)] truncate">Draw operations</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold bg-[var(--gmart-red)] text-white">
-                A
-              </div>
+              {isCallCenter ? (
+                <div className="w-7 h-7 rounded-full flex items-center justify-center bg-[var(--gmart-red)] text-white">
+                  <Headset className="w-4 h-4" />
+                </div>
+              ) : (
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold bg-[var(--gmart-red)] text-white">
+                  A
+                </div>
+              )}
               <span className="text-sm font-medium text-[var(--gmart-title)] hidden sm:inline">
-                Admin
+                {isCallCenter ? "Call Center" : "Admin"}
               </span>
               <form action={logout} className="md:hidden">
                 <button

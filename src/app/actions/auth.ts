@@ -61,3 +61,10 @@ export async function isAuthenticated() {
   const payload = await decrypt(sessionToken);
   return !!payload;
 }
+
+export async function getSession() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("admin_session")?.value;
+  if (!sessionToken) return null;
+  return await decrypt(sessionToken);
+}
