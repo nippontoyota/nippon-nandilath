@@ -21,6 +21,8 @@ model Entry {
   flagReason           String?
   excluded             Boolean  @default(false)
   createdAt            DateTime @default(now())
+  callStatus           String?
+  callOutcome          String?
   winner               Winner?
 
   @@index([phone])

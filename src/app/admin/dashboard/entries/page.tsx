@@ -37,6 +37,8 @@ export default async function EntriesPage(props: {
         flag: true,
         flagReason: true,
         excluded: true,
+        callStatus: true,
+        callOutcome: true,
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },

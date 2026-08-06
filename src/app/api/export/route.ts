@@ -69,6 +69,8 @@ export async function GET(req: NextRequest) {
       "Phone Number": e.phone,
       "Email": e.email || "",
       Address: e.customerLocation,
+      "Call Status": e.callStatus || "",
+      "Call Outcome": e.callOutcome || "",
       "Flagged?": flags.length > 0 ? "Yes" : "No",
       Excluded: e.excluded ? "Yes" : "No",
       "Created At": e.createdAt.toISOString(),

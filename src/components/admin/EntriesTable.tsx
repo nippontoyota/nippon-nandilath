@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { X, User } from "lucide-react";
 import { DeleteEntryButton } from "@/components/admin/DeleteEntryButton";
 import { ExcludeEntryButton } from "@/components/admin/ExcludeEntryButton";
+import { CallStatusSelect } from "@/components/admin/CallStatusSelect";
 
 export type EntryRow = {
   id: string;
@@ -14,6 +15,8 @@ export type EntryRow = {
   flag: string | null;
   flagReason: string | null;
   excluded: boolean;
+  callStatus: string | null;
+  callOutcome: string | null;
   createdAt: string;
 };
 
@@ -66,6 +69,9 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                   Address
                 </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
+                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
+                  Call Status
+                </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] whitespace-nowrap">
                   Draw status
                 </th>
@@ -135,6 +141,13 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                       ) : (
                         <span className="text-[var(--gmart-border)]">—</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3 align-top">
+                      <CallStatusSelect
+                        entryId={entry.id}
+                        initialStatus={entry.callStatus}
+                        initialOutcome={entry.callOutcome}
+                      />
                     </td>
                     <td className="px-4 py-3 align-top whitespace-nowrap">
                       {entry.excluded ? (
@@ -219,6 +232,14 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                 <DetailRow
                   label="Submitted"
                   value={dateFormatter.format(new Date(selected.createdAt))}
+                />
+                <DetailRow
+                  label="Call Status"
+                  value={
+                    selected.callStatus
+                      ? `${selected.callStatus}${selected.callOutcome ? ` - ${selected.callOutcome}` : ""}`
+                      : "—"
+                  }
                 />
                 <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
                   <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
