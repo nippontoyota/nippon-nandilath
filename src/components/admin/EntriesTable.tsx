@@ -39,7 +39,7 @@ function parseFlags(flag: string | null): string[] {
   }
 }
 
-export function EntriesTable({ entries }: { entries: EntryRow[] }) {
+export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userRole?: string }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = entries.find((e) => e.id === selectedId) ?? null;
 
@@ -75,9 +75,11 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] text-right whitespace-nowrap">
                   Actions
                 </th>
-                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
-                  Call Status
-                </th>
+                {userRole === "call_center" && (
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
+                    Call Status
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--gmart-border)]">
@@ -154,7 +156,7 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                         </span>
                       )}
                     </td>
-                    <td
+                    <td 
                       className="px-4 py-3 align-top"
                       onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => e.stopPropagation()}
@@ -164,17 +166,19 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                         <DeleteEntryButton id={entry.id} name={entry.name} />
                       </div>
                     </td>
-                    <td 
-                      className="px-4 py-3 align-top"
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => e.stopPropagation()}
-                    >
-                      <CallStatusSelect
-                        entryId={entry.id}
-                        initialStatus={entry.callStatus}
-                        initialOutcome={entry.callOutcome}
-                      />
-                    </td>
+                    {userRole === "call_center" && (
+                      <td 
+                        className="px-4 py-3 align-top"
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      >
+                        <CallStatusSelect
+                          entryId={entry.id}
+                          initialStatus={entry.callStatus}
+                          initialOutcome={entry.callOutcome}
+                        />
+                      </td>
+                    )}
                   </tr>
                 );
               })}
@@ -238,14 +242,16 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                   label="Submitted"
                   value={dateFormatter.format(new Date(selected.createdAt))}
                 />
-                <DetailRow
-                  label="Call Status"
-                  value={
-                    selected.callStatus
-                      ? `${selected.callStatus}${selected.callOutcome ? ` - ${selected.callOutcome}` : ""}`
-                      : "—"
-                  }
-                />
+                {userRole === "call_center" && (
+                  <DetailRow
+                    label="Call Status"
+                    value={
+                      selected.callStatus
+                        ? `${selected.callStatus}${selected.callOutcome ? ` - ${selected.callOutcome}` : ""}`
+                        : "—"
+                    }
+                  />
+                )}
                 <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
                   <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
                   <dd className="font-medium text-[var(--gmart-title)]">
