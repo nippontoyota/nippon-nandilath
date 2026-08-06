@@ -112,7 +112,11 @@ export function CallStatusSelect({
   const availableOutcomes = initialStatus ? OUTCOMES[initialStatus as keyof typeof OUTCOMES] || [] : [];
 
   return (
-    <div className="flex flex-col gap-1.5 min-w-[150px] relative">
+    <div 
+      className="flex flex-col gap-1.5 min-w-[150px] relative"
+      onClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+    >
       <CustomSelect
         value={initialStatus}
         options={["Connected", "Not Connected"]}

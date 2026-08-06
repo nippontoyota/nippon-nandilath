@@ -164,7 +164,11 @@ export function EntriesTable({ entries }: { entries: EntryRow[] }) {
                         <DeleteEntryButton id={entry.id} name={entry.name} />
                       </div>
                     </td>
-                    <td className="px-4 py-3 align-top">
+                    <td 
+                      className="px-4 py-3 align-top"
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => e.stopPropagation()}
+                    >
                       <CallStatusSelect
                         entryId={entry.id}
                         initialStatus={entry.callStatus}
