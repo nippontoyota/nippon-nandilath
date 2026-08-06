@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/app/actions/auth";
 import { EntriesSearch } from "@/components/admin/EntriesSearch";
 import { EntriesTable } from "@/components/admin/EntriesTable";
 import { Download, ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,6 +11,7 @@ const PAGE_SIZE = 50;
 export default async function EntriesPage(props: {
   searchParams?: Promise<{ search?: string; page?: string }>;
 }) {
+  const session = await getSession();
   const searchParams = await props.searchParams;
   const search = searchParams?.search || "";
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
@@ -108,7 +110,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && <EntriesTable entries={tableEntries} />}
+      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role} />}
 
       {totalPages > 1 && (
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
