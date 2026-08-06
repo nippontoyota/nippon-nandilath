@@ -14,13 +14,15 @@ function CustomSelect({
   options,
   placeholder,
   onChange,
-  disabled
+  disabled,
+  colorMap
 }: {
   value: string | null;
   options: string[];
   placeholder: string;
   onChange: (val: string) => void;
   disabled: boolean;
+  colorMap?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,15 +37,19 @@ function CustomSelect({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const buttonColorClass = (value && colorMap && colorMap[value]) 
+    ? colorMap[value] 
+    : "bg-white border-[var(--gmart-border)]";
+
   return (
     <div className="relative w-full" ref={containerRef}>
       <button
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between text-xs bg-white border border-[var(--gmart-border)] rounded px-2 py-1.5 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 text-left disabled:opacity-50 transition-all"
+        className={`w-full flex items-center justify-between text-xs border rounded px-2 py-1.5 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 text-left disabled:opacity-50 transition-all ${buttonColorClass}`}
       >
-        <span className={value ? "text-[var(--gmart-title)] font-medium" : "text-[var(--gmart-muted)]"}>
+        <span className={value ? (colorMap && colorMap[value] ? "font-medium" : "text-[var(--gmart-title)] font-medium") : "text-[var(--gmart-muted)]"}>
           {value || placeholder}
         </span>
         <ChevronDown className={`w-3 h-3 text-[var(--gmart-muted)] transition-transform ${isOpen ? "rotate-180" : ""}`} />
@@ -59,10 +65,13 @@ function CustomSelect({
                 onChange(opt);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-[#fff5f6] transition-colors ${
+              className={`w-full flex items-center gap-2 text-left px-3 py-1.5 text-xs hover:bg-[#fff5f6] transition-colors ${
                 value === opt ? "bg-[#fff5f6] text-[var(--gmart-red)] font-semibold" : "text-[var(--gmart-title)]"
               }`}
             >
+              {colorMap && colorMap[opt] && (
+                <span className={`w-2 h-2 rounded-full border ${colorMap[opt]}`} />
+              )}
               {opt}
             </button>
           ))}
@@ -71,6 +80,11 @@ function CustomSelect({
     </div>
   );
 }
+
+const STATUS_COLORS = {
+  "Connected": "bg-[#f0faf4] text-[var(--gmart-success)] border-[#b7e4c7]",
+  "Not Connected": "bg-amber-50 text-amber-700 border-amber-300",
+};
 
 export function CallStatusSelect({
   entryId,
@@ -105,6 +119,7 @@ export function CallStatusSelect({
         placeholder="Select status..."
         onChange={handleStatusChange}
         disabled={isPending}
+        colorMap={STATUS_COLORS}
       />
 
       {initialStatus && (
