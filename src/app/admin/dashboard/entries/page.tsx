@@ -110,7 +110,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role} />}
+      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} />}
 
       {totalPages > 1 && (
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
