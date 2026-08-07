@@ -40,7 +40,7 @@ function parseFlags(flag: string | null): string[] {
   }
 }
 
-export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userRole?: string }) {
+export function EntriesTable({ entries, userRole, offset = 0 }: { entries: EntryRow[], userRole?: string, offset?: number }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = entries.find((e) => e.id === selectedId) ?? null;
 
@@ -60,6 +60,9 @@ export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userR
           <table className="w-full text-left text-sm table-auto">
             <thead className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-xs">
               <tr>
+                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] w-12 text-center">
+                  #
+                </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[10rem]">
                   Participant
                 </th>
@@ -84,7 +87,7 @@ export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userR
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--gmart-border)]">
-              {entries.map((entry) => {
+              {entries.map((entry, index) => {
                 const flags = parseFlags(entry.flag);
                 return (
                   <tr
@@ -102,6 +105,9 @@ export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userR
                       entry.excluded ? "bg-[#fafafa]" : "bg-white"
                     }`}
                   >
+                    <td className="px-4 py-3 align-top text-center text-[var(--gmart-muted)] text-xs font-medium">
+                      {offset + index + 1}
+                    </td>
                     <td className="px-4 py-3 align-top">
                       <div
                         className={`font-medium break-words ${

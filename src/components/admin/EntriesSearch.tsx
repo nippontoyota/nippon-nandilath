@@ -9,10 +9,12 @@ export function EntriesSearch({
   initialSearch,
   initialStatus,
   initialOutcome,
+  initialDate,
 }: {
   initialSearch: string;
   initialStatus: string;
   initialOutcome: string;
+  initialDate: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -23,6 +25,7 @@ export function EntriesSearch({
   
   const [statusValue, setStatusValue] = useState(initialStatus === "all" ? null : initialStatus);
   const [outcomeValue, setOutcomeValue] = useState(initialOutcome === "all" ? null : initialOutcome);
+  const [dateValue, setDateValue] = useState(initialDate);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchValue), 300);
@@ -57,13 +60,19 @@ export function EntriesSearch({
       changed = true;
     }
 
+    if (dateValue !== (params.get("date") || "")) {
+      if (dateValue) params.set("date", dateValue);
+      else params.delete("date");
+      changed = true;
+    }
+
     if (changed) {
       params.delete("page");
       startTransition(() => {
         router.replace(`?${params.toString()}`);
       });
     }
-  }, [debouncedSearch, statusValue, outcomeValue, router, searchParams]);
+  }, [debouncedSearch, statusValue, outcomeValue, dateValue, router, searchParams]);
 
   const handleStatusChange = (val: string | null) => {
     setStatusValue(val);
@@ -82,7 +91,7 @@ export function EntriesSearch({
     : [];
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 w-full">
+    <div className="flex flex-col lg:flex-row gap-3 w-full">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gmart-muted)] pointer-events-none" />
         <input
@@ -108,7 +117,20 @@ export function EntriesSearch({
       </div>
 
       <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
-        <div className="min-w-[150px]">
+        <div className="min-w-[130px] relative">
+          <input
+            type="date"
+            value={dateValue}
+            onChange={(e) => setDateValue(e.target.value)}
+            className="w-full h-[34px] px-2.5 border border-[var(--gmart-border)] rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm"
+          />
+          {!dateValue && (
+            <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-2.5 border border-[var(--gmart-border)] rounded-md shadow-sm">
+              <span className="text-xs text-[var(--gmart-muted)]">Date Filter</span>
+            </div>
+          )}
+        </div>
+        <div className="min-w-[140px]">
           <CustomSelect
             value={statusValue}
             options={["Connected", "Not Connected", "Pending", "All Status"]}
@@ -119,7 +141,7 @@ export function EntriesSearch({
           />
         </div>
         {availableOutcomes.length > 0 && (
-          <div className="min-w-[150px]">
+          <div className="min-w-[140px]">
             <CustomSelect
               value={outcomeValue}
               options={[...availableOutcomes, "All Outcomes"]}

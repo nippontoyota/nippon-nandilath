@@ -17,6 +17,7 @@ export default async function EntriesPage(props: {
   const search = searchParams?.search || "";
   const statusFilter = searchParams?.status || "all";
   const outcomeFilter = searchParams?.outcome || "all";
+  const dateFilter = searchParams?.date || "";
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
 
   const whereClause: Prisma.EntryWhereInput = search
@@ -40,6 +41,16 @@ export default async function EntriesPage(props: {
 
   if (outcomeFilter !== "all" && statusFilter !== "pending") {
     whereClause.callOutcome = outcomeFilter;
+  }
+
+  if (dateFilter) {
+    // Treat the selected date as local time block for IST filtering
+    const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
+    const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
+    whereClause.createdAt = {
+      gte: startDate,
+      lte: endDate,
+    };
   }
 
   const [entries, totalEntries, flaggedCount, connectedCount, notConnectedCount] = await Promise.all([
@@ -77,6 +88,7 @@ export default async function EntriesPage(props: {
     if (search) params.set("search", search);
     if (statusFilter !== "all") params.set("status", statusFilter);
     if (outcomeFilter !== "all") params.set("outcome", outcomeFilter);
+    if (dateFilter) params.set("date", dateFilter);
     return `?${params.toString()}`;
   };
 
@@ -130,7 +142,12 @@ export default async function EntriesPage(props: {
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center relative z-20">
         <div className="flex-1 w-full min-w-0">
-          <EntriesSearch initialSearch={search} initialStatus={statusFilter} initialOutcome={outcomeFilter} />
+          <EntriesSearch 
+            initialSearch={search} 
+            initialStatus={statusFilter} 
+            initialOutcome={outcomeFilter} 
+            initialDate={dateFilter} 
+          />
         </div>
         <p className="text-sm text-[var(--gmart-muted)] shrink-0">
           {totalEntries} {totalEntries === 1 ? "entry" : "entries"}
@@ -153,7 +170,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} />}
+      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} offset={(page - 1) * PAGE_SIZE} />}
 
       {totalPages > 1 && (
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
