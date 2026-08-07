@@ -53,7 +53,7 @@ export default async function EntriesPage(props: {
     };
   }
 
-  const [entries, totalEntries, flaggedCount, connectedCount, notConnectedCount] = await Promise.all([
+  const [entries, totalEntries, connectedCount, notConnectedCount] = await Promise.all([
     prisma.entry.findMany({
       where: whereClause,
       select: {
@@ -75,7 +75,6 @@ export default async function EntriesPage(props: {
       skip: (page - 1) * PAGE_SIZE,
     }),
     prisma.entry.count({ where: whereClause }),
-    prisma.entry.count({ where: { flag: { not: null } } }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } }),
   ]);
@@ -99,27 +98,6 @@ export default async function EntriesPage(props: {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="admin-section-rail min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--gmart-title)]">Entries</h1>
-          <p className="text-sm text-[var(--gmart-muted)] mt-1 max-w-xl">
-            Review submissions, exclude fraud suspects from the draw, or delete invalid entries.
-            {flaggedCount > 0 && (
-              <span className="text-[var(--gmart-red)] font-semibold">
-                {" "}
-                {flaggedCount} flagged for review.
-              </span>
-            )}
-          </p>
-        </div>
-        <a
-          href="/api/export?type=entries"
-          className="admin-btn-secondary inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-md text-sm font-medium shrink-0 self-start"
-        >
-          <Download className="w-4 h-4" />
-          Export CSV
-        </a>
-      </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
