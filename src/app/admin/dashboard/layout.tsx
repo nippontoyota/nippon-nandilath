@@ -71,7 +71,7 @@ export default async function AdminDashboardLayout({
         </header>
 
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-auto pb-20 md:pb-8 bg-[var(--gmart-page)]">
-          <div className="max-w-6xl mx-auto w-full min-w-0">{children}</div>
+          <div className="w-full min-w-0">{children}</div>
         </main>
       </div>
 
