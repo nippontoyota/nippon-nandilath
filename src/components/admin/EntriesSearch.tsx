@@ -96,7 +96,16 @@ export function EntriesSearch({
           type="date"
           value={dateValue}
           onChange={(e) => setDateValue(e.target.value)}
-          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm"
+          onClick={(e) => {
+            try {
+              if (e.currentTarget.showPicker) {
+                e.currentTarget.showPicker();
+              }
+            } catch (err) {
+              // ignore if not supported or already open
+            }
+          }}
+          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm cursor-pointer"
         />
         {!dateValue && (
           <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md shadow-sm">
