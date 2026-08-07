@@ -107,7 +107,7 @@ export function EntriesSearch({
         )}
       </div>
 
-      <div className="flex gap-2 shrink-0 overflow-x-auto pb-1 sm:pb-0 items-center">
+      <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
         <div className="min-w-[150px]">
           <CustomSelect
             value={statusValue}

@@ -128,7 +128,7 @@ export default async function EntriesPage(props: {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center relative z-20">
         <div className="flex-1 w-full min-w-0">
           <EntriesSearch initialSearch={search} initialStatus={statusFilter} initialOutcome={outcomeFilter} />
         </div>
