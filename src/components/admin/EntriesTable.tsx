@@ -110,17 +110,17 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                     </td>
                     <td className="px-4 py-3 align-top">
                       <div
-                        className={`font-medium break-words ${
+                        className={`text-base font-semibold break-words ${
                           entry.excluded ? "text-[var(--gmart-muted)]" : "text-[var(--gmart-title)]"
                         }`}
                       >
                         {entry.name}
                       </div>
-                      <div className="text-xs text-[var(--gmart-muted)] mt-0.5 break-all">
+                      <div className="text-sm font-medium text-[var(--gmart-muted)] mt-1 break-all">
                         {entry.phone}
                       </div>
                       {entry.email && (
-                        <div className="text-xs text-[var(--gmart-muted)]/80 mt-0.5 break-all">
+                        <div className="text-sm text-[var(--gmart-muted)]/80 mt-0.5 break-all">
                           {entry.email}
                         </div>
                       )}
