@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { getSession } from "@/app/actions/auth";
 import { EntriesSearch } from "@/components/admin/EntriesSearch";
 import { EntriesTable } from "@/components/admin/EntriesTable";
@@ -9,14 +10,15 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 50;
 
 export default async function EntriesPage(props: {
-  searchParams?: Promise<{ search?: string; page?: string }>;
+  searchParams?: Promise<{ search?: string; page?: string; status?: string }>;
 }) {
   const session = await getSession();
   const searchParams = await props.searchParams;
   const search = searchParams?.search || "";
+  const statusFilter = searchParams?.status || "all";
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
 
-  const whereClause = search
+  const whereClause: Prisma.EntryWhereInput = search
     ? {
         OR: [
           { id: { startsWith: search, mode: "insensitive" as const } },
@@ -26,6 +28,14 @@ export default async function EntriesPage(props: {
         ],
       }
     : {};
+
+  if (statusFilter === "connected") {
+    whereClause.callStatus = "Connected";
+  } else if (statusFilter === "not_connected") {
+    whereClause.callStatus = "Not Connected";
+  } else if (statusFilter === "pending") {
+    whereClause.callStatus = null;
+  }
 
   const [entries, totalEntries, flaggedCount, connectedCount, notConnectedCount] = await Promise.all([
     prisma.entry.findMany({
@@ -56,8 +66,13 @@ export default async function EntriesPage(props: {
 
   const totalPages = Math.max(1, Math.ceil(totalEntries / PAGE_SIZE));
 
-  const pageHref = (p: number) =>
-    `?page=${p}${search ? `&search=${encodeURIComponent(search)}` : ""}`;
+  const pageHref = (p: number) => {
+    const params = new URLSearchParams();
+    params.set("page", p.toString());
+    if (search) params.set("search", search);
+    if (statusFilter !== "all") params.set("status", statusFilter);
+    return `?${params.toString()}`;
+  };
 
   const tableEntries = entries.map((entry) => ({
     ...entry,
@@ -108,8 +123,8 @@ export default async function EntriesPage(props: {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-        <div className="flex-1 sm:max-w-md min-w-0">
-          <EntriesSearch initialSearch={search} />
+        <div className="flex-1 w-full min-w-0">
+          <EntriesSearch initialSearch={search} initialStatus={statusFilter} />
         </div>
         <p className="text-sm text-[var(--gmart-muted)] shrink-0">
           {totalEntries} {totalEntries === 1 ? "entry" : "entries"}
