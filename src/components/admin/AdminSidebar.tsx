@@ -53,12 +53,12 @@ export function AdminSidebar() {
       
       <AdminNav isCollapsed={isCollapsed} />
       
-      <div className="p-3 border-t border-[var(--gmart-border)] overflow-hidden flex-shrink-0">
-        <form action={logout}>
+      <div className="p-3 border-t border-[var(--gmart-border)] overflow-hidden flex-shrink-0 flex justify-center">
+        <form action={logout} className="w-full">
           <button
             type="submit"
             className={`flex items-center rounded-md text-sm font-medium text-[var(--gmart-muted)] hover:bg-[#fff5f6] hover:text-[var(--gmart-red)] transition-colors ${
-              isCollapsed ? "justify-center w-10 h-10 mx-auto p-0" : "gap-2.5 px-3 py-2 w-full text-left"
+              isCollapsed ? "justify-center w-full h-10 p-0" : "gap-2.5 px-3 py-2 w-full text-left"
             }`}
             aria-label="Sign out"
           >
