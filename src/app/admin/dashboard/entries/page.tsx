@@ -7,8 +7,6 @@ import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SIZE = 50;
-
 export default async function EntriesPage(props: {
   searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string }>;
 }) {
@@ -18,7 +16,6 @@ export default async function EntriesPage(props: {
   const statusFilter = searchParams?.status || "all";
   const outcomeFilter = searchParams?.outcome || "all";
   const dateFilter = searchParams?.date || "";
-  const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
 
   const whereClause: Prisma.EntryWhereInput = search
     ? {
@@ -71,25 +68,11 @@ export default async function EntriesPage(props: {
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },
-      take: PAGE_SIZE,
-      skip: (page - 1) * PAGE_SIZE,
     }),
     prisma.entry.count({ where: whereClause }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } }),
   ]);
-
-  const totalPages = Math.max(1, Math.ceil(totalEntries / PAGE_SIZE));
-
-  const pageHref = (p: number) => {
-    const params = new URLSearchParams();
-    params.set("page", p.toString());
-    if (search) params.set("search", search);
-    if (statusFilter !== "all") params.set("status", statusFilter);
-    if (outcomeFilter !== "all") params.set("outcome", outcomeFilter);
-    if (dateFilter) params.set("date", dateFilter);
-    return `?${params.toString()}`;
-  };
 
   const tableEntries = entries.map((entry) => ({
     ...entry,
@@ -144,43 +127,7 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} offset={(page - 1) * PAGE_SIZE} />}
-
-      {totalPages > 1 && (
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-          {page > 1 ? (
-            <a
-              href={pageHref(page - 1)}
-              className="admin-btn-secondary inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Previous
-            </a>
-          ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-[var(--gmart-border)] bg-white border border-[var(--gmart-border)] rounded-md cursor-not-allowed">
-              <ChevronLeft className="w-4 h-4" />
-              Previous
-            </span>
-          )}
-          <span className="text-sm text-[var(--gmart-muted)] px-2">
-            Page {page} of {totalPages}
-          </span>
-          {page < totalPages ? (
-            <a
-              href={pageHref(page + 1)}
-              className="admin-btn-secondary inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md"
-            >
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </a>
-          ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-[var(--gmart-border)] bg-white border border-[var(--gmart-border)] rounded-md cursor-not-allowed">
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </span>
-          )}
-        </div>
-      )}
+      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} offset={0} />}
     </div>
   );
 }
