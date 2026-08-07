@@ -48,7 +48,7 @@ export default function AdminLogin() {
                   type="email"
                   required
                   autoComplete="email"
-                  className="h-12 text-lg px-4 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
+                  className="h-12 text-lg md:text-lg px-4 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
                   placeholder="admin@nippontoyota.com"
                 />
               </div>
@@ -63,7 +63,7 @@ export default function AdminLogin() {
                     type={showPassword ? "text" : "password"}
                     required
                     autoComplete="current-password"
-                    className="h-12 text-lg px-4 pr-12 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
+                    className="h-12 text-lg md:text-lg px-4 pr-12 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
                   />
                   <button
                     type="button"
