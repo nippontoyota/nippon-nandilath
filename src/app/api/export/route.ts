@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
-import * as XLSX from "xlsx";
+import { PassThrough, Readable } from "stream";
+import * as ExcelJS from "exceljs";
 
 async function verifyAuth() {
   const cookieStore = await cookies();
@@ -25,103 +26,160 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const type = searchParams.get("type") ?? "entries"; // entries | winners
 
-  if (type === "winners") {
-    const winners = await prisma.winner.findMany({
-      include: {
-        entry: true,
-      },
-      orderBy: { place: "asc" },
-    });
+  const passThrough = new PassThrough();
 
-    const rows = winners.map((w) => ({
-      Place: w.place,
-      Name: w.entry.name,
-      Phone: w.entry.phone,
+  const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
+    stream: passThrough,
+    useStyles: true,
+  });
 
-      Address: w.entry.customerLocation,
+  // Start building the file in the background
+  (async () => {
+    try {
+      if (type === "winners") {
+        const sheet = workbook.addWorksheet("Winners");
+        sheet.columns = [
+          { header: "Place", key: "place", width: 10 },
+          { header: "Name", key: "name", width: 25 },
+          { header: "Phone", key: "phone", width: 15 },
+          { header: "Address", key: "address", width: 30 },
+          { header: "Draw Date", key: "drawDate", width: 25 },
+        ];
 
-      "Draw Date": w.createdAt.toISOString(),
-    }));
+        let skip = 0;
+        const take = 100;
+        let hasMore = true;
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Winners");
-    const buf = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
+        while (hasMore) {
+          const winners = await prisma.winner.findMany({
+            include: { entry: true },
+            orderBy: { place: "asc" },
+            skip,
+            take,
+          });
 
-    return new NextResponse(buf, {
-      headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename="winners.xlsx"`,
-      },
-    });
-  }
+          if (winners.length === 0) {
+            hasMore = false;
+            break;
+          }
 
-  const search = searchParams.get("search") || "";
-  const statusFilter = searchParams.get("status") || "all";
-  const outcomeFilter = searchParams.get("outcome") || "all";
-  const dateFilter = searchParams.get("date") || "";
+          for (const w of winners) {
+            sheet.addRow({
+              place: w.place,
+              name: w.entry.name,
+              phone: w.entry.phone,
+              address: w.entry.customerLocation,
+              drawDate: w.createdAt.toISOString(),
+            }).commit();
+          }
 
-  const whereClause: any = search
-    ? {
-        OR: [
-          { id: { startsWith: search, mode: "insensitive" } },
-          { name: { contains: search, mode: "insensitive" } },
-          { phone: { contains: search } },
-          { customerLocation: { contains: search, mode: "insensitive" } },
-        ],
+          skip += take;
+        }
+      } else {
+        const sheet = workbook.addWorksheet("Entries");
+        sheet.columns = [
+          { header: "Ticket ID", key: "ticket", width: 15 },
+          { header: "Name", key: "name", width: 25 },
+          { header: "Phone Number", key: "phone", width: 15 },
+          { header: "Email", key: "email", width: 25 },
+          { header: "Address", key: "address", width: 30 },
+          { header: "Call Status", key: "callStatus", width: 15 },
+          { header: "Call Outcome", key: "callOutcome", width: 15 },
+          { header: "Flagged?", key: "flagged", width: 10 },
+          { header: "Excluded", key: "excluded", width: 10 },
+          { header: "Created At", key: "createdAt", width: 25 },
+        ];
+
+        const search = searchParams.get("search") || "";
+        const statusFilter = searchParams.get("status") || "all";
+        const outcomeFilter = searchParams.get("outcome") || "all";
+        const dateFilter = searchParams.get("date") || "";
+
+        const whereClause: any = search
+          ? {
+              OR: [
+                { id: { startsWith: search, mode: "insensitive" } },
+                { name: { contains: search, mode: "insensitive" } },
+                { phone: { contains: search } },
+                { customerLocation: { contains: search, mode: "insensitive" } },
+              ],
+            }
+          : {};
+
+        if (statusFilter === "Connected") {
+          whereClause.callStatus = "Connected";
+        } else if (statusFilter === "Not Connected") {
+          whereClause.callStatus = "Not Connected";
+        } else if (statusFilter === "Pending") {
+          whereClause.callStatus = null;
+        }
+
+        if (outcomeFilter !== "all" && statusFilter !== "Pending") {
+          whereClause.callOutcome = outcomeFilter;
+        }
+
+        if (dateFilter) {
+          const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
+          const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
+          whereClause.createdAt = {
+            gte: startDate,
+            lte: endDate,
+          };
+        }
+
+        let skip = 0;
+        const take = 500;
+        let hasMore = true;
+
+        while (hasMore) {
+          const entries = await prisma.entry.findMany({
+            where: whereClause,
+            orderBy: { createdAt: "asc" },
+            skip,
+            take,
+          });
+
+          if (entries.length === 0) {
+            hasMore = false;
+            break;
+          }
+
+          for (const e of entries) {
+            let flags: string[] = [];
+            try { flags = e.flag ? JSON.parse(e.flag) : []; } catch { flags = e.flag ? [e.flag] : []; }
+
+            sheet.addRow({
+              ticket: e.id.slice(0, 8).toUpperCase(),
+              name: e.name,
+              phone: e.phone,
+              email: e.email || "",
+              address: e.customerLocation,
+              callStatus: e.callStatus || "",
+              callOutcome: e.callOutcome || "",
+              flagged: flags.length > 0 ? "Yes" : "No",
+              excluded: e.excluded ? "Yes" : "No",
+              createdAt: e.createdAt.toISOString(),
+            }).commit();
+          }
+
+          skip += take;
+        }
       }
-    : {};
 
-  if (statusFilter === "Connected") {
-    whereClause.callStatus = "Connected";
-  } else if (statusFilter === "Not Connected") {
-    whereClause.callStatus = "Not Connected";
-  } else if (statusFilter === "Pending") {
-    whereClause.callStatus = null;
-  }
+      await workbook.commit();
+    } catch (error) {
+      console.error("Export streaming error:", error);
+      passThrough.end(); // close stream on error
+    }
+  })();
 
-  if (outcomeFilter !== "all" && statusFilter !== "Pending") {
-    whereClause.callOutcome = outcomeFilter;
-  }
+  // Node.js stream needs to be converted to a Web ReadableStream for NextResponse
+  const stream = Readable.toWeb(passThrough);
 
-  if (dateFilter) {
-    const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
-    const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
-    whereClause.createdAt = {
-      gte: startDate,
-      lte: endDate,
-    };
-  }
-
-  const entries = await prisma.entry.findMany({
-    where: whereClause,
-    orderBy: { createdAt: "asc" },
-  });
-
-  const rows = entries.map((e) => {
-    let flags: string[] = [];
-    try { flags = e.flag ? JSON.parse(e.flag) : []; } catch { flags = e.flag ? [e.flag] : []; }
-    return {
-      "Ticket ID": e.id.slice(0, 8).toUpperCase(),
-      Name: e.name,
-      "Phone Number": e.phone,
-      "Email": e.email || "",
-      Address: e.customerLocation,
-      "Call Status": e.callStatus || "",
-      "Call Outcome": e.callOutcome || "",
-      "Flagged?": flags.length > 0 ? "Yes" : "No",
-      Excluded: e.excluded ? "Yes" : "No",
-      "Created At": e.createdAt.toISOString(),
-    };
-  });
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Entries");
-  const buf = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
-
-  return new NextResponse(buf, {
+  return new NextResponse(stream as any, {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "Content-Disposition": `attachment; filename="entries.xlsx"`,
+      "Content-Disposition": `attachment; filename="${type}.xlsx"`,
     },
   });
 }
