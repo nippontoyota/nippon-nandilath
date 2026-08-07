@@ -40,6 +40,13 @@ function parseFlags(flag: string | null): string[] {
   }
 }
 
+function formatPhone(phone: string) {
+  if (phone.startsWith("+91") && phone.length > 3 && phone[3] !== " ") {
+    return `+91 ${phone.slice(3)}`;
+  }
+  return phone;
+}
+
 export function EntriesTable({ entries, userRole, offset = 0 }: { entries: EntryRow[], userRole?: string, offset?: number }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = entries.find((e) => e.id === selectedId) ?? null;
@@ -120,7 +127,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                       </div>
                       <div className="flex items-center gap-1.5 text-base font-bold text-[var(--gmart-title)] mt-1.5 break-all">
                         <Phone className="w-4 h-4 text-[var(--gmart-muted)]" />
-                        <span>{entry.phone}</span>
+                        <span>{formatPhone(entry.phone)}</span>
                       </div>
                       {entry.email && (
                         <div className="text-sm text-[var(--gmart-muted)]/80 mt-0.5 break-all">
@@ -243,7 +250,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
               </div>
 
               <dl className="space-y-3 bg-[#fafafa] p-4 rounded-md border border-[var(--gmart-border)] text-sm">
-                <DetailRow label="Phone" value={selected.phone} breakAll />
+                <DetailRow label="Phone" value={formatPhone(selected.phone)} breakAll />
                 <DetailRow label="Email" value={selected.email || "—"} breakAll />
                 <DetailRow label="Address" value={selected.customerLocation} />
                 <DetailRow
