@@ -101,7 +101,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                         setSelectedId(entry.id);
                       }
                     }}
-                    className={`cursor-pointer transition-colors hover:bg-[#fff5f6]/70 focus-visible:outline-none focus-visible:bg-[#fff5f6] ${
+                    className={`cursor-pointer transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:bg-gray-50 ${
                       entry.excluded ? "bg-[#fafafa]" : "bg-white"
                     }`}
                   >
