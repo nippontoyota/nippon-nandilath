@@ -41,6 +41,7 @@ export default async function EntriesPage(props: {
         excluded: true,
         callStatus: true,
         callOutcome: true,
+        callRemark: true,
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },

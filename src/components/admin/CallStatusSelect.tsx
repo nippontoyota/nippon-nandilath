@@ -5,7 +5,7 @@ import { updateCallStatus } from "@/app/actions/entry";
 import { ChevronDown, Loader2 } from "lucide-react";
 
 const OUTCOMES = {
-  "Connected": ["Interested to Buy vehicle", "Not interested", "Need more details", "TD Required", "DND"],
+  "Connected": ["Interested to Buy vehicle", "Not interested", "Need more details", "TD Required", "Follow up", "DND"],
   "Not Connected": ["RNR", "Call me back", "Switch off", "Busy", "Number doesn't exist"],
 };
 
@@ -90,13 +90,16 @@ export function CallStatusSelect({
   entryId,
   initialStatus,
   initialOutcome,
+  initialRemark,
 }: {
   entryId: string;
   initialStatus: string | null;
   initialOutcome: string | null;
+  initialRemark: string | null;
 }) {
   const [currentStatus, setCurrentStatus] = useState(initialStatus);
   const [currentOutcome, setCurrentOutcome] = useState(initialOutcome);
+  const [currentRemark, setCurrentRemark] = useState(initialRemark || "");
   const [isSaving, setIsSaving] = useState(false);
   const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
 
@@ -106,7 +109,7 @@ export function CallStatusSelect({
     setIsSaving(true);
     
     saveQueueRef.current = saveQueueRef.current.then(async () => {
-      await updateCallStatus(entryId, newStatus, null);
+      await updateCallStatus(entryId, newStatus, null, currentRemark);
       setIsSaving(false);
     });
   };
@@ -116,7 +119,16 @@ export function CallStatusSelect({
     setIsSaving(true);
     
     saveQueueRef.current = saveQueueRef.current.then(async () => {
-      await updateCallStatus(entryId, currentStatus, newOutcome);
+      await updateCallStatus(entryId, currentStatus, newOutcome, currentRemark);
+      setIsSaving(false);
+    });
+  };
+
+  const handleRemarkBlur = () => {
+    if (currentRemark === (initialRemark || "")) return;
+    setIsSaving(true);
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
+      await updateCallStatus(entryId, currentStatus, currentOutcome, currentRemark);
       setIsSaving(false);
     });
   };
@@ -139,13 +151,29 @@ export function CallStatusSelect({
       />
 
       {currentStatus && (
-        <CustomSelect
-          value={currentOutcome}
-          options={availableOutcomes}
-          placeholder="Select outcome..."
-          onChange={handleOutcomeChange}
-          disabled={false}
-        />
+        <>
+          <CustomSelect
+            value={currentOutcome}
+            options={availableOutcomes}
+            placeholder="Select outcome..."
+            onChange={handleOutcomeChange}
+            disabled={false}
+          />
+          <input
+            type="text"
+            value={currentRemark}
+            onChange={(e) => setCurrentRemark(e.target.value)}
+            onBlur={handleRemarkBlur}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                e.currentTarget.blur();
+              }
+            }}
+            placeholder="Add remark..."
+            className="w-full text-xs border border-[var(--gmart-border)] rounded px-2 py-1.5 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 transition-all text-[var(--gmart-title)]"
+          />
+        </>
       )}
       
       {isSaving && (
