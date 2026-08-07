@@ -14,9 +14,6 @@ export default function AdminLogin() {
   return (
     <div className="admin-shell min-h-dvh flex flex-col">
       <div className="h-1 w-full bg-[var(--gmart-red)]" />
-      <div className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-center text-[11px] sm:text-xs tracking-wide py-2 px-4">
-        {CAMPAIGN_NAME} · Admin portal
-      </div>
 
       <div className="flex-1 flex flex-col items-center justify-center py-12 px-4">
         <div className="w-full max-w-[380px] space-y-7">
@@ -31,7 +28,7 @@ export default function AdminLogin() {
                 Nippon Toyota
               </p>
               <h1 className="text-2xl font-bold tracking-tight text-[var(--gmart-title)]">
-                Admin sign in
+                Sign in
               </h1>
               <p className="text-sm text-[var(--gmart-muted)] mt-1.5">
                 Manage lucky draw entries and winners
