@@ -104,6 +104,18 @@ export function CallStatusSelect({
   const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
 
   const handleStatusChange = (newStatus: string) => {
+    if (newStatus === "Clear Status") {
+      setCurrentStatus(null);
+      setCurrentOutcome(null);
+      setCurrentRemark("");
+      setIsSaving(true);
+      saveQueueRef.current = saveQueueRef.current.then(async () => {
+        await updateCallStatus(entryId, null, null, null);
+        setIsSaving(false);
+      });
+      return;
+    }
+
     setCurrentStatus(newStatus);
     setCurrentOutcome(null);
     setIsSaving(true);
@@ -143,7 +155,7 @@ export function CallStatusSelect({
     >
       <CustomSelect
         value={currentStatus}
-        options={["Connected", "Not Connected"]}
+        options={["Connected", "Not Connected", "Clear Status"]}
         placeholder="Select status..."
         onChange={handleStatusChange}
         disabled={false}
