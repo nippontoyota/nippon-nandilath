@@ -17,6 +17,7 @@ export type EntryRow = {
   excluded: boolean;
   callStatus: string | null;
   callOutcome: string | null;
+  callRemark: string | null;
   createdAt: string;
 };
 
@@ -176,6 +177,7 @@ export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userR
                           entryId={entry.id}
                           initialStatus={entry.callStatus}
                           initialOutcome={entry.callOutcome}
+                          initialRemark={entry.callRemark}
                         />
                       </td>
                     )}
@@ -250,6 +252,12 @@ export function EntriesTable({ entries, userRole }: { entries: EntryRow[], userR
                         ? `${selected.callStatus}${selected.callOutcome ? ` - ${selected.callOutcome}` : ""}`
                         : "—"
                     }
+                  />
+                )}
+                {userRole === "call_center" && selected.callRemark && (
+                  <DetailRow
+                    label="Remark"
+                    value={selected.callRemark}
                   />
                 )}
                 <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">

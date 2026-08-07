@@ -146,13 +146,18 @@ export async function toggleExclude(entryId: string) {
   }
 }
 
-export async function updateCallStatus(entryId: string, callStatus: string | null, callOutcome: string | null) {
+export async function updateCallStatus(
+  entryId: string,
+  callStatus: string | null,
+  callOutcome: string | null,
+  callRemark: string | null = null
+) {
   if (!(await isAuthenticated())) return { error: "Unauthorized" };
 
   try {
     await prisma.entry.update({
       where: { id: entryId },
-      data: { callStatus, callOutcome },
+      data: { callStatus, callOutcome, callRemark },
     });
     return { success: true };
   } catch (error) {

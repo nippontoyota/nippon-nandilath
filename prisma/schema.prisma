@@ -23,6 +23,7 @@ model Entry {
   createdAt            DateTime @default(now())
   callStatus           String?
   callOutcome          String?
+  callRemark           String?
   winner               Winner?
 
   @@index([phone])
