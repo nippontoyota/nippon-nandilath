@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { updateCallStatus } from "@/app/actions/entry";
 import { ChevronDown, Loader2 } from "lucide-react";
 
@@ -95,22 +95,29 @@ export function CallStatusSelect({
   initialStatus: string | null;
   initialOutcome: string | null;
 }) {
-  const [isPending, startTransition] = useTransition();
   const [currentStatus, setCurrentStatus] = useState(initialStatus);
   const [currentOutcome, setCurrentOutcome] = useState(initialOutcome);
+  const [isSaving, setIsSaving] = useState(false);
+  const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
 
   const handleStatusChange = (newStatus: string) => {
     setCurrentStatus(newStatus);
     setCurrentOutcome(null);
-    startTransition(async () => {
+    setIsSaving(true);
+    
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
       await updateCallStatus(entryId, newStatus, null);
+      setIsSaving(false);
     });
   };
 
   const handleOutcomeChange = (newOutcome: string) => {
     setCurrentOutcome(newOutcome);
-    startTransition(async () => {
+    setIsSaving(true);
+    
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
       await updateCallStatus(entryId, currentStatus, newOutcome);
+      setIsSaving(false);
     });
   };
 
@@ -127,7 +134,7 @@ export function CallStatusSelect({
         options={["Connected", "Not Connected"]}
         placeholder="Select status..."
         onChange={handleStatusChange}
-        disabled={isPending}
+        disabled={false}
         colorMap={STATUS_COLORS}
       />
 
@@ -137,11 +144,11 @@ export function CallStatusSelect({
           options={availableOutcomes}
           placeholder="Select outcome..."
           onChange={handleOutcomeChange}
-          disabled={isPending}
+          disabled={false}
         />
       )}
       
-      {isPending && (
+      {isSaving && (
         <div className="absolute -left-5 top-2">
           <Loader2 className="w-3 h-3 animate-spin text-[var(--gmart-red)]" />
         </div>
