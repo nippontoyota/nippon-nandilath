@@ -10,12 +10,13 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 50;
 
 export default async function EntriesPage(props: {
-  searchParams?: Promise<{ search?: string; page?: string; status?: string }>;
+  searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string }>;
 }) {
   const session = await getSession();
   const searchParams = await props.searchParams;
   const search = searchParams?.search || "";
   const statusFilter = searchParams?.status || "all";
+  const outcomeFilter = searchParams?.outcome || "all";
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
 
   const whereClause: Prisma.EntryWhereInput = search
@@ -35,6 +36,10 @@ export default async function EntriesPage(props: {
     whereClause.callStatus = "Not Connected";
   } else if (statusFilter === "pending") {
     whereClause.callStatus = null;
+  }
+
+  if (outcomeFilter !== "all" && statusFilter !== "pending") {
+    whereClause.callOutcome = outcomeFilter;
   }
 
   const [entries, totalEntries, flaggedCount, connectedCount, notConnectedCount] = await Promise.all([
@@ -71,6 +76,7 @@ export default async function EntriesPage(props: {
     params.set("page", p.toString());
     if (search) params.set("search", search);
     if (statusFilter !== "all") params.set("status", statusFilter);
+    if (outcomeFilter !== "all") params.set("outcome", outcomeFilter);
     return `?${params.toString()}`;
   };
 
@@ -124,7 +130,7 @@ export default async function EntriesPage(props: {
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
         <div className="flex-1 w-full min-w-0">
-          <EntriesSearch initialSearch={search} initialStatus={statusFilter} />
+          <EntriesSearch initialSearch={search} initialStatus={statusFilter} initialOutcome={outcomeFilter} />
         </div>
         <p className="text-sm text-[var(--gmart-muted)] shrink-0">
           {totalEntries} {totalEntries === 1 ? "entry" : "entries"}
