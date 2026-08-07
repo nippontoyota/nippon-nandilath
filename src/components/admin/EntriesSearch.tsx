@@ -2,14 +2,17 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, useState, useEffect } from "react";
-import { Search, X, Filter } from "lucide-react";
+import { Search, X } from "lucide-react";
+import { CustomSelect, OUTCOMES, STATUS_COLORS } from "@/components/admin/CallStatusSelect";
 
 export function EntriesSearch({
   initialSearch,
   initialStatus,
+  initialOutcome,
 }: {
   initialSearch: string;
   initialStatus: string;
+  initialOutcome: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,7 +21,8 @@ export function EntriesSearch({
   const [searchValue, setSearchValue] = useState(initialSearch);
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
   
-  const [statusValue, setStatusValue] = useState(initialStatus);
+  const [statusValue, setStatusValue] = useState(initialStatus === "all" ? null : initialStatus);
+  const [outcomeValue, setOutcomeValue] = useState(initialOutcome === "all" ? null : initialOutcome);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchValue), 300);
@@ -37,9 +41,19 @@ export function EntriesSearch({
       changed = true;
     }
 
-    if (statusValue !== (params.get("status") || "all")) {
-      if (statusValue !== "all") params.set("status", statusValue);
+    const currentStatusUrl = params.get("status") || "all";
+    const targetStatusUrl = statusValue || "all";
+    if (currentStatusUrl !== targetStatusUrl) {
+      if (targetStatusUrl !== "all") params.set("status", targetStatusUrl);
       else params.delete("status");
+      changed = true;
+    }
+
+    const currentOutcomeUrl = params.get("outcome") || "all";
+    const targetOutcomeUrl = outcomeValue || "all";
+    if (currentOutcomeUrl !== targetOutcomeUrl) {
+      if (targetOutcomeUrl !== "all") params.set("outcome", targetOutcomeUrl);
+      else params.delete("outcome");
       changed = true;
     }
 
@@ -49,12 +63,28 @@ export function EntriesSearch({
         router.replace(`?${params.toString()}`);
       });
     }
-  }, [debouncedSearch, statusValue, router, searchParams]);
+  }, [debouncedSearch, statusValue, outcomeValue, router, searchParams]);
+
+  const handleStatusChange = (val: string | null) => {
+    setStatusValue(val);
+    if (!val || val === "Pending") {
+      setOutcomeValue(null);
+    } else {
+      const validOutcomes = OUTCOMES[val as keyof typeof OUTCOMES] || [];
+      if (outcomeValue && !validOutcomes.includes(outcomeValue)) {
+        setOutcomeValue(null);
+      }
+    }
+  };
+
+  const availableOutcomes = statusValue && statusValue !== "Pending" 
+    ? OUTCOMES[statusValue as keyof typeof OUTCOMES] || [] 
+    : [];
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full">
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gmart-muted)] pointer-events-none" />
         <input
           type="search"
           value={searchValue}
@@ -66,36 +96,39 @@ export function EntriesSearch({
           <button
             type="button"
             onClick={() => setSearchValue("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--gmart-muted)] hover:text-[var(--gmart-red)]"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
           </button>
         )}
         {isPending && (
-          <div className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin" />
+          <div className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 border-2 border-[var(--gmart-border)] border-t-[var(--gmart-red)] rounded-full animate-spin" />
         )}
       </div>
 
-      <div className="relative shrink-0 sm:w-[180px]">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <Filter className="w-4 h-4 text-gray-400" />
+      <div className="flex gap-2 shrink-0 overflow-x-auto pb-1 sm:pb-0 items-center">
+        <div className="min-w-[150px]">
+          <CustomSelect
+            value={statusValue}
+            options={["Connected", "Not Connected", "Pending", "All Status"]}
+            placeholder="All Status"
+            onChange={(val) => handleStatusChange(val === "All Status" ? null : val)}
+            disabled={false}
+            colorMap={STATUS_COLORS}
+          />
         </div>
-        <select
-          value={statusValue}
-          onChange={(e) => setStatusValue(e.target.value)}
-          className="w-full pl-9 pr-8 py-2.5 appearance-none border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer shadow-sm"
-        >
-          <option value="all">All Call Status</option>
-          <option value="connected">Connected</option>
-          <option value="not_connected">Not Connected</option>
-          <option value="pending">Pending</option>
-        </select>
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400" />
-          </svg>
-        </div>
+        {availableOutcomes.length > 0 && (
+          <div className="min-w-[150px]">
+            <CustomSelect
+              value={outcomeValue}
+              options={[...availableOutcomes, "All Outcomes"]}
+              placeholder="All Outcomes"
+              onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
+              disabled={false}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

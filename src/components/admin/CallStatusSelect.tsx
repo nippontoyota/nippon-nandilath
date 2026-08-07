@@ -4,12 +4,12 @@ import { useState, useRef, useEffect } from "react";
 import { updateCallStatus } from "@/app/actions/entry";
 import { ChevronDown, Loader2 } from "lucide-react";
 
-const OUTCOMES = {
+export const OUTCOMES = {
   "Connected": ["Interested to Buy vehicle", "Not interested", "Need more details", "TD Required", "Follow up", "DND"],
   "Not Connected": ["RNR", "Call me back", "Switch off", "Busy", "Number doesn't exist"],
 };
 
-function CustomSelect({
+export function CustomSelect({
   value,
   options,
   placeholder,
@@ -81,7 +81,7 @@ function CustomSelect({
   );
 }
 
-const STATUS_COLORS = {
+export const STATUS_COLORS = {
   "Connected": "bg-[#f0faf4] text-[var(--gmart-success)] border-[#b7e4c7]",
   "Not Connected": "bg-amber-50 text-amber-700 border-amber-300",
 };
