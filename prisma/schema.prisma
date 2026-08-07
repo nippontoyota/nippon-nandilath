@@ -32,6 +32,7 @@ model Entry {
   @@index([phone, createdAt])
   @@index([ip, createdAt])
   @@index([excluded])
+  @@index([callStatus])
   @@map("entries")
 }
 
