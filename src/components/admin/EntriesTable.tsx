@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, User } from "lucide-react";
+import { X, User, Phone } from "lucide-react";
 import { DeleteEntryButton } from "@/components/admin/DeleteEntryButton";
 import { ExcludeEntryButton } from "@/components/admin/ExcludeEntryButton";
 import { CallStatusSelect } from "@/components/admin/CallStatusSelect";
@@ -118,8 +118,9 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                       >
                         {entry.name}
                       </div>
-                      <div className="text-sm font-medium text-[var(--gmart-muted)] mt-1 break-all">
-                        {entry.phone}
+                      <div className="flex items-center gap-1.5 text-base font-bold text-[var(--gmart-title)] mt-1.5 break-all">
+                        <Phone className="w-4 h-4 text-[var(--gmart-muted)]" />
+                        <span>{entry.phone}</span>
                       </div>
                       {entry.email && (
                         <div className="text-sm text-[var(--gmart-muted)]/80 mt-0.5 break-all">
