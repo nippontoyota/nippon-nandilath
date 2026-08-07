@@ -139,7 +139,7 @@ export function EntriesSearch({
       </div>
 
       <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
-        <div className="min-w-[180px]">
+        <div className="w-[200px]">
           <CustomSelect
             value={statusValue}
             options={["All Status", "Connected", "Not Connected", "Pending"]}
@@ -147,15 +147,17 @@ export function EntriesSearch({
             onChange={(val) => handleStatusChange(val === "All Status" ? null : val)}
             disabled={false}
             colorMap={STATUS_COLORS}
+            size="md"
           />
         </div>
-        <div className="min-w-[180px]">
+        <div className="w-[200px]">
           <CustomSelect
             value={outcomeValue}
             options={availableOutcomes.length > 0 ? ["All Outcomes", ...availableOutcomes] : ["All Outcomes"]}
             placeholder="All Outcomes"
             onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
             disabled={availableOutcomes.length === 0}
+            size="md"
           />
         </div>
       </div>
