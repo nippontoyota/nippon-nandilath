@@ -45,7 +45,7 @@ export function CustomSelect({
 
   const sizeClasses = size === "md" 
     ? "h-[42px] text-sm px-3 rounded-md" 
-    : "text-xs px-2 py-1.5 rounded";
+    : "text-sm px-2.5 py-2 rounded-md";
 
   return (
     <div className="relative w-full" ref={containerRef}>
@@ -72,7 +72,7 @@ export function CustomSelect({
                 setIsOpen(false);
               }}
               className={`w-full flex items-center gap-2 text-left px-3 transition-colors ${
-                size === "md" ? "py-2 text-sm" : "py-1.5 text-xs"
+                size === "md" ? "py-2 text-sm" : "py-2 text-sm"
               } ${
                 value === opt ? "bg-[#fff5f6] text-[var(--gmart-red)] font-semibold" : "text-[var(--gmart-title)] hover:bg-[#f3f3f3]"
               }`}
@@ -157,7 +157,7 @@ export function CallStatusSelect({
 
   return (
     <div 
-      className="flex flex-col gap-1.5 min-w-[180px] relative"
+      className="flex flex-col gap-1.5 min-w-[200px] relative"
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
@@ -191,7 +191,7 @@ export function CallStatusSelect({
               }
             }}
             placeholder="Add remark..."
-            className="w-full text-xs border border-[var(--gmart-border)] rounded px-2 py-1.5 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 transition-all text-[var(--gmart-title)]"
+            className="w-full text-sm border border-[var(--gmart-border)] rounded-md px-2.5 py-2 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 transition-all text-[var(--gmart-title)]"
           />
         </>
       )}
