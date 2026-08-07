@@ -142,7 +142,7 @@ export function EntriesSearch({
         <div className="min-w-[180px]">
           <CustomSelect
             value={statusValue}
-            options={["Connected", "Not Connected", "Pending", "All Status"]}
+            options={["All Status", "Connected", "Not Connected", "Pending"]}
             placeholder="All Status"
             onChange={(val) => handleStatusChange(val === "All Status" ? null : val)}
             disabled={false}
@@ -152,7 +152,7 @@ export function EntriesSearch({
         <div className="min-w-[180px]">
           <CustomSelect
             value={outcomeValue}
-            options={availableOutcomes.length > 0 ? [...availableOutcomes, "All Outcomes"] : ["All Outcomes"]}
+            options={availableOutcomes.length > 0 ? ["All Outcomes", ...availableOutcomes] : ["All Outcomes"]}
             placeholder="All Outcomes"
             onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
             disabled={availableOutcomes.length === 0}
