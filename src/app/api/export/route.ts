@@ -55,8 +55,45 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const entries = await prisma.entry.findMany({
+  const search = searchParams.get("search") || "";
+  const statusFilter = searchParams.get("status") || "all";
+  const outcomeFilter = searchParams.get("outcome") || "all";
+  const dateFilter = searchParams.get("date") || "";
 
+  const whereClause: any = search
+    ? {
+        OR: [
+          { id: { startsWith: search, mode: "insensitive" } },
+          { name: { contains: search, mode: "insensitive" } },
+          { phone: { contains: search } },
+          { customerLocation: { contains: search, mode: "insensitive" } },
+        ],
+      }
+    : {};
+
+  if (statusFilter === "Connected") {
+    whereClause.callStatus = "Connected";
+  } else if (statusFilter === "Not Connected") {
+    whereClause.callStatus = "Not Connected";
+  } else if (statusFilter === "Pending") {
+    whereClause.callStatus = null;
+  }
+
+  if (outcomeFilter !== "all" && statusFilter !== "Pending") {
+    whereClause.callOutcome = outcomeFilter;
+  }
+
+  if (dateFilter) {
+    const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
+    const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
+    whereClause.createdAt = {
+      gte: startDate,
+      lte: endDate,
+    };
+  }
+
+  const entries = await prisma.entry.findMany({
+    where: whereClause,
     orderBy: { createdAt: "asc" },
   });
 
