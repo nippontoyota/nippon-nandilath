@@ -91,7 +91,7 @@ export function EntriesSearch({
 
   return (
     <div className="flex flex-col lg:flex-row gap-3 w-full">
-      <div className="min-w-[130px] relative shrink-0">
+      <div className="min-w-[160px] relative shrink-0">
         <input
           type="date"
           value={dateValue}

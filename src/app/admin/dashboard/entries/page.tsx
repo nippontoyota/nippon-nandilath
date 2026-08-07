@@ -28,15 +28,15 @@ export default async function EntriesPage(props: {
       }
     : {};
 
-  if (statusFilter === "connected") {
+  if (statusFilter === "Connected") {
     whereClause.callStatus = "Connected";
-  } else if (statusFilter === "not_connected") {
+  } else if (statusFilter === "Not Connected") {
     whereClause.callStatus = "Not Connected";
-  } else if (statusFilter === "pending") {
+  } else if (statusFilter === "Pending") {
     whereClause.callStatus = null;
   }
 
-  if (outcomeFilter !== "all" && statusFilter !== "pending") {
+  if (outcomeFilter !== "all" && statusFilter !== "Pending") {
     whereClause.callOutcome = outcomeFilter;
   }
 
