@@ -71,8 +71,10 @@ export function CustomSelect({
                 onChange(opt);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center gap-2 text-left px-3 py-1.5 text-xs hover:bg-[#fff5f6] transition-colors ${
-                value === opt ? "bg-[#fff5f6] text-[var(--gmart-red)] font-semibold" : "text-[var(--gmart-title)]"
+              className={`w-full flex items-center gap-2 text-left px-3 transition-colors ${
+                size === "md" ? "py-2 text-sm" : "py-1.5 text-xs"
+              } ${
+                value === opt ? "bg-[#fff5f6] text-[var(--gmart-red)] font-semibold" : "text-[var(--gmart-title)] hover:bg-[#f3f3f3]"
               }`}
             >
               {colorMap && colorMap[opt] && (
