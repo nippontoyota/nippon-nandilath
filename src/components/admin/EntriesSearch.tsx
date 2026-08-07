@@ -105,23 +105,25 @@ export function EntriesSearch({
               // ignore if not supported or already open
             }
           }}
-          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm cursor-pointer"
+          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
         />
         {!dateValue && (
-          <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md shadow-sm">
+          <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
             <span className="text-sm text-[var(--gmart-muted)]">Date Filter</span>
           </div>
         )}
       </div>
 
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gmart-muted)] pointer-events-none" />
+      <div className="relative w-full sm:max-w-md shrink-0 sm:shrink">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search className="w-4 h-4 text-[var(--gmart-muted)]" />
+        </div>
         <input
-          type="search"
+          type="text"
+          placeholder="Search by name, phone, email or ticket id..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Search by name or phone..."
-          className="w-full pl-10 pr-10 py-2.5 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] placeholder:text-[var(--gmart-muted)] shadow-sm"
+          className="w-full pl-10 pr-10 py-2.5 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] placeholder:text-[var(--gmart-muted)]"
         />
         {searchValue && (
           <button
