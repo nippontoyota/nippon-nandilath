@@ -91,9 +91,9 @@ export default async function EntriesPage(props: {
           <p className="text-sm font-medium text-green-800">Connected</p>
           <p className="text-3xl font-bold text-green-800 mt-1">{connectedCount}</p>
         </div>
-        <div className="bg-yellow-100 border border-yellow-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-medium text-yellow-800">Not Connected</p>
-          <p className="text-3xl font-bold text-yellow-800 mt-1">{notConnectedCount}</p>
+        <div className="bg-amber-100 border border-amber-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
+          <p className="text-sm font-medium text-amber-800">Not Connected</p>
+          <p className="text-3xl font-bold text-amber-800 mt-1">{notConnectedCount}</p>
         </div>
         <div className="bg-gray-50 border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
           <p className="text-sm font-medium text-gray-500">Pending</p>
