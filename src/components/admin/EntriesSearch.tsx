@@ -92,6 +92,20 @@ export function EntriesSearch({
 
   return (
     <div className="flex flex-col lg:flex-row gap-3 w-full">
+      <div className="min-w-[130px] relative shrink-0">
+        <input
+          type="date"
+          value={dateValue}
+          onChange={(e) => setDateValue(e.target.value)}
+          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm"
+        />
+        {!dateValue && (
+          <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md shadow-sm">
+            <span className="text-sm text-[var(--gmart-muted)]">Date Filter</span>
+          </div>
+        )}
+      </div>
+
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gmart-muted)] pointer-events-none" />
         <input
@@ -117,19 +131,6 @@ export function EntriesSearch({
       </div>
 
       <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
-        <div className="min-w-[130px] relative">
-          <input
-            type="date"
-            value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
-            className="w-full h-[34px] px-2.5 border border-[var(--gmart-border)] rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] shadow-sm"
-          />
-          {!dateValue && (
-            <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-2.5 border border-[var(--gmart-border)] rounded-md shadow-sm">
-              <span className="text-xs text-[var(--gmart-muted)]">Date Filter</span>
-            </div>
-          )}
-        </div>
         <div className="min-w-[140px]">
           <CustomSelect
             value={statusValue}
