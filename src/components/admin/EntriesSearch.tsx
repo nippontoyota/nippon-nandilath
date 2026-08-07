@@ -141,17 +141,15 @@ export function EntriesSearch({
             colorMap={STATUS_COLORS}
           />
         </div>
-        {availableOutcomes.length > 0 && (
-          <div className="min-w-[140px]">
-            <CustomSelect
-              value={outcomeValue}
-              options={[...availableOutcomes, "All Outcomes"]}
-              placeholder="All Outcomes"
-              onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
-              disabled={false}
-            />
-          </div>
-        )}
+        <div className="min-w-[140px]">
+          <CustomSelect
+            value={outcomeValue}
+            options={availableOutcomes.length > 0 ? [...availableOutcomes, "All Outcomes"] : ["All Outcomes"]}
+            placeholder="All Outcomes"
+            onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
+            disabled={availableOutcomes.length === 0}
+          />
+        </div>
       </div>
     </div>
   );
