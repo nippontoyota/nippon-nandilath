@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 import { logout } from "@/app/actions/auth";
@@ -11,32 +11,34 @@ export function AdminSidebar() {
 
   return (
     <aside className={`bg-[var(--gmart-surface)] border-r border-[var(--gmart-border)] flex-col hidden md:flex shrink-0 transition-all duration-300 ease-in-out relative ${isCollapsed ? "w-16" : "w-60"}`}>
-      <button 
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-20 z-10 w-6 h-6 bg-white border border-[var(--gmart-border)] rounded-full flex items-center justify-center text-[var(--gmart-muted)] hover:text-[var(--gmart-red)] hover:border-[var(--gmart-red)] shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20"
-        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-      >
-        {isCollapsed ? <PanelLeftOpen className="w-3.5 h-3.5" /> : <PanelLeftClose className="w-3.5 h-3.5" />}
-      </button>
-
       <div className="border-b border-[var(--gmart-border)] overflow-hidden">
         <div className="h-1 w-full bg-[var(--gmart-red)]" />
-        <div className={`h-14 flex items-center px-4 transition-all ${isCollapsed ? "justify-center" : "gap-2.5"}`}>
-          <img
-            src="https://dealer.toyotabharat.com/dealerV11/images/common/favicon.ico"
-            alt=""
-            className="w-5 h-5 shrink-0"
-          />
-          {!isCollapsed && (
-            <div className="min-w-0 transition-opacity duration-300">
-              <p className="text-sm font-semibold text-[var(--gmart-title)] truncate leading-tight">
-                Nippon Toyota
-              </p>
-              <p className="text-[11px] text-[var(--gmart-muted)] leading-tight truncate">
-                {CAMPAIGN_NAME}
-              </p>
-            </div>
-          )}
+        <div className={`h-14 flex items-center px-4 transition-all ${isCollapsed ? "justify-center" : "gap-2.5 justify-between"}`}>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img
+              src="https://dealer.toyotabharat.com/dealerV11/images/common/favicon.ico"
+              alt=""
+              className="w-5 h-5 shrink-0"
+            />
+            {!isCollapsed && (
+              <div className="min-w-0 transition-opacity duration-300">
+                <p className="text-sm font-semibold text-[var(--gmart-title)] truncate leading-tight">
+                  Nippon Toyota
+                </p>
+                <p className="text-[11px] text-[var(--gmart-muted)] leading-tight truncate">
+                  {CAMPAIGN_NAME}
+                </p>
+              </div>
+            )}
+          </div>
+          
+          <button 
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="w-7 h-7 rounded-md flex items-center justify-center text-[var(--gmart-muted)] hover:bg-[#fff5f6] hover:text-[var(--gmart-red)] transition-colors focus:outline-none shrink-0"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          </button>
         </div>
       </div>
       <div className={`bg-[var(--gmart-navy)] py-2 transition-all overflow-hidden ${isCollapsed ? "px-0 text-center" : "px-5"}`}>
