@@ -70,7 +70,7 @@ export function CustomSelect({
               }`}
             >
               {colorMap && colorMap[opt] && (
-                <span className={`w-2 h-2 rounded-full border ${colorMap[opt]}`} />
+                <span className={`w-2 h-2 rounded-full border bg-current ${colorMap[opt].replace(/bg-[^\s]+/g, "")}`} />
               )}
               {opt}
             </button>
@@ -82,8 +82,8 @@ export function CustomSelect({
 }
 
 export const STATUS_COLORS = {
-  "Connected": "bg-[#f0faf4] text-[var(--gmart-success)] border-[#b7e4c7]",
-  "Not Connected": "bg-amber-50 text-amber-700 border-amber-300",
+  "Connected": "bg-green-100 text-green-800 border-green-400",
+  "Not Connected": "bg-yellow-100 text-yellow-800 border-yellow-400",
 };
 
 export function CallStatusSelect({
