@@ -10,11 +10,13 @@ export function EntriesSearch({
   initialStatus,
   initialOutcome,
   initialDate,
+  isCallCenter = false,
 }: {
   initialSearch: string;
   initialStatus: string;
   initialOutcome: string;
   initialDate: string;
+  isCallCenter?: boolean;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -91,28 +93,30 @@ export function EntriesSearch({
 
   return (
     <div className="flex flex-col lg:flex-row gap-3 w-full">
-      <div className="min-w-[160px] relative shrink-0">
-        <input
-          type="date"
-          value={dateValue}
-          onChange={(e) => setDateValue(e.target.value)}
-          onClick={(e) => {
-            try {
-              if (e.currentTarget.showPicker) {
-                e.currentTarget.showPicker();
+      {isCallCenter && (
+        <div className="min-w-[160px] relative shrink-0">
+          <input
+            type="date"
+            value={dateValue}
+            onChange={(e) => setDateValue(e.target.value)}
+            onClick={(e) => {
+              try {
+                if (e.currentTarget.showPicker) {
+                  e.currentTarget.showPicker();
+                }
+              } catch (err) {
+                // ignore if not supported or already open
               }
-            } catch (err) {
-              // ignore if not supported or already open
-            }
-          }}
-          className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
-        />
-        {!dateValue && (
-          <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
-            <span className="text-sm text-[var(--gmart-muted)]">Date Filter</span>
-          </div>
-        )}
-      </div>
+            }}
+            className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
+          />
+          {!dateValue && (
+            <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
+              <span className="text-sm text-[var(--gmart-muted)]">Date Filter</span>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="relative flex-1 min-w-[200px]">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -140,29 +144,31 @@ export function EntriesSearch({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
-        <div className="w-[200px]">
-          <CustomSelect
-            value={statusValue}
-            options={["All Status", "Connected", "Not Connected", "Pending"]}
-            placeholder="All Status"
-            onChange={(val) => handleStatusChange(val === "All Status" ? null : val)}
-            disabled={false}
-            colorMap={STATUS_COLORS}
-            size="md"
-          />
+      {isCallCenter && (
+        <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
+          <div className="w-[200px]">
+            <CustomSelect
+              value={statusValue}
+              options={["All Status", "Connected", "Not Connected", "Pending"]}
+              placeholder="All Status"
+              onChange={(val) => handleStatusChange(val === "All Status" ? null : val)}
+              disabled={false}
+              colorMap={STATUS_COLORS}
+              size="md"
+            />
+          </div>
+          <div className="w-[200px]">
+            <CustomSelect
+              value={outcomeValue}
+              options={availableOutcomes.length > 0 ? ["All Outcomes", ...availableOutcomes] : ["All Outcomes"]}
+              placeholder="All Outcomes"
+              onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
+              disabled={availableOutcomes.length === 0}
+              size="md"
+            />
+          </div>
         </div>
-        <div className="w-[200px]">
-          <CustomSelect
-            value={outcomeValue}
-            options={availableOutcomes.length > 0 ? ["All Outcomes", ...availableOutcomes] : ["All Outcomes"]}
-            placeholder="All Outcomes"
-            onChange={(val) => setOutcomeValue(val === "All Outcomes" ? null : val)}
-            disabled={availableOutcomes.length === 0}
-            size="md"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 }

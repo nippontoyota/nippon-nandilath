@@ -82,24 +82,26 @@ export default async function EntriesPage(props: {
   return (
     <div className="space-y-6">
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-medium text-[var(--gmart-muted)]">Total Leads</p>
-          <p className="text-3xl font-bold text-[var(--gmart-title)] mt-1">{totalEntries}</p>
+      {session?.role === "call_center" && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="bg-white border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
+            <p className="text-sm font-medium text-[var(--gmart-muted)]">Total Leads</p>
+            <p className="text-3xl font-bold text-[var(--gmart-title)] mt-1">{totalEntries}</p>
+          </div>
+          <div className="bg-green-100 border border-green-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
+            <p className="text-sm font-medium text-green-800">Connected</p>
+            <p className="text-3xl font-bold text-green-800 mt-1">{connectedCount}</p>
+          </div>
+          <div className="bg-amber-100 border border-amber-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
+            <p className="text-sm font-medium text-amber-800">Not Connected</p>
+            <p className="text-3xl font-bold text-amber-800 mt-1">{notConnectedCount}</p>
+          </div>
+          <div className="bg-gray-50 border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
+            <p className="text-sm font-medium text-gray-500">Pending</p>
+            <p className="text-3xl font-bold text-gray-700 mt-1">{totalEntries - connectedCount - notConnectedCount}</p>
+          </div>
         </div>
-        <div className="bg-green-100 border border-green-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-medium text-green-800">Connected</p>
-          <p className="text-3xl font-bold text-green-800 mt-1">{connectedCount}</p>
-        </div>
-        <div className="bg-amber-100 border border-amber-200 rounded-xl p-5 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-medium text-amber-800">Not Connected</p>
-          <p className="text-3xl font-bold text-amber-800 mt-1">{notConnectedCount}</p>
-        </div>
-        <div className="bg-gray-50 border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-medium text-gray-500">Pending</p>
-          <p className="text-3xl font-bold text-gray-700 mt-1">{totalEntries - connectedCount - notConnectedCount}</p>
-        </div>
-      </div>
+      )}
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center relative z-20">
         <div className="flex-1 w-full min-w-0">
@@ -108,6 +110,7 @@ export default async function EntriesPage(props: {
             initialStatus={statusFilter} 
             initialOutcome={outcomeFilter} 
             initialDate={dateFilter} 
+            isCallCenter={session?.role === "call_center"}
           />
         </div>
       </div>
