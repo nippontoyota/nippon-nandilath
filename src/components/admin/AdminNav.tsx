@@ -7,7 +7,7 @@ import { FlagBadge } from "./FlagBadge";
 
 export const adminNavItems = [
   { href: "/admin/dashboard", label: "Draw", fullLabel: "Draw Winner", icon: LayoutDashboard, badge: null as "flags" | null },
-  { href: "/admin/dashboard/entries", label: "Entries", fullLabel: "Entries", icon: FileText, badge: "flags" as const },
+  { href: "/admin/dashboard/entries", label: "Entries", fullLabel: "Entries", icon: FileText, badge: null as "flags" | null },
 ];
 
 function isActivePath(pathname: string, href: string) {
