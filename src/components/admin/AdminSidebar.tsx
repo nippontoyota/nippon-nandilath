@@ -7,7 +7,7 @@ import { CAMPAIGN_NAME } from "@/lib/brand";
 import { logout } from "@/app/actions/auth";
 
 export function AdminSidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <aside className={`bg-[var(--gmart-surface)] border-r border-[var(--gmart-border)] flex-col hidden md:flex shrink-0 transition-all duration-300 ease-in-out relative ${isCollapsed ? "w-16" : "w-60"}`}>
