@@ -127,10 +127,6 @@ export default async function EntriesPage(props: {
             initialDate={dateFilter} 
           />
         </div>
-        <p className="text-sm text-[var(--gmart-muted)] shrink-0">
-          {totalEntries} {totalEntries === 1 ? "entry" : "entries"}
-          {search ? " matching" : ""}
-        </p>
       </div>
 
       {entries.length === 0 && search && (

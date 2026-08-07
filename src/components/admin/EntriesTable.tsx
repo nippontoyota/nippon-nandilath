@@ -61,7 +61,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
             <thead className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-xs">
               <tr>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] w-12 text-center">
-                  #
+                  
                 </th>
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[10rem]">
                   Participant
