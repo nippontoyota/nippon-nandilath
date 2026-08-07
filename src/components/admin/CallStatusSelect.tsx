@@ -15,7 +15,8 @@ export function CustomSelect({
   placeholder,
   onChange,
   disabled,
-  colorMap
+  colorMap,
+  size = "sm",
 }: {
   value: string | null;
   options: string[];
@@ -23,6 +24,7 @@ export function CustomSelect({
   onChange: (val: string) => void;
   disabled: boolean;
   colorMap?: Record<string, string>;
+  size?: "sm" | "md";
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,13 +43,17 @@ export function CustomSelect({
     ? colorMap[value] 
     : "bg-white border-[var(--gmart-border)]";
 
+  const sizeClasses = size === "md" 
+    ? "h-[42px] text-sm px-3 rounded-md" 
+    : "text-xs px-2 py-1.5 rounded";
+
   return (
     <div className="relative w-full" ref={containerRef}>
       <button
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between text-xs border rounded px-2 py-1.5 outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 text-left disabled:opacity-50 transition-all ${buttonColorClass}`}
+        className={`w-full flex items-center justify-between border outline-none focus:border-[var(--gmart-red)] focus:ring-1 focus:ring-[var(--gmart-red)]/20 text-left disabled:opacity-50 transition-all ${sizeClasses} ${buttonColorClass}`}
       >
         <span className={value ? (colorMap && colorMap[value] ? "font-medium" : "text-[var(--gmart-title)] font-medium") : "text-[var(--gmart-muted)]"}>
           {value || placeholder}
