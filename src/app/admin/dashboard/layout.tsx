@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { getSession, logout } from "@/app/actions/auth";
 import { LogOut, Headset } from "lucide-react";
 
-import { AdminNav, AdminMobileNav } from "@/components/admin/AdminNav";
+import { AdminMobileNav } from "@/components/admin/AdminNav";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { SupabaseRealtime } from "@/components/admin/SupabaseRealtime";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 
@@ -22,43 +23,7 @@ export default async function AdminDashboardLayout({
     <div className="admin-shell h-dvh overflow-hidden flex">
       <SupabaseRealtime />
 
-      <aside className="w-60 bg-[var(--gmart-surface)] border-r border-[var(--gmart-border)] flex-col hidden md:flex shrink-0">
-        <div className="border-b border-[var(--gmart-border)]">
-          <div className="h-1 w-full bg-[var(--gmart-red)]" />
-          <div className="h-14 flex items-center gap-2.5 px-5">
-            <img
-              src="https://dealer.toyotabharat.com/dealerV11/images/common/favicon.ico"
-              alt=""
-              className="w-5 h-5"
-            />
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-[var(--gmart-title)] truncate leading-tight">
-                Nippon Toyota
-              </p>
-              <p className="text-[11px] text-[var(--gmart-muted)] leading-tight truncate">
-                {CAMPAIGN_NAME}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[var(--gmart-navy)] px-5 py-2">
-          <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-[var(--gmart-cream)]">
-            Admin menu
-          </p>
-        </div>
-        <AdminNav />
-        <div className="p-3 border-t border-[var(--gmart-border)]">
-          <form action={logout}>
-            <button
-              type="submit"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-[var(--gmart-muted)] hover:bg-[#fff5f6] hover:text-[var(--gmart-red)] w-full text-left transition-colors"
-            >
-              <LogOut className="w-4 h-4 shrink-0 opacity-70" />
-              Sign out
-            </button>
-          </form>
-        </div>
-      </aside>
+      <AdminSidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
         <header className="bg-[var(--gmart-surface)] border-b border-[var(--gmart-border)] shrink-0">
