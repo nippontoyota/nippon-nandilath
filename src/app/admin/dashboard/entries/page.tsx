@@ -27,7 +27,7 @@ export default async function EntriesPage(props: {
       }
     : {};
 
-  const [entries, totalEntries, flaggedCount] = await Promise.all([
+  const [entries, totalEntries, flaggedCount, connectedCount, notConnectedCount] = await Promise.all([
     prisma.entry.findMany({
       where: whereClause,
       select: {
@@ -49,6 +49,8 @@ export default async function EntriesPage(props: {
     }),
     prisma.entry.count({ where: whereClause }),
     prisma.entry.count({ where: { flag: { not: null } } }),
+    prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } }),
+    prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalEntries / PAGE_SIZE));
@@ -83,6 +85,21 @@ export default async function EntriesPage(props: {
           <Download className="w-4 h-4" />
           Export CSV
         </a>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white border border-[var(--gmart-border)] rounded-xl p-5 shadow-sm flex flex-col justify-center">
+          <p className="text-sm font-medium text-[var(--gmart-muted)]">Total Leads</p>
+          <p className="text-3xl font-bold text-[var(--gmart-title)] mt-1">{totalEntries}</p>
+        </div>
+        <div className="bg-[#f0faf4] border border-[#b7e4c7] rounded-xl p-5 shadow-sm flex flex-col justify-center">
+          <p className="text-sm font-medium text-[var(--gmart-success)]">Connected</p>
+          <p className="text-3xl font-bold text-[var(--gmart-success)] mt-1">{connectedCount}</p>
+        </div>
+        <div className="bg-amber-50 border border-amber-300 rounded-xl p-5 shadow-sm flex flex-col justify-center">
+          <p className="text-sm font-medium text-amber-700">Not Connected</p>
+          <p className="text-3xl font-bold text-amber-700 mt-1">{notConnectedCount}</p>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
