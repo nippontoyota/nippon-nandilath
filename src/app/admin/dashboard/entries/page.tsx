@@ -8,7 +8,7 @@ import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function EntriesPage(props: {
-  searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string }>;
+  searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string; date?: string }>;
 }) {
   const session = await getSession();
   const searchParams = await props.searchParams;
