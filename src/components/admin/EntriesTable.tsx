@@ -119,18 +119,24 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                     </td>
                     <td className="px-4 py-3 align-top">
                       <div
-                        className={`text-base font-semibold break-words ${
+                        className={`${userRole === "call_center" ? "text-base font-semibold" : "font-medium"} break-words ${
                           entry.excluded ? "text-[var(--gmart-muted)]" : "text-[var(--gmart-title)]"
                         }`}
                       >
                         {entry.name}
                       </div>
-                      <div className="flex items-center gap-1.5 text-base font-bold text-[var(--gmart-title)] mt-1.5 break-all">
-                        <Phone className="w-4 h-4 text-[var(--gmart-muted)]" />
-                        <span>{formatPhone(entry.phone)}</span>
-                      </div>
+                      {userRole === "call_center" ? (
+                        <div className="flex items-center gap-1.5 text-base font-bold text-[var(--gmart-title)] mt-1.5 break-all">
+                          <Phone className="w-4 h-4 text-[var(--gmart-muted)]" />
+                          <span>{formatPhone(entry.phone)}</span>
+                        </div>
+                      ) : (
+                        <div className="text-xs text-[var(--gmart-muted)] mt-0.5 break-all">
+                          {formatPhone(entry.phone)}
+                        </div>
+                      )}
                       {entry.email && (
-                        <div className="text-sm text-[var(--gmart-muted)]/80 mt-0.5 break-all">
+                        <div className={`${userRole === "call_center" ? "text-sm" : "text-xs"} text-[var(--gmart-muted)]/80 mt-0.5 break-all`}>
                           {entry.email}
                         </div>
                       )}
