@@ -72,7 +72,9 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[12rem]">
                   Address
                 </th>
-                <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
+                {userRole !== "call_center" && (
+                  <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px]">Flags</th>
+                )}
                 <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] whitespace-nowrap">
                   Draw status
                 </th>
@@ -138,19 +140,21 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                         {entry.customerLocation}
                       </div>
                     </td>
-                    <td className="px-4 py-3 align-top">
-                      {flags.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {flags.map((f) => (
-                            <span key={f} className="admin-sale-badge capitalize">
-                              {f.replace(/_/g, " ")}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-[var(--gmart-border)]">—</span>
-                      )}
-                    </td>
+                    {userRole !== "call_center" && (
+                      <td className="px-4 py-3 align-top">
+                        {flags.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {flags.map((f) => (
+                              <span key={f} className="admin-sale-badge capitalize">
+                                {f.replace(/_/g, " ")}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-[var(--gmart-border)]">—</span>
+                        )}
+                      </td>
+                    )}
 
                     <td className="px-4 py-3 align-top whitespace-nowrap">
                       {entry.excluded ? (
@@ -266,23 +270,25 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                     value={selected.callRemark}
                   />
                 )}
-                <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
-                  <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
-                  <dd className="font-medium text-[var(--gmart-title)]">
-                    {parseFlags(selected.flag).length > 0 ? (
-                      <div className="flex flex-wrap gap-1">
-                        {parseFlags(selected.flag).map((f) => (
-                          <span key={f} className="admin-sale-badge capitalize">
-                            {f.replace(/_/g, " ")}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-[var(--gmart-muted)] font-normal">None</span>
-                    )}
-                  </dd>
-                </div>
-                {selected.flagReason && (
+                {userRole !== "call_center" && (
+                  <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
+                    <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
+                    <dd className="font-medium text-[var(--gmart-title)]">
+                      {parseFlags(selected.flag).length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {parseFlags(selected.flag).map((f) => (
+                            <span key={f} className="admin-sale-badge capitalize">
+                              {f.replace(/_/g, " ")}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-[var(--gmart-muted)] font-normal">None</span>
+                      )}
+                    </dd>
+                  </div>
+                )}
+                {userRole !== "call_center" && selected.flagReason && (
                   <DetailRow label="Reason" value={selected.flagReason} />
                 )}
               </dl>
