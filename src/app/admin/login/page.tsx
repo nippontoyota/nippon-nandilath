@@ -39,7 +39,7 @@ export default function AdminLogin() {
           <div className="admin-product-card p-8">
             <form action={formAction} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-base font-medium text-[var(--gmart-title)]">
+                <Label htmlFor="email" className="text-lg font-medium text-[var(--gmart-title)]">
                   Email
                 </Label>
                 <Input
@@ -48,12 +48,12 @@ export default function AdminLogin() {
                   type="email"
                   required
                   autoComplete="email"
-                  className="h-12 text-base px-4 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
+                  className="h-12 text-lg px-4 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
                   placeholder="admin@nippontoyota.com"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-base font-medium text-[var(--gmart-title)]">
+                <Label htmlFor="password" className="text-lg font-medium text-[var(--gmart-title)]">
                   Password
                 </Label>
                 <div className="relative">
@@ -63,7 +63,7 @@ export default function AdminLogin() {
                     type={showPassword ? "text" : "password"}
                     required
                     autoComplete="current-password"
-                    className="h-12 text-base px-4 pr-12 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
+                    className="h-12 text-lg px-4 pr-12 rounded-md border-[var(--gmart-border)] focus-visible:border-[var(--gmart-red)] focus-visible:ring-[var(--gmart-red)]/20"
                   />
                   <button
                     type="button"
@@ -88,7 +88,7 @@ export default function AdminLogin() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="admin-btn-primary w-full h-12 mt-2 rounded-md text-base font-semibold disabled:opacity-70"
+                className="admin-btn-primary w-full h-12 mt-2 rounded-md text-lg font-semibold disabled:opacity-70"
               >
                 {isPending ? "Signing in…" : "Sign in"}
               </button>
