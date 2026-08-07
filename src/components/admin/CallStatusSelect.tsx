@@ -83,7 +83,7 @@ export function CustomSelect({
 
 export const STATUS_COLORS = {
   "Connected": "bg-green-100 text-green-800 border-green-400",
-  "Not Connected": "bg-yellow-100 text-yellow-800 border-yellow-400",
+  "Not Connected": "bg-amber-100 text-amber-800 border-amber-400",
 };
 
 export function CallStatusSelect({
@@ -149,7 +149,7 @@ export function CallStatusSelect({
 
   return (
     <div 
-      className="flex flex-col gap-1.5 min-w-[150px] relative"
+      className="flex flex-col gap-1.5 min-w-[180px] relative"
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
