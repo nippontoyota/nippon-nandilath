@@ -14,11 +14,11 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || (href !== "/admin/dashboard" && pathname.startsWith(href));
 }
 
-export function AdminNav() {
+export function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex-1 px-3 py-4 space-y-0.5" aria-label="Admin">
+    <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1 overflow-x-hidden" aria-label="Admin">
       {adminNavItems.map((item) => {
         const Icon = item.icon;
         const isActive = isActivePath(pathname, item.href);
@@ -27,15 +27,28 @@ export function AdminNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
+            title={isCollapsed ? item.fullLabel : undefined}
+            className={`relative flex items-center rounded-md transition-colors ${
+              isCollapsed ? "justify-center w-10 h-10 mx-auto" : "gap-3 px-3 py-2.5 w-full"
+            } ${
               isActive
                 ? "bg-[var(--gmart-red)] text-white shadow-sm"
                 : "text-[var(--gmart-muted)] hover:bg-[#fff5f6] hover:text-[var(--gmart-title)]"
             }`}
           >
             <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-[var(--gmart-muted)]"}`} />
-            <span className="flex-1 truncate">{item.fullLabel}</span>
-            {item.badge === "flags" && <FlagBadge />}
+            {!isCollapsed && (
+              <>
+                <span className="flex-1 truncate text-sm font-medium">{item.fullLabel}</span>
+                {item.badge === "flags" && <FlagBadge />}
+              </>
+            )}
+            {isCollapsed && item.badge === "flags" && (
+              <span className="absolute top-1 right-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--gmart-red)]"></span>
+              </span>
+            )}
           </Link>
         );
       })}
