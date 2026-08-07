@@ -14,22 +14,20 @@ export function AdminSidebar() {
       <div className="border-b border-[var(--gmart-border)] overflow-hidden">
         <div className="h-1 w-full bg-[var(--gmart-red)]" />
         <div className={`h-14 flex items-center px-4 transition-all ${isCollapsed ? "justify-center" : "gap-2.5 justify-between"}`}>
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className={`items-center gap-2.5 min-w-0 ${isCollapsed ? "hidden" : "flex"}`}>
             <img
               src="https://dealer.toyotabharat.com/dealerV11/images/common/favicon.ico"
               alt=""
               className="w-5 h-5 shrink-0"
             />
-            {!isCollapsed && (
-              <div className="min-w-0 transition-opacity duration-300">
-                <p className="text-sm font-semibold text-[var(--gmart-title)] truncate leading-tight">
-                  Nippon Toyota
-                </p>
-                <p className="text-[11px] text-[var(--gmart-muted)] leading-tight truncate">
-                  {CAMPAIGN_NAME}
-                </p>
-              </div>
-            )}
+            <div className="min-w-0 transition-opacity duration-300">
+              <p className="text-sm font-semibold text-[var(--gmart-title)] truncate leading-tight">
+                Nippon Toyota
+              </p>
+              <p className="text-[11px] text-[var(--gmart-muted)] leading-tight truncate">
+                {CAMPAIGN_NAME}
+              </p>
+            </div>
           </div>
           
           <button 
