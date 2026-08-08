@@ -148,17 +148,63 @@ export async function toggleExclude(entryId: string) {
 
 export async function updateCallStatus(
   entryId: string,
+  attempt: number,
   callStatus: string | null,
   callOutcome: string | null,
   callRemark: string | null = null
 ) {
   if (!(await isAuthenticated())) return { error: "Unauthorized" };
 
+  if (attempt < 1 || attempt > 5) return { error: "Invalid attempt number" };
+
   try {
+    const entry = await prisma.entry.findUnique({
+      where: { id: entryId },
+      select: {
+        call1Status: true, call1Outcome: true, call1Remark: true,
+        call2Status: true, call2Outcome: true, call2Remark: true,
+        call3Status: true, call3Outcome: true, call3Remark: true,
+        call4Status: true, call4Outcome: true, call4Remark: true,
+        call5Status: true, call5Outcome: true, call5Remark: true,
+      }
+    });
+
+    if (!entry) return { error: "Entry not found" };
+
+    const attempts = [
+      { status: entry.call1Status, outcome: entry.call1Outcome, remark: entry.call1Remark },
+      { status: entry.call2Status, outcome: entry.call2Outcome, remark: entry.call2Remark },
+      { status: entry.call3Status, outcome: entry.call3Outcome, remark: entry.call3Remark },
+      { status: entry.call4Status, outcome: entry.call4Outcome, remark: entry.call4Remark },
+      { status: entry.call5Status, outcome: entry.call5Outcome, remark: entry.call5Remark },
+    ];
+
+    attempts[attempt - 1] = { status: callStatus, outcome: callOutcome, remark: callRemark };
+
+    let latestStatus = null;
+    let latestOutcome = null;
+    let latestRemark = null;
+    for (let i = 4; i >= 0; i--) {
+      if (attempts[i].status !== null) {
+        latestStatus = attempts[i].status;
+        latestOutcome = attempts[i].outcome;
+        latestRemark = attempts[i].remark;
+        break;
+      }
+    }
+
     await prisma.entry.update({
       where: { id: entryId },
-      data: { callStatus, callOutcome, callRemark },
+      data: {
+        [`call${attempt}Status`]: callStatus,
+        [`call${attempt}Outcome`]: callOutcome,
+        [`call${attempt}Remark`]: callRemark,
+        callStatus: latestStatus,
+        callOutcome: latestOutcome,
+        callRemark: latestRemark,
+      },
     });
+
     revalidatePath("/admin/dashboard/entries");
     return { success: true };
   } catch (error) {
