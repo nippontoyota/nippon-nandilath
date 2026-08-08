@@ -25,7 +25,7 @@ export default async function AdminDashboardLayout({
     <div className="admin-shell h-dvh overflow-hidden flex">
       <SupabaseRealtime />
 
-      <AdminSidebar />
+      <AdminSidebar isCallCenter={isCallCenter} />
 
       <div className="flex-1 flex flex-col min-w-0">
         <header className="bg-[var(--gmart-surface)] border-b border-[var(--gmart-border)] shrink-0">
@@ -71,7 +71,7 @@ export default async function AdminDashboardLayout({
         </main>
       </div>
 
-      <AdminMobileNav />
+      <AdminMobileNav isCallCenter={isCallCenter} />
     </div>
   );
 }

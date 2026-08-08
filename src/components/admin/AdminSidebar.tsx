@@ -6,7 +6,7 @@ import { AdminNav } from "@/components/admin/AdminNav";
 import { CAMPAIGN_NAME } from "@/lib/brand";
 import { logout } from "@/app/actions/auth";
 
-export function AdminSidebar() {
+export function AdminSidebar({ isCallCenter = false }: { isCallCenter?: boolean }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
@@ -49,7 +49,7 @@ export function AdminSidebar() {
         )}
       </div>
       
-      <AdminNav isCollapsed={isCollapsed} />
+      <AdminNav isCollapsed={isCollapsed} isCallCenter={isCallCenter} />
       
       <div className="p-3 border-t border-[var(--gmart-border)] overflow-hidden flex-shrink-0 flex justify-center">
         <form action={logout} className="w-full">

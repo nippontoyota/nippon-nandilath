@@ -14,12 +14,16 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || (href !== "/admin/dashboard" && pathname.startsWith(href));
 }
 
-export function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
+export function AdminNav({ isCollapsed = false, isCallCenter = false }: { isCollapsed?: boolean; isCallCenter?: boolean }) {
   const pathname = usePathname();
+
+  const items = isCallCenter 
+    ? adminNavItems.filter(item => item.href !== "/admin/dashboard") 
+    : adminNavItems;
 
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1 overflow-x-hidden" aria-label="Admin">
-      {adminNavItems.map((item) => {
+      {items.map((item) => {
         const Icon = item.icon;
         const isActive = isActivePath(pathname, item.href);
 
@@ -56,16 +60,20 @@ export function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
   );
 }
 
-export function AdminMobileNav() {
+export function AdminMobileNav({ isCallCenter = false }: { isCallCenter?: boolean }) {
   const pathname = usePathname();
+
+  const items = isCallCenter 
+    ? adminNavItems.filter(item => item.href !== "/admin/dashboard") 
+    : adminNavItems;
 
   return (
     <nav
       className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-[var(--gmart-border)] bg-[var(--gmart-surface)]/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]"
       aria-label="Admin mobile"
     >
-      <div className="grid grid-cols-2 h-14">
-        {adminNavItems.map((item) => {
+      <div className={`grid h-14 ${items.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+        {items.map((item) => {
           const Icon = item.icon;
           const isActive = isActivePath(pathname, item.href);
 
