@@ -77,7 +77,7 @@ export default async function ReportPage({
       rows.push({ status: "Connected", outcome, count: connectedBreakdown[outcome] });
     });
   }
-  rows.push({ status: "Connected Total", outcome: "", count: totalConnected, isSubtotal: true, colorClass: "text-green-700 bg-green-50/50" });
+  rows.push({ status: "Total Connected", outcome: "", count: totalConnected, isSubtotal: true, colorClass: "text-green-700 bg-green-50/50" });
 
   // Not Connected Rows
   if (totalDisconnected > 0) {
@@ -85,13 +85,13 @@ export default async function ReportPage({
       rows.push({ status: "Not Connected", outcome, count: disconnectedBreakdown[outcome] });
     });
   }
-  rows.push({ status: "Not Connected Total", outcome: "", count: totalDisconnected, isSubtotal: true, colorClass: "text-red-700 bg-red-50/50" });
+  rows.push({ status: "Total Not Connected", outcome: "", count: totalDisconnected, isSubtotal: true, colorClass: "text-red-700 bg-red-50/50" });
 
   // Pending Rows
   if (totalPending > 0) {
     rows.push({ status: "Pending", outcome: "Not Called Yet", count: totalPending });
   }
-  rows.push({ status: "Pending Total", outcome: "", count: totalPending, isSubtotal: true, colorClass: "text-yellow-700 bg-yellow-50/50" });
+  rows.push({ status: "Total Pending", outcome: "", count: totalPending, isSubtotal: true, colorClass: "text-yellow-700 bg-yellow-50/50" });
 
   const grandTotal = totalConnected + totalDisconnected + totalPending;
 
