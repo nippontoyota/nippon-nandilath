@@ -32,10 +32,23 @@ export function DailyReportModal({
   const [data, setData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const params = new URLSearchParams(searchParams);
+  const dateParam = params.get("date");
+  const reportDate = dateParam ? new Date(dateParam) : new Date();
+  
+  // Format to YYYY-MM-DD for the API
+  const localIsoDate = new Date(reportDate.getTime() - (reportDate.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
+
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
-      fetch(`/api/report?${searchParams}`)
+      
+      // Force the date parameter if it's missing to ensure it never pulls the whole DB
+      if (!params.has("date")) {
+        params.set("date", localIsoDate);
+      }
+
+      fetch(`/api/report?${params.toString()}`)
         .then((res) => res.json())
         .then((d) => {
           setData(d);
@@ -47,9 +60,6 @@ export function DailyReportModal({
 
   if (!isOpen) return null;
 
-  const params = new URLSearchParams(searchParams);
-  const dateParam = params.get("date");
-  const reportDate = dateParam ? new Date(dateParam) : new Date();
   const dateStr = reportDate.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "long",
