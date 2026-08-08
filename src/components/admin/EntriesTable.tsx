@@ -219,7 +219,11 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                             }`}>
                               {entry.callStatus}
                             </span>
-                            {entry.callOutcome && <span className="text-[11px] text-[var(--gmart-title)] font-medium leading-tight">{entry.callOutcome}</span>}
+                            {entry.callOutcome && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-[#f0f0f0] text-[var(--gmart-title)] border border-[var(--gmart-border)]">
+                                {entry.callOutcome}
+                              </span>
+                            )}
                           </div>
                         ) : (
                           <span className="text-[11px] text-[var(--gmart-muted)] font-medium italic">No calls yet</span>
