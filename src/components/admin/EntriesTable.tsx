@@ -226,7 +226,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                             )}
                           </div>
                         ) : (
-                          <span className="text-[11px] text-[var(--gmart-muted)] font-medium italic">No calls yet</span>
+                          <span className="text-[11px] text-red-500 font-medium italic">No calls yet</span>
                         )}
                       </td>
                     )}
