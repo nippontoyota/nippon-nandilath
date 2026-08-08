@@ -71,8 +71,9 @@ export default async function ReportPage({
   ])).sort();
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="min-h-[calc(100vh-4rem)] bg-white -m-4 sm:-m-6 md:-m-8 p-4 sm:p-6 md:p-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">
           Daily Report Overview
         </h1>
@@ -91,7 +92,7 @@ export default async function ReportPage({
         </h2>
         
         <div className="overflow-x-auto flex justify-center">
-          <table className="w-full max-w-2xl border-collapse text-sm text-left text-gray-700">
+          <table className="w-full max-w-2xl border-collapse text-sm text-left text-gray-700 bg-white">
             <thead>
               <tr>
                 <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 w-1/3 text-center">
@@ -120,7 +121,7 @@ export default async function ReportPage({
                   const conn = connectedBreakdown[outcome] || 0;
                   const notConn = disconnectedBreakdown[outcome] || 0;
                   return (
-                    <tr key={outcome} className="hover:bg-gray-50">
+                    <tr key={outcome}>
                       <td className="border border-gray-300 px-4 py-2 font-medium">
                         {outcome}
                       </td>
@@ -140,7 +141,7 @@ export default async function ReportPage({
             </tbody>
             {allOutcomes.length > 0 && (
               <tfoot>
-                <tr className="bg-gray-100 font-bold text-gray-900">
+                <tr className="bg-white font-bold text-gray-900">
                   <td className="border border-gray-300 px-4 py-3">
                     Grand Total
                   </td>
@@ -157,6 +158,7 @@ export default async function ReportPage({
               </tfoot>
             )}
           </table>
+        </div>
         </div>
       </div>
     </div>
