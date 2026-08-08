@@ -164,7 +164,7 @@ export default async function ReportPage({
             <tfoot>
               <tr className="bg-white font-bold text-gray-900 text-base">
                 <td className="border border-gray-400 border-t-2 px-4 py-3" colSpan={2}>
-                  📊 GRAND TOTAL
+                  GRAND TOTAL
                 </td>
                 <td className="border border-gray-400 border-t-2 px-4 py-3 text-right">
                   {grandTotal}
