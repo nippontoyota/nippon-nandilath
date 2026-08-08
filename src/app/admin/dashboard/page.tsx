@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { getSession } from "@/app/actions/auth";
 import { prisma } from "@/lib/prisma";
 import { DrawCard } from "@/components/admin/DrawCard";
 import { UniversalQrCard } from "@/components/admin/UniversalQrCard";
@@ -5,6 +7,11 @@ import { ENTRY_FORM_URL } from "@/lib/entry-config";
 import { Download } from "lucide-react";
 
 export default async function AdminDashboardPage() {
+  const session = await getSession();
+  if (session?.role === "call_center") {
+    redirect("/admin/dashboard/entries");
+  }
+
   const [winner, eligibleCount] = await Promise.all([
     prisma.winner.findFirst({
       select: {
