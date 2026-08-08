@@ -93,7 +93,8 @@ export async function GET(req: NextRequest) {
         const search = searchParams.get("search") || "";
         const statusFilter = searchParams.get("status") || "all";
         const outcomeFilter = searchParams.get("outcome") || "all";
-        const dateFilter = searchParams.get("date") || "";
+        const fromDateFilter = searchParams.get("fromDate") || "";
+        const toDateFilter = searchParams.get("toDate") || "";
 
         const whereClause: any = search
           ? {
@@ -118,13 +119,14 @@ export async function GET(req: NextRequest) {
           whereClause.callOutcome = outcomeFilter;
         }
 
-        if (dateFilter) {
-          const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
-          const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
-          whereClause.createdAt = {
-            gte: startDate,
-            lte: endDate,
-          };
+        if (fromDateFilter || toDateFilter) {
+          whereClause.createdAt = {};
+          if (fromDateFilter) {
+            whereClause.createdAt.gte = new Date(`${fromDateFilter}T00:00:00.000+05:30`);
+          }
+          if (toDateFilter) {
+            whereClause.createdAt.lte = new Date(`${toDateFilter}T23:59:59.999+05:30`);
+          }
         }
 
         let skip = 0;

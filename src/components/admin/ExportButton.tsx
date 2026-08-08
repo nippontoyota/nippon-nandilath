@@ -18,7 +18,7 @@ export function ExportButton() {
         className="hidden sm:inline-flex items-center justify-center gap-2 h-8 px-3 rounded-md text-xs font-medium bg-white border border-[var(--gmart-border)] text-[var(--gmart-title)] hover:bg-[#fafafa] hover:text-[var(--gmart-red)] transition-colors"
       >
         <FileText className="w-3.5 h-3.5" />
-        Daily Pivot Report
+        Pivot Report
       </a>
 
       <a
