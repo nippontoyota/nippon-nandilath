@@ -209,12 +209,20 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                     {userRole === "call_center" && (
                       <td className="px-4 py-3 align-top">
                         {entry.callStatus ? (
-                          <div className="flex flex-col gap-0.5">
-                            <span className="font-semibold text-[var(--gmart-title)] text-[13px]">{entry.callStatus}</span>
-                            {entry.callOutcome && <span className="text-[11px] text-[var(--gmart-muted)] leading-tight">{entry.callOutcome}</span>}
+                          <div className="flex flex-col items-start gap-1">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider ${
+                              entry.callStatus === 'Connected' 
+                                ? 'bg-green-100 text-green-700 border border-green-200' 
+                                : entry.callStatus === 'Not Connected'
+                                ? 'bg-amber-100 text-amber-700 border border-amber-200'
+                                : 'bg-gray-100 text-gray-700 border border-gray-200'
+                            }`}>
+                              {entry.callStatus}
+                            </span>
+                            {entry.callOutcome && <span className="text-[11px] text-[var(--gmart-title)] font-medium leading-tight">{entry.callOutcome}</span>}
                           </div>
                         ) : (
-                          <span className="text-xs text-[var(--gmart-muted)] font-medium italic">No calls yet</span>
+                          <span className="text-[11px] text-[var(--gmart-muted)] font-medium italic">No calls yet</span>
                         )}
                       </td>
                     )}
