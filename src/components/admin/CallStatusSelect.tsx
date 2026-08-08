@@ -96,11 +96,13 @@ export const STATUS_COLORS = {
 
 export function CallStatusSelect({
   entryId,
+  attempt,
   initialStatus,
   initialOutcome,
   initialRemark,
 }: {
   entryId: string;
+  attempt: number;
   initialStatus: string | null;
   initialOutcome: string | null;
   initialRemark: string | null;
@@ -118,7 +120,7 @@ export function CallStatusSelect({
       setCurrentRemark("");
       setIsSaving(true);
       saveQueueRef.current = saveQueueRef.current.then(async () => {
-        await updateCallStatus(entryId, null, null, null);
+        await updateCallStatus(entryId, attempt, null, null, null);
         setIsSaving(false);
       });
       return;
@@ -129,7 +131,7 @@ export function CallStatusSelect({
     setIsSaving(true);
     
     saveQueueRef.current = saveQueueRef.current.then(async () => {
-      await updateCallStatus(entryId, newStatus, null, currentRemark);
+      await updateCallStatus(entryId, attempt, newStatus, null, currentRemark);
       setIsSaving(false);
     });
   };
@@ -139,7 +141,7 @@ export function CallStatusSelect({
     setIsSaving(true);
     
     saveQueueRef.current = saveQueueRef.current.then(async () => {
-      await updateCallStatus(entryId, currentStatus, newOutcome, currentRemark);
+      await updateCallStatus(entryId, attempt, currentStatus, newOutcome, currentRemark);
       setIsSaving(false);
     });
   };
@@ -148,7 +150,7 @@ export function CallStatusSelect({
     if (currentRemark === (initialRemark || "")) return;
     setIsSaving(true);
     saveQueueRef.current = saveQueueRef.current.then(async () => {
-      await updateCallStatus(entryId, currentStatus, currentOutcome, currentRemark);
+      await updateCallStatus(entryId, attempt, currentStatus, currentOutcome, currentRemark);
       setIsSaving(false);
     });
   };

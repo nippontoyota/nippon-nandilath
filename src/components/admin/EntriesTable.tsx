@@ -18,6 +18,21 @@ export type EntryRow = {
   callStatus: string | null;
   callOutcome: string | null;
   callRemark: string | null;
+  call1Status: string | null;
+  call1Outcome: string | null;
+  call1Remark: string | null;
+  call2Status: string | null;
+  call2Outcome: string | null;
+  call2Remark: string | null;
+  call3Status: string | null;
+  call3Outcome: string | null;
+  call3Remark: string | null;
+  call4Status: string | null;
+  call4Outcome: string | null;
+  call4Remark: string | null;
+  call5Status: string | null;
+  call5Outcome: string | null;
+  call5Remark: string | null;
   createdAt: string;
 };
 
@@ -192,17 +207,15 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                       </div>
                     </td>
                     {userRole === "call_center" && (
-                      <td 
-                        className="px-4 py-3 align-top"
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => e.stopPropagation()}
-                      >
-                        <CallStatusSelect
-                          entryId={entry.id}
-                          initialStatus={entry.callStatus}
-                          initialOutcome={entry.callOutcome}
-                          initialRemark={entry.callRemark}
-                        />
+                      <td className="px-4 py-3 align-top">
+                        {entry.callStatus ? (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-semibold text-[var(--gmart-title)] text-[13px]">{entry.callStatus}</span>
+                            {entry.callOutcome && <span className="text-[11px] text-[var(--gmart-muted)] leading-tight">{entry.callOutcome}</span>}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-[var(--gmart-muted)] font-medium italic">No calls yet</span>
+                        )}
                       </td>
                     )}
                   </tr>
@@ -269,21 +282,25 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                   value={dateFormatter.format(new Date(selected.createdAt))}
                 />
                 {userRole === "call_center" && (
-                  <DetailRow
-                    label="Call Status"
-                    value={
-                      selected.callStatus
-                        ? `${selected.callStatus}${selected.callOutcome ? ` - ${selected.callOutcome}` : ""}`
-                        : "—"
-                    }
-                  />
+                  <div className="mt-4 border-t border-[var(--gmart-border)] pt-4">
+                    <h5 className="text-sm font-semibold text-[var(--gmart-title)] mb-3">Follow-up Module</h5>
+                    <div className="space-y-3">
+                      {[1, 2, 3, 4, 5].map((attempt) => (
+                        <div key={attempt} className="bg-white border border-[var(--gmart-border)] rounded-md p-3">
+                          <h6 className="text-[11px] font-semibold text-[var(--gmart-muted)] mb-2 uppercase tracking-wider">Attempt {attempt}</h6>
+                          <CallStatusSelect
+                            entryId={selected.id}
+                            attempt={attempt}
+                            initialStatus={(selected as any)[`call${attempt}Status`]}
+                            initialOutcome={(selected as any)[`call${attempt}Outcome`]}
+                            initialRemark={(selected as any)[`call${attempt}Remark`]}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
-                {userRole === "call_center" && selected.callRemark && (
-                  <DetailRow
-                    label="Remark"
-                    value={selected.callRemark}
-                  />
-                )}
+                
                 {userRole !== "call_center" && (
                   <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
                     <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>

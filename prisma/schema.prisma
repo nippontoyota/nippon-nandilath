@@ -24,6 +24,26 @@ model Entry {
   callStatus           String?
   callOutcome          String?
   callRemark           String?
+
+  call1Status          String?
+  call1Outcome         String?
+  call1Remark          String?
+  
+  call2Status          String?
+  call2Outcome         String?
+  call2Remark          String?
+  
+  call3Status          String?
+  call3Outcome         String?
+  call3Remark          String?
+  
+  call4Status          String?
+  call4Outcome         String?
+  call4Remark          String?
+  
+  call5Status          String?
+  call5Outcome         String?
+  call5Remark          String?
   winner               Winner?
 
   @@index([phone])
