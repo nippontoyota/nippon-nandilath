@@ -9,13 +9,15 @@ export function EntriesSearch({
   initialSearch,
   initialStatus,
   initialOutcome,
-  initialDate,
+  initialFromDate,
+  initialToDate,
   isCallCenter = false,
 }: {
   initialSearch: string;
   initialStatus: string;
   initialOutcome: string;
-  initialDate: string;
+  initialFromDate: string;
+  initialToDate: string;
   isCallCenter?: boolean;
 }) {
   const router = useRouter();
@@ -27,7 +29,8 @@ export function EntriesSearch({
   
   const [statusValue, setStatusValue] = useState(initialStatus === "all" ? null : initialStatus);
   const [outcomeValue, setOutcomeValue] = useState(initialOutcome === "all" ? null : initialOutcome);
-  const [dateValue, setDateValue] = useState(initialDate);
+  const [fromDateValue, setFromDateValue] = useState(initialFromDate);
+  const [toDateValue, setToDateValue] = useState(initialToDate);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchValue), 300);
@@ -62,9 +65,15 @@ export function EntriesSearch({
       changed = true;
     }
 
-    if (dateValue !== (params.get("date") || "")) {
-      if (dateValue) params.set("date", dateValue);
-      else params.delete("date");
+    if (fromDateValue !== (params.get("fromDate") || "")) {
+      if (fromDateValue) params.set("fromDate", fromDateValue);
+      else params.delete("fromDate");
+      changed = true;
+    }
+
+    if (toDateValue !== (params.get("toDate") || "")) {
+      if (toDateValue) params.set("toDate", toDateValue);
+      else params.delete("toDate");
       changed = true;
     }
 
@@ -73,7 +82,7 @@ export function EntriesSearch({
         router.replace(`?${params.toString()}`);
       });
     }
-  }, [debouncedSearch, statusValue, outcomeValue, dateValue, router, searchParams]);
+  }, [debouncedSearch, statusValue, outcomeValue, fromDateValue, toDateValue, router, searchParams]);
 
   const handleStatusChange = (val: string | null) => {
     setStatusValue(val);
@@ -94,27 +103,44 @@ export function EntriesSearch({
   return (
     <div className="flex flex-col lg:flex-row gap-3 w-full">
       {isCallCenter && (
-        <div className="min-w-[160px] relative shrink-0">
-          <input
-            type="date"
-            value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
-            onClick={(e) => {
-              try {
-                if (e.currentTarget.showPicker) {
-                  e.currentTarget.showPicker();
-                }
-              } catch (err) {
-                // ignore if not supported or already open
-              }
-            }}
-            className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
-          />
-          {!dateValue && (
-            <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
-              <span className="text-sm text-[var(--gmart-muted)]">Date Filter</span>
-            </div>
-          )}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="min-w-[130px] relative">
+            <input
+              type="date"
+              value={fromDateValue}
+              onChange={(e) => setFromDateValue(e.target.value)}
+              onClick={(e) => {
+                try {
+                  if (e.currentTarget.showPicker) e.currentTarget.showPicker();
+                } catch (err) {}
+              }}
+              className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
+            />
+            {!fromDateValue && (
+              <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
+                <span className="text-sm text-[var(--gmart-muted)]">From Date</span>
+              </div>
+            )}
+          </div>
+          <span className="text-[var(--gmart-muted)] text-sm font-medium">-</span>
+          <div className="min-w-[130px] relative">
+            <input
+              type="date"
+              value={toDateValue}
+              onChange={(e) => setToDateValue(e.target.value)}
+              onClick={(e) => {
+                try {
+                  if (e.currentTarget.showPicker) e.currentTarget.showPicker();
+                } catch (err) {}
+              }}
+              className="w-full h-[42px] px-3 border border-[var(--gmart-border)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gmart-red)]/20 focus:border-[var(--gmart-red)] bg-white text-[var(--gmart-title)] cursor-pointer"
+            />
+            {!toDateValue && (
+              <div className="absolute inset-0 bg-white pointer-events-none flex items-center px-3 border border-[var(--gmart-border)] rounded-md">
+                <span className="text-sm text-[var(--gmart-muted)]">To Date</span>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

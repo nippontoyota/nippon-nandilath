@@ -13,30 +13,37 @@ export default async function ReportPage({
     redirect("/admin/login");
   }
 
-  // Await searchParams as required in Next.js 15
   const sp = await searchParams;
-  const dateParam = typeof sp.date === "string" ? sp.date : null;
-  
-  const reportDate = dateParam ? new Date(dateParam) : new Date();
-  
-  // Format for display
-  const dateStr = reportDate.toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  const fromDateParam = typeof sp.fromDate === "string" ? sp.fromDate : null;
+  const toDateParam = typeof sp.toDate === "string" ? sp.toDate : null;
 
-  // Calculate local timezone bounds to ensure accurate filtering
-  const localIsoDate = new Date(reportDate.getTime() - (reportDate.getTimezoneOffset() * 60000)).toISOString().split("T")[0];
-  const startDate = new Date(`${localIsoDate}T00:00:00.000+05:30`);
-  const endDate = new Date(`${localIsoDate}T23:59:59.999+05:30`);
+  const whereClause: any = {};
+  let dateTitle = "All Time";
 
-  const whereClause = {
-    createdAt: {
-      gte: startDate,
-      lte: endDate,
-    },
-  };
+  if (fromDateParam || toDateParam) {
+    whereClause.createdAt = {};
+    const fromStr = fromDateParam ? new Date(fromDateParam).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "";
+    const toStr = toDateParam ? new Date(toDateParam).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "";
+
+    if (fromDateParam && toDateParam) {
+      if (fromDateParam === toDateParam) {
+        dateTitle = fromStr;
+      } else {
+        dateTitle = `${fromStr} to ${toStr}`;
+      }
+    } else if (fromDateParam) {
+      dateTitle = `From ${fromStr}`;
+    } else if (toDateParam) {
+      dateTitle = `Up to ${toStr}`;
+    }
+
+    if (fromDateParam) {
+      whereClause.createdAt.gte = new Date(`${fromDateParam}T00:00:00.000+05:30`);
+    }
+    if (toDateParam) {
+      whereClause.createdAt.lte = new Date(`${toDateParam}T23:59:59.999+05:30`);
+    }
+  }
 
   const groupedOutcomes = await prisma.entry.groupBy({
     by: ['callStatus', 'callOutcome'],
@@ -113,7 +120,7 @@ export default async function ReportPage({
       
       <div>
         <h2 className="text-lg font-semibold text-gray-800 mb-6 text-center">
-          {dateStr}
+          {dateTitle}
         </h2>
         
         <div className="overflow-x-auto flex justify-center">

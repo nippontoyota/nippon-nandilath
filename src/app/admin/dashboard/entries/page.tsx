@@ -8,14 +8,15 @@ import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function EntriesPage(props: {
-  searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string; date?: string }>;
+  searchParams?: Promise<{ search?: string; page?: string; status?: string; outcome?: string; fromDate?: string; toDate?: string }>;
 }) {
   const session = await getSession();
   const searchParams = await props.searchParams;
   const search = searchParams?.search || "";
   const statusFilter = searchParams?.status || "all";
   const outcomeFilter = searchParams?.outcome || "all";
-  const dateFilter = searchParams?.date || "";
+  const fromDateFilter = searchParams?.fromDate || "";
+  const toDateFilter = searchParams?.toDate || "";
 
   const whereClause: Prisma.EntryWhereInput = search
     ? {
@@ -40,14 +41,14 @@ export default async function EntriesPage(props: {
     whereClause.callOutcome = outcomeFilter;
   }
 
-  if (dateFilter) {
-    // Treat the selected date as local time block for IST filtering
-    const startDate = new Date(`${dateFilter}T00:00:00.000+05:30`);
-    const endDate = new Date(`${dateFilter}T23:59:59.999+05:30`);
-    whereClause.createdAt = {
-      gte: startDate,
-      lte: endDate,
-    };
+  if (fromDateFilter || toDateFilter) {
+    whereClause.createdAt = {};
+    if (fromDateFilter) {
+      whereClause.createdAt.gte = new Date(`${fromDateFilter}T00:00:00.000+05:30`);
+    }
+    if (toDateFilter) {
+      whereClause.createdAt.lte = new Date(`${toDateFilter}T23:59:59.999+05:30`);
+    }
   }
 
   const [entries, totalEntries, connectedCount, notConnectedCount] = await Promise.all([
@@ -109,7 +110,8 @@ export default async function EntriesPage(props: {
             initialSearch={search} 
             initialStatus={statusFilter} 
             initialOutcome={outcomeFilter} 
-            initialDate={dateFilter} 
+            initialFromDate={fromDateFilter} 
+            initialToDate={toDateFilter} 
             isCallCenter={session?.role === "call_center"}
           />
         </div>
