@@ -119,8 +119,44 @@ export function DailyReportModal({
     
     doc.text(`Total Pending Calls to be made: ${data.totalPending}`, 14, y);
     y += 15;
+
+    // Pivot Table Grid
+    const allOutcomes = Array.from(new Set([
+      ...Object.keys(data.connectedBreakdown),
+      ...Object.keys(data.disconnectedBreakdown)
+    ])).sort();
+
+    if (allOutcomes.length > 0) {
+      const pivotData = allOutcomes.map(outcome => {
+        const conn = data.connectedBreakdown[outcome] || 0;
+        const notConn = data.disconnectedBreakdown[outcome] || 0;
+        return [outcome, conn, notConn, conn + notConn];
+      });
+
+      // Add Grand Total Row
+      const grandConn = allOutcomes.reduce((sum, o) => sum + (data.connectedBreakdown[o] || 0), 0);
+      const grandNotConn = allOutcomes.reduce((sum, o) => sum + (data.disconnectedBreakdown[o] || 0), 0);
+      pivotData.push(['Grand Total', grandConn, grandNotConn, grandConn + grandNotConn]);
+
+      autoTable(doc, {
+        startY: y,
+        head: [['Call Outcome', 'Connected', 'Not Connected', 'Total']],
+        body: pivotData,
+        theme: 'grid',
+        headStyles: { fillColor: [75, 85, 99] }, // Slate gray
+        styles: { fontSize: 10, cellPadding: 4 },
+        didParseCell: function(cellData) {
+          if (cellData.row.index === pivotData.length - 1) {
+            cellData.cell.styles.fontStyle = 'bold';
+            cellData.cell.styles.fillColor = [243, 244, 246]; // Gray 100
+          }
+        }
+      });
+      
+      y = (doc as any).lastAutoTable.finalY + 15;
+    }
     
-    // Table
+    // Detailed Table
     const tableData = data.entries.map((e, i) => [
       i + 1,
       e.name,
