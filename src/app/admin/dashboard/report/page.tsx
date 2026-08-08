@@ -88,7 +88,7 @@ export default async function ReportPage({
       
       <div>
         <h2 className="text-lg font-semibold text-gray-800 mb-6 text-center">
-          Nippon-Nandilath Lucky Draw Pivot - {dateStr}
+          {dateStr}
         </h2>
         
         <div className="overflow-x-auto flex justify-center">
