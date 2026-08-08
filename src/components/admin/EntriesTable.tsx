@@ -266,40 +266,73 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
             </div>
 
             <div className="p-5 space-y-4 overflow-y-auto">
-              <div className="flex items-start gap-3 min-w-0">
-                <span className="flex items-center justify-center w-11 h-11 rounded-full bg-[var(--gmart-red)] text-white shrink-0">
-                  <User className="w-5 h-5" />
-                </span>
-                <div className="min-w-0">
-                  <h4 className="text-base font-semibold text-[var(--gmart-title)] break-words">
+              {userRole === "call_center" ? (
+                <div className="mb-2">
+                  <h4 className="text-2xl font-bold text-[var(--gmart-title)] break-words">
                     {selected.name}
                   </h4>
-                  <p className="text-sm text-[var(--gmart-muted)] mt-0.5">
-                    {selected.excluded ? "Excluded from draw" : "In draw"}
-                  </p>
+                  <div className="flex items-center gap-2 text-xl font-bold text-[var(--gmart-title)] mt-1.5">
+                    <Phone className="w-5 h-5 text-[var(--gmart-muted)]" />
+                    <span>{formatPhone(selected.phone)}</span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div className="flex items-start gap-3 min-w-0">
+                    <span className="flex items-center justify-center w-11 h-11 rounded-full bg-[var(--gmart-red)] text-white shrink-0">
+                      <User className="w-5 h-5" />
+                    </span>
+                    <div className="min-w-0">
+                      <h4 className="text-base font-semibold text-[var(--gmart-title)] break-words">
+                        {selected.name}
+                      </h4>
+                      <p className="text-sm text-[var(--gmart-muted)] mt-0.5">
+                        {selected.excluded ? "Excluded from draw" : "In draw"}
+                      </p>
+                    </div>
+                  </div>
 
-              <dl className="space-y-3 bg-[#fafafa] p-4 rounded-md border border-[var(--gmart-border)] text-sm">
-                <DetailRow label="Phone" value={formatPhone(selected.phone)} breakAll />
-                <DetailRow label="Email" value={selected.email || "—"} breakAll />
-                <DetailRow label="Address" value={selected.customerLocation} />
-                <DetailRow
-                  label="Ticket"
-                  value={selected.id.slice(0, 8).toUpperCase()}
-                  mono
-                />
-                <DetailRow
-                  label="Submitted"
-                  value={dateFormatter.format(new Date(selected.createdAt))}
-                />
+                  <dl className="space-y-3 bg-[#fafafa] p-4 rounded-md border border-[var(--gmart-border)] text-sm">
+                    <DetailRow label="Phone" value={formatPhone(selected.phone)} breakAll />
+                    <DetailRow label="Email" value={selected.email || "—"} breakAll />
+                    <DetailRow label="Address" value={selected.customerLocation} />
+                    <DetailRow
+                      label="Ticket"
+                      value={selected.id.slice(0, 8).toUpperCase()}
+                      mono
+                    />
+                    <DetailRow
+                      label="Submitted"
+                      value={dateFormatter.format(new Date(selected.createdAt))}
+                    />
+                    <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
+                      <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
+                      <dd className="font-medium text-[var(--gmart-title)]">
+                        {parseFlags(selected.flag).length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {parseFlags(selected.flag).map((f) => (
+                              <span key={f} className="admin-sale-badge capitalize">
+                                {f.replace(/_/g, " ")}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-[var(--gmart-muted)] font-normal">None</span>
+                        )}
+                      </dd>
+                    </div>
+                    {selected.flagReason && (
+                      <DetailRow label="Reason" value={selected.flagReason} />
+                    )}
+                  </dl>
+                </>
+              )}
                 {userRole === "call_center" && (
-                  <div className="mt-4 border-t border-[var(--gmart-border)] pt-4">
-                    <h5 className="text-sm font-semibold text-[var(--gmart-title)] mb-3">Follow-up Module</h5>
+                  <div className="mt-2">
                     <div className="space-y-3">
                       {[1, 2, 3, 4, 5].map((attempt) => (
-                        <div key={attempt} className="bg-white border border-[var(--gmart-border)] rounded-md p-3">
-                          <h6 className="text-[11px] font-semibold text-[var(--gmart-muted)] mb-2 uppercase tracking-wider">Attempt {attempt}</h6>
+                        <div key={attempt} className="bg-white border border-[var(--gmart-border)] rounded-md p-3 shadow-sm">
+                          <h6 className="text-[11px] font-bold text-[var(--gmart-title)] mb-2 uppercase tracking-wider">Attempt {attempt}</h6>
                           <CallStatusSelect
                             entryId={selected.id}
                             attempt={attempt}
@@ -312,39 +345,18 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                     </div>
                   </div>
                 )}
-                
-                {userRole !== "call_center" && (
-                  <div className="grid grid-cols-[5.5rem_1fr] gap-2 items-start">
-                    <dt className="text-[var(--gmart-muted)] shrink-0">Flags</dt>
-                    <dd className="font-medium text-[var(--gmart-title)]">
-                      {parseFlags(selected.flag).length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {parseFlags(selected.flag).map((f) => (
-                            <span key={f} className="admin-sale-badge capitalize">
-                              {f.replace(/_/g, " ")}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-[var(--gmart-muted)] font-normal">None</span>
-                      )}
-                    </dd>
-                  </div>
-                )}
-                {userRole !== "call_center" && selected.flagReason && (
-                  <DetailRow label="Reason" value={selected.flagReason} />
-                )}
-              </dl>
-            </div>
+              </div>
 
-            <div className="bg-[#fafafa] px-5 py-3 border-t border-[var(--gmart-border)] flex flex-wrap items-center justify-end gap-2 shrink-0">
-              <ExcludeEntryButton id={selected.id} excluded={selected.excluded} />
-              <DeleteEntryButton
-                id={selected.id}
-                name={selected.name}
-                onDeleted={() => setSelectedId(null)}
-              />
-            </div>
+            {userRole !== "call_center" && (
+              <div className="bg-[#fafafa] px-5 py-3 border-t border-[var(--gmart-border)] flex flex-wrap items-center justify-end gap-2 shrink-0">
+                <ExcludeEntryButton id={selected.id} excluded={selected.excluded} />
+                <DeleteEntryButton
+                  id={selected.id}
+                  name={selected.name}
+                  onDeleted={() => setSelectedId(null)}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
