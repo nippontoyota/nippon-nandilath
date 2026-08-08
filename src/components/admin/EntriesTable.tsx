@@ -105,7 +105,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
                 </th>
                 {userRole === "call_center" && (
                   <th className="px-4 py-3 font-semibold tracking-wide uppercase text-[10px] min-w-[150px]">
-                    Call Status
+                    Latest Call Status
                   </th>
                 )}
               </tr>
