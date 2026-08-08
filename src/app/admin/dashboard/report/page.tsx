@@ -68,10 +68,32 @@ export default async function ReportPage({
     }
   });
 
-  const allOutcomes = Array.from(new Set([
-    ...Object.keys(connectedBreakdown),
-    ...Object.keys(disconnectedBreakdown)
-  ])).sort();
+  // Build rows array for the grouped table layout
+  const rows: { status: string; outcome: string; count: number; isSubtotal?: boolean; isTotal?: boolean; colorClass?: string }[] = [];
+
+  // Connected Rows
+  if (totalConnected > 0) {
+    Object.keys(connectedBreakdown).sort().forEach(outcome => {
+      rows.push({ status: "Connected", outcome, count: connectedBreakdown[outcome] });
+    });
+  }
+  rows.push({ status: "Connected Subtotal", outcome: "", count: totalConnected, isSubtotal: true, colorClass: "text-green-700 bg-green-50/50" });
+
+  // Not Connected Rows
+  if (totalDisconnected > 0) {
+    Object.keys(disconnectedBreakdown).sort().forEach(outcome => {
+      rows.push({ status: "Not Connected", outcome, count: disconnectedBreakdown[outcome] });
+    });
+  }
+  rows.push({ status: "Not Connected Subtotal", outcome: "", count: totalDisconnected, isSubtotal: true, colorClass: "text-red-700 bg-red-50/50" });
+
+  // Pending Rows
+  if (totalPending > 0) {
+    rows.push({ status: "Pending", outcome: "Not Called Yet", count: totalPending });
+  }
+  rows.push({ status: "Pending Subtotal", outcome: "", count: totalPending, isSubtotal: true, colorClass: "text-yellow-700 bg-yellow-50/50" });
+
+  const grandTotal = totalConnected + totalDisconnected + totalPending;
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-white -m-4 sm:-m-6 md:-m-8 p-4 sm:p-6 md:p-8">
@@ -98,97 +120,57 @@ export default async function ReportPage({
           <table className="w-full max-w-2xl border-collapse text-sm text-left text-gray-700 bg-white">
             <thead>
               <tr>
-                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 w-1/3 text-center">
-                  Call Outcome
+                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 w-1/3">
+                  Call Status
                 </th>
-                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
-                  Connected
+                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900">
+                  Breakdown (Outcome)
                 </th>
-                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
-                  Not Connected
-                </th>
-                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
-                  Pending
-                </th>
-                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
-                  Total
+                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-right w-32">
+                  Count
                 </th>
               </tr>
             </thead>
             <tbody>
-              {allOutcomes.length === 0 && totalPending === 0 ? (
-                <tr>
-                  <td colSpan={5} className="border border-gray-300 px-4 py-8 text-center text-gray-500 italic">
-                    No entries found for this date.
-                  </td>
-                </tr>
-              ) : (
-                allOutcomes.map((outcome) => {
-                  const conn = connectedBreakdown[outcome] || 0;
-                  const notConn = disconnectedBreakdown[outcome] || 0;
+              {rows.map((row, i) => {
+                if (row.isSubtotal) {
                   return (
-                    <tr key={outcome}>
-                      <td className="border border-gray-300 px-4 py-2 font-medium">
-                        {outcome}
+                    <tr key={`subtotal-${i}`} className={`font-semibold ${row.colorClass || "bg-gray-50 text-gray-900"}`}>
+                      <td className="border border-gray-300 px-4 py-2" colSpan={2}>
+                        {row.status}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2 text-center">
-                        {conn}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2 text-center">
-                        {notConn}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
-                        0
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2 text-center font-medium">
-                        {conn + notConn}
+                      <td className="border border-gray-300 px-4 py-2 text-right">
+                        {row.count}
                       </td>
                     </tr>
                   );
-                })
-              )}
-              
-              {totalPending > 0 && (
-                <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-medium">
-                    Pending / Not Called
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
-                    0
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
-                    0
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center font-semibold text-blue-600">
-                    {totalPending}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center font-medium">
-                    {totalPending}
-                  </td>
-                </tr>
-              )}
+                }
+
+                return (
+                  <tr key={`row-${i}`}>
+                    <td className="border border-gray-300 px-4 py-2 font-medium">
+                      {row.status}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-gray-600">
+                      {row.outcome}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-right font-medium">
+                      {row.count}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
-            {(allOutcomes.length > 0 || totalPending > 0) && (
-              <tfoot>
-                <tr className="bg-white font-bold text-gray-900">
-                  <td className="border border-gray-300 px-4 py-3">
-                    Grand Total
-                  </td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">
-                    {totalConnected}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">
-                    {totalDisconnected}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">
-                    {totalPending}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">
-                    {totalConnected + totalDisconnected + totalPending}
-                  </td>
-                </tr>
-              </tfoot>
-            )}
+            <tfoot>
+              <tr className="bg-white font-bold text-gray-900 text-base">
+                <td className="border border-gray-400 border-t-2 px-4 py-3" colSpan={2}>
+                  📊 GRAND TOTAL
+                </td>
+                <td className="border border-gray-400 border-t-2 px-4 py-3 text-right">
+                  {grandTotal}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
         </div>
