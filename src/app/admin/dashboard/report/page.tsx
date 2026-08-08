@@ -85,7 +85,7 @@ export default async function ReportPage({
         </a>
       </div>
       
-      <div className="bg-white p-8 rounded-md border border-[var(--gmart-border)] shadow-sm">
+      <div>
         <h2 className="text-lg font-semibold text-gray-800 mb-6 text-center">
           Nippon-Nandilath Lucky Draw Pivot - {dateStr}
         </h2>
