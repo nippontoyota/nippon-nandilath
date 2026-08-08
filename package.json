@@ -20,6 +20,8 @@
     "exceljs": "^4.4.0",
     "framer-motion": "^12.42.2",
     "jose": "^6.2.4",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
     "qrcode": "^1.5.4",
