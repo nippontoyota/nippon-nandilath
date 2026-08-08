@@ -144,6 +144,15 @@ export function EntriesSearch({
         )}
       </div>
 
+      {isPending && (
+        <div className="fixed inset-0 z-[100] bg-white/40 backdrop-blur-[2px] flex items-center justify-center transition-all duration-200">
+           <div className="bg-white px-5 py-3 rounded-md shadow-lg border border-[var(--gmart-border)] flex items-center gap-3 animate-in fade-in zoom-in-95">
+             <div className="w-5 h-5 border-2 border-gray-200 border-t-[var(--gmart-red)] rounded-full animate-spin" />
+             <span className="text-sm font-medium text-[var(--gmart-title)]">Updating data...</span>
+           </div>
+        </div>
+      )}
+
       {isCallCenter && (
         <div className="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0 items-center relative z-10">
           <div className="w-[200px]">
