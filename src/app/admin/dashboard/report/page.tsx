@@ -46,6 +46,7 @@ export default async function ReportPage({
 
   let totalConnected = 0;
   let totalDisconnected = 0;
+  let totalPending = 0;
 
   const connectedBreakdown: Record<string, number> = {};
   const disconnectedBreakdown: Record<string, number> = {};
@@ -62,6 +63,8 @@ export default async function ReportPage({
       if (group.callOutcome) {
         disconnectedBreakdown[group.callOutcome] = count;
       }
+    } else {
+      totalPending += count;
     }
   });
 
@@ -105,15 +108,18 @@ export default async function ReportPage({
                   Not Connected
                 </th>
                 <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
+                  Pending
+                </th>
+                <th className="border border-gray-300 bg-[#eef6ff] px-4 py-3 font-semibold text-gray-900 text-center">
                   Total
                 </th>
               </tr>
             </thead>
             <tbody>
-              {allOutcomes.length === 0 ? (
+              {allOutcomes.length === 0 && totalPending === 0 ? (
                 <tr>
-                  <td colSpan={4} className="border border-gray-300 px-4 py-8 text-center text-gray-500 italic">
-                    No call outcomes recorded for this date.
+                  <td colSpan={5} className="border border-gray-300 px-4 py-8 text-center text-gray-500 italic">
+                    No entries found for this date.
                   </td>
                 </tr>
               ) : (
@@ -131,6 +137,9 @@ export default async function ReportPage({
                       <td className="border border-gray-300 px-4 py-2 text-center">
                         {notConn}
                       </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
+                        0
+                      </td>
                       <td className="border border-gray-300 px-4 py-2 text-center font-medium">
                         {conn + notConn}
                       </td>
@@ -138,8 +147,28 @@ export default async function ReportPage({
                   );
                 })
               )}
+              
+              {totalPending > 0 && (
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-medium">
+                    Pending / Not Called
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
+                    0
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-400">
+                    0
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center font-semibold text-blue-600">
+                    {totalPending}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center font-medium">
+                    {totalPending}
+                  </td>
+                </tr>
+              )}
             </tbody>
-            {allOutcomes.length > 0 && (
+            {(allOutcomes.length > 0 || totalPending > 0) && (
               <tfoot>
                 <tr className="bg-white font-bold text-gray-900">
                   <td className="border border-gray-300 px-4 py-3">
@@ -152,7 +181,10 @@ export default async function ReportPage({
                     {totalDisconnected}
                   </td>
                   <td className="border border-gray-300 px-4 py-3 text-center">
-                    {totalConnected + totalDisconnected}
+                    {totalPending}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-center">
+                    {totalConnected + totalDisconnected + totalPending}
                   </td>
                 </tr>
               </tfoot>
