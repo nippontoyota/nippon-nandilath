@@ -1,9 +1,11 @@
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getSession } from "@/app/actions/auth";
 import { EntriesSearch } from "@/components/admin/EntriesSearch";
 import { EntriesTable } from "@/components/admin/EntriesTable";
-import { Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { EntriesPagination } from "@/components/admin/EntriesPagination";
+import { ENTRIES_PAGE_SIZE, clampPage, parsePageParam } from "@/lib/pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -51,34 +53,58 @@ export default async function EntriesPage(props: {
     }
   }
 
-  const [entries, totalEntries, connectedCount, notConnectedCount] = await Promise.all([
-    prisma.entry.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        phone: true,
-        email: true,
-        customerLocation: true,
-        flag: true,
-        flagReason: true,
-        excluded: true,
-        callStatus: true,
-        callOutcome: true,
-        callRemark: true,
-        call1Status: true, call1Outcome: true, call1Remark: true,
-        call2Status: true, call2Outcome: true, call2Remark: true,
-        call3Status: true, call3Outcome: true, call3Remark: true,
-        call4Status: true, call4Outcome: true, call4Remark: true,
-        call5Status: true, call5Outcome: true, call5Remark: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: "desc" },
-    }),
+  const requestedPage = parsePageParam(searchParams?.page);
+
+  const [totalEntries, connectedCount, notConnectedCount] = await Promise.all([
     prisma.entry.count({ where: whereClause }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } }),
     prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } }),
   ]);
+
+  const totalPages = Math.max(1, Math.ceil(totalEntries / ENTRIES_PAGE_SIZE));
+  const currentPage = clampPage(requestedPage, totalPages);
+  const skip = (currentPage - 1) * ENTRIES_PAGE_SIZE;
+
+  if (requestedPage !== currentPage) {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (statusFilter !== "all") params.set("status", statusFilter);
+    if (outcomeFilter !== "all") params.set("outcome", outcomeFilter);
+    if (fromDateFilter) params.set("fromDate", fromDateFilter);
+    if (toDateFilter) params.set("toDate", toDateFilter);
+    if (currentPage > 1) params.set("page", String(currentPage));
+    const qs = params.toString();
+    redirect(qs ? `/admin/dashboard/entries?${qs}` : "/admin/dashboard/entries");
+  }
+
+  const entries =
+    totalEntries === 0
+      ? []
+      : await prisma.entry.findMany({
+          where: whereClause,
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            email: true,
+            customerLocation: true,
+            flag: true,
+            flagReason: true,
+            excluded: true,
+            callStatus: true,
+            callOutcome: true,
+            callRemark: true,
+            call1Status: true, call1Outcome: true, call1Remark: true,
+            call2Status: true, call2Outcome: true, call2Remark: true,
+            call3Status: true, call3Outcome: true, call3Remark: true,
+            call4Status: true, call4Outcome: true, call4Remark: true,
+            call5Status: true, call5Outcome: true, call5Remark: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: ENTRIES_PAGE_SIZE,
+        });
 
   const tableEntries = entries.map((entry) => ({
     ...entry,
@@ -137,7 +163,12 @@ export default async function EntriesPage(props: {
         </div>
       )}
 
-      {entries.length > 0 && <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} offset={0} />}
+      {entries.length > 0 && (
+        <div className="admin-product-card">
+          <EntriesTable entries={tableEntries} userRole={session?.role as string | undefined} offset={skip} />
+          <EntriesPagination currentPage={currentPage} totalPages={totalPages} />
+        </div>
+      )}
     </div>
   );
 }

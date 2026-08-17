@@ -78,6 +78,7 @@ export function EntriesSearch({
     }
 
     if (changed) {
+      params.delete("page");
       startTransition(() => {
         router.replace(`?${params.toString()}`);
       });

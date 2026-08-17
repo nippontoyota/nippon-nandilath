@@ -77,8 +77,7 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
 
   return (
     <>
-      <div className="admin-product-card">
-        <div className="overflow-x-auto">
+      <div className="overflow-x-auto">
           <table className="w-full text-left text-sm table-auto">
             <thead className="bg-[var(--gmart-navy)] text-[var(--gmart-cream)] text-xs">
               <tr>
@@ -236,7 +235,6 @@ export function EntriesTable({ entries, userRole, offset = 0 }: { entries: Entry
             </tbody>
           </table>
         </div>
-      </div>
 
       {selected && (
         <div
