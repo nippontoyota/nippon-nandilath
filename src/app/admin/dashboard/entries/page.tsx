@@ -54,11 +54,42 @@ export default async function EntriesPage(props: {
   }
 
   const requestedPage = parsePageParam(searchParams?.page);
+  const skipGuess = (requestedPage - 1) * ENTRIES_PAGE_SIZE;
+  const isCallCenter = session?.role === "call_center";
 
-  const [totalEntries, connectedCount, notConnectedCount] = await Promise.all([
+  const [entries, totalEntries, connectedCount, notConnectedCount] = await Promise.all([
+    prisma.entry.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        email: true,
+        customerLocation: true,
+        flag: true,
+        flagReason: true,
+        excluded: true,
+        callStatus: true,
+        callOutcome: true,
+        callRemark: true,
+        call1Status: true, call1Outcome: true, call1Remark: true,
+        call2Status: true, call2Outcome: true, call2Remark: true,
+        call3Status: true, call3Outcome: true, call3Remark: true,
+        call4Status: true, call4Outcome: true, call4Remark: true,
+        call5Status: true, call5Outcome: true, call5Remark: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+      skip: skipGuess,
+      take: ENTRIES_PAGE_SIZE,
+    }),
     prisma.entry.count({ where: whereClause }),
-    prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } }),
-    prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } }),
+    isCallCenter
+      ? prisma.entry.count({ where: { ...whereClause, callStatus: "Connected" } })
+      : Promise.resolve(0),
+    isCallCenter
+      ? prisma.entry.count({ where: { ...whereClause, callStatus: "Not Connected" } })
+      : Promise.resolve(0),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(totalEntries / ENTRIES_PAGE_SIZE));
@@ -76,35 +107,6 @@ export default async function EntriesPage(props: {
     const qs = params.toString();
     redirect(qs ? `/admin/dashboard/entries?${qs}` : "/admin/dashboard/entries");
   }
-
-  const entries =
-    totalEntries === 0
-      ? []
-      : await prisma.entry.findMany({
-          where: whereClause,
-          select: {
-            id: true,
-            name: true,
-            phone: true,
-            email: true,
-            customerLocation: true,
-            flag: true,
-            flagReason: true,
-            excluded: true,
-            callStatus: true,
-            callOutcome: true,
-            callRemark: true,
-            call1Status: true, call1Outcome: true, call1Remark: true,
-            call2Status: true, call2Outcome: true, call2Remark: true,
-            call3Status: true, call3Outcome: true, call3Remark: true,
-            call4Status: true, call4Outcome: true, call4Remark: true,
-            call5Status: true, call5Outcome: true, call5Remark: true,
-            createdAt: true,
-          },
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: ENTRIES_PAGE_SIZE,
-        });
 
   const tableEntries = entries.map((entry) => ({
     ...entry,
